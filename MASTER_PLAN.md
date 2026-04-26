@@ -266,17 +266,32 @@ Track every potential client from first contact to signed contract (or lost).
 LEAD (also called Prospect)
 ├── id (UUID)
 ├── client_id (FK, nullable — if converted)
+├── contact_name (string, required)
+├── company_name (string, required)
+├── contact_email (string)
+├── contact_phone (string)
+├── website (string)
 ├── source (enum: referral/website/ads/cold_outreach/event/partnership/other)
 ├── source_detail (string — e.g., "John Smith referral", "Google search", "LinkedIn cold email")
+├── source_campaign (string, nullable — ad campaign / landing page / UTM campaign)
+├── source_channel (string, nullable — e.g., linkedin/google/partner/webinar)
 ├── first_contact_date (date)
 ├── first_contact_method (enum: form/phone/email/meeting)
+├── service_interest (array of service_ids or service categories)
+├── estimated_close_date (date, nullable)
 ├── status (enum: new/contacted/qualified/proposal_sent/negotiation/won/lost/nurture)
 ├── estimated_value (decimal — potential monthly retainer)
 ├── probability (integer 0-100)
 ├── assigned_to (user_id, FK)
 ├── last_activity_date (date)
 ├── next_follow_up_date (date)
+├── qualification_score (integer 0-100, nullable)
+├── qualification_status (enum: unqualified/working/qualified/disqualified)
+├── disqualified_reason (enum: no_budget/no_authority/no_need/no_timeline/bad_fit/spam/other)
+├── is_stale (boolean, computed)
+├── converted_at (timestamp, nullable)
 ├── lost_reason (enum: price/competitor/no_budget/timing/no_fit/other)
+├── duplicate_of_lead_id (FK, nullable)
 ├── notes (text)
 ├── created_at (timestamp)
 └── updated_at (timestamp)
@@ -294,6 +309,16 @@ PROPOSAL
 ├── expiry_date (date)
 ├── document_url (string)
 └── notes (text)
+
+LEAD_ACTIVITY
+├── id (UUID)
+├── lead_id (FK)
+├── activity_type (enum: note/call/email/meeting/task/stage_change/proposal_sent)
+├── summary (string)
+├── activity_date (timestamp)
+├── created_by (user_id, FK)
+├── next_step (string, nullable)
+└── next_step_due_date (date, nullable)
 ```
 
 ### Functional Requirements
@@ -308,8 +333,40 @@ PROPOSAL
 | 6 | Set follow-up reminders | P0 | ✅ | ✅ | ✅ |
 | 7 | Create and track proposals | P1 | — | ✅ | ✅ |
 | 8 | Win rate by source / service / rep | P1 | — | ✅ | ✅ |
-| 9 | Lead scoring (automated) | P2 | — | — | ✅ |
-| 10 | Automated follow-up sequences | P2 | — | — | ✅ |
+| 9 | Prevent duplicate leads on import/form capture | P1 | — | ✅ | ✅ |
+| 10 | Mark stale leads automatically if no next action / no recent activity | P1 | — | ✅ | ✅ |
+| 11 | Convert won lead into client + onboarding record in one action | P0 | — | ✅ | ✅ |
+| 12 | Qualification scoring (manual first, automated later) | P1 | — | ✅ | ✅ |
+| 13 | Lead scoring (automated) | P2 | — | — | ✅ |
+| 14 | Automated follow-up sequences | P2 | — | — | ✅ |
+
+### Qualification Rule (Recommended)
+
+Use a simple qualification system in v1 before adding "AI scoring":
+
+```text
+BANT-lite for agencies
+- Budget: Can they afford the minimum service package?
+- Authority: Are we talking to a decision-maker?
+- Need: Is there a real service problem to solve?
+- Timeline: Is there a live buying window?
+
+Qualified = at least 3 of 4 are true
+Disqualified = clear bad fit, no budget, or no timeline
+Nurture = good fit, but not ready now
+```
+
+### Pipeline Operating Rules
+
+- Every open lead must have an `owner`, `next_follow_up_date`, and `next_step`.
+- A lead becomes `stale` if no activity is logged for 7 business days.
+- A proposal cannot move to `won` unless at least one service is attached.
+- Converting a lead to `won` should automatically:
+  - create the client record if it does not exist
+  - create the initial client-service assignments
+  - create the onboarding record
+  - preserve the full lead activity history
+- Lost and disqualified leads should never be deleted; they are reporting data.
 
 ### Key Formulas
 
@@ -322,6 +379,12 @@ Average Contract Value (ACV) = Total Monthly Revenue from Won / Number of Won
 Pipeline Value = Sum of (Estimated Value × Probability) for all open leads
 
 Sales Cycle Length = Average days from Lead Created → Proposal Won
+
+Lead Response Time = First Sales Activity - Lead Created
+Target: <1 business day for inbound leads
+
+Stale Lead Rate = Leads with is_stale = true / Total Open Leads
+Target: <10%
 ```
 
 ---
@@ -911,13 +974,26 @@ PERMISSION_MATRIX (role-based)
 | Task | Deliverable | Owner | Time |
 |------|-----------|-------|------|
 | Set up database (PostgreSQL + Supabase) | Running DB with tables | Dev | 2 days |
-| Set up auth system (Clerk/Supabase Auth) | Login/signup working | Dev | 2 days |
-| Set up API framework (Next.js + tRPC or Express) | API routes scaffolded | Dev | 2 days |
-| Set up deployment (Vercel + Render/Railway) | Staging environment live | Dev | 1 day |
+| Set up auth system (Supabase Auth) | Login/signup working | Dev | 2 days |
+| Set up backend functions (Supabase Edge Functions) | Lead intake and workflow endpoints scaffolded | Dev | 2 days |
+| Set up deployment (Vercel + Supabase) | Staging environment live | Dev | 1 day |
 | Define all database schemas | Migration files written | Dev | 2 days |
 | Set up error tracking (Sentry) | Errors logged to dashboard | Dev | 1 day |
 
 **Exit Criteria:** Team can log in, database is queryable, API responds.
+
+### Phase 0 Build Principle
+
+Build the system in this order:
+
+1. data model
+2. auth and permissions
+3. CRUD flows
+4. workflow automation
+5. third-party integrations
+6. client-facing polish
+
+If a screen looks finished but does not save real data, it is not complete.
 
 ---
 
@@ -937,7 +1013,9 @@ PERMISSION_MATRIX (role-based)
 | Services | Assign services to clients | 4 | Required |
 | Revenue | Auto-calculate MRR dashboard | 4 | Required |
 | Pipeline | Add leads, move stages | 4 | Required |
+| Pipeline | Website form capture into CRM | 4 | Required |
 | Pipeline | Track proposals (won/lost) | 5 | Required |
+| Pipeline | Convert won lead into client + onboarding | 5 | Required |
 | Activity | Log calls, emails, meetings | 5 | Required |
 | Time | Log hours per client per service | 5 | Required |
 | Time | Weekly timesheet view | 6 | Required |
@@ -954,11 +1032,24 @@ PERMISSION_MATRIX (role-based)
 - ❌ No AI assistant
 - ❌ No fancy charts (simple tables + basic numbers)
 
+### Beta Definition Clarification
+
+Beta is not just for existing clients. Beta must also prove that a real lead can:
+
+1. come in from a website form
+2. land in the CRM with source attribution
+3. be assigned to an owner
+4. move through pipeline stages
+5. convert into a client
+6. start onboarding without retyping data
+
 ### Beta Success Criteria
 - [ ] All 87 current clients are in the system
 - [ ] All 6 services are defined
 - [ ] Every client has correct services assigned with prices
 - [ ] Dashboard shows true MRR ($235.3K)
+- [ ] Website forms create leads automatically in the CRM
+- [ ] Every open lead has owner + next follow-up date
 - [ ] Team logs time weekly
 - [ ] Invoices generated match actual billing
 - [ ] Proposal tracking shows actual win rate
@@ -993,7 +1084,6 @@ PERMISSION_MATRIX (role-based)
 | Client Portal | Client can view their reports | 16 | Low |
 | Notifications | Email alerts (low ROAS, overdue) | 16 | Medium |
 | Pipeline | Lead scoring (automated) | 17 | Medium |
-| Pipeline | Website form → lead capture | 17 | Medium |
 | Integrations | Slack notifications | 18 | Low |
 | Integrations | Calendar sync (Google/Outlook) | 18 | Medium |
 
@@ -1014,6 +1104,213 @@ PERMISSION_MATRIX (role-based)
 - [ ] System handles all 87 clients without performance issues
 
 **Exit Criteria:** 80% of data in system comes from APIs, not manual entry.
+
+---
+
+## Shipping Sequence (Recommended Execution Order)
+
+This is the practical order to ship from start to finish without painting ourselves into a corner:
+
+### Step 1: Core platform spine
+
+- Supabase project, auth, roles, migrations, environment setup
+- Shared TypeScript types from database schema
+- Basic audit fields on all important records
+
+### Step 2: CRM operating system
+
+- Clients
+- Services
+- Client-service assignments
+- Activities
+- Leads / prospects
+- Proposals
+
+This is the minimum set that makes the CRM real.
+
+### Step 3: Lead capture and conversion
+
+- Website form endpoint
+- UTM/source attribution capture
+- duplicate checking
+- owner assignment
+- next follow-up enforcement
+- one-click convert lead to client + onboarding
+
+This is where the CRM stops being a passive database and starts feeding the business.
+
+### Step 4: Financial and delivery workflows
+
+- MRR dashboard
+- time tracking
+- invoice generation
+- onboarding
+- offboarding
+- CSV exports
+
+### Step 5: Real proof-of-value integrations
+
+- Google Ads
+- Meta Ads
+- GA4
+- SEO provider
+- reporting engine
+
+### Step 6: Client-facing layer
+
+- client portal
+- scheduled reports
+- notifications
+- account health
+
+### Step 7: Intelligence and automation
+
+- lead scoring
+- churn prediction
+- AI assistant with real actions
+- workflow automation
+
+### Ship Rule
+
+Do not start advanced integrations, AI, or a client portal until Steps 1-4 are stable in real daily use.
+
+---
+
+## GitHub Cross-Check: Current Repo vs Market-Ready Structure
+
+Current repository: `lanrcaz/SLASH-CRM`
+
+| Area | Current State | Market-Ready Gap | Improvement |
+|------|---------------|------------------|-------------|
+| App shell | React + Vite app with full route surface | No authenticated route protection | Add auth guard, tenant context, and role-based navigation |
+| Data | All pages read from `src/data/*Mock.ts` | No persisted records | Replace mocks with Supabase queries/mutations behind feature APIs |
+| Pages | Large route files, many 600-1,200+ lines | Hard to maintain and test | Split into feature modules, components, hooks, and data adapters |
+| Backend | None in repo | No lead capture, CRUD, jobs, or integrations | Add Supabase schema, RLS policies, Edge Functions, and migrations |
+| Lead capture | UI-only prospects board | No real source of leads | Add public lead intake endpoint, UTM capture, duplicate detection, assignment rules |
+| Testing | No test setup | No confidence before deploy | Add typecheck, lint, unit tests for domain logic, Playwright smoke tests |
+| CI/CD | No GitHub Actions | Manual quality gate | Add GitHub workflow for lint, typecheck, build, and smoke tests |
+| Deployment | No deployment config | Not market-accessible | Add Vercel deployment, environment docs, and preview deploy flow |
+| Product identity | `package.json` still named `my-app` | Weak project identity | Rename package to `slash-crm` and add project metadata |
+| Docs | README + master plan | No operator setup docs | Add `.env.example`, setup guide, deployment guide, and data import guide |
+
+### Recommended Repo Structure
+
+Keep the current Vite + React app for Beta. It is already working as a front-end shell, and Supabase can provide auth, database, storage, row-level security, lead capture functions, and scheduled jobs without forcing a framework migration.
+
+Recommended structure:
+
+```text
+SLASH-CRM/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── docs/
+│   ├── SETUP.md
+│   ├── DEPLOYMENT.md
+│   ├── DATA_IMPORT.md
+│   └── RELEASE_CHECKLIST.md
+├── public/
+├── supabase/
+│   ├── functions/
+│   │   ├── lead-intake/
+│   │   ├── convert-lead/
+│   │   └── scheduled-sync/
+│   ├── migrations/
+│   └── seed.sql
+├── src/
+│   ├── app/
+│   │   ├── App.tsx
+│   │   ├── routes.tsx
+│   │   └── providers.tsx
+│   ├── components/
+│   │   ├── layout/
+│   │   └── ui/
+│   ├── features/
+│   │   ├── activities/
+│   │   ├── auth/
+│   │   ├── clients/
+│   │   ├── dashboard/
+│   │   ├── leads/
+│   │   ├── onboarding/
+│   │   ├── reports/
+│   │   ├── revenue/
+│   │   └── services/
+│   ├── integrations/
+│   │   ├── supabase/
+│   │   ├── google-ads/
+│   │   ├── meta-ads/
+│   │   └── ga4/
+│   ├── lib/
+│   ├── mocks/
+│   ├── pages/
+│   └── types/
+│       └── database.ts
+├── .env.example
+├── README.md
+└── MASTER_PLAN.md
+```
+
+### Feature Module Shape
+
+Each market-critical feature should be structured the same way:
+
+```text
+src/features/clients/
+├── api/
+│   ├── clients.queries.ts
+│   └── clients.mutations.ts
+├── components/
+├── hooks/
+├── pages/
+├── schemas/
+│   └── client.schema.ts
+├── types.ts
+└── utils.ts
+```
+
+Use this shape for `clients`, `leads`, `services`, `activities`, `revenue`, `onboarding`, and `reports`. The goal is to make each business workflow independently understandable and shippable.
+
+### Market Shipping Gates
+
+Do not call the product "Beta" until these gates pass:
+
+| Gate | Requirement |
+|------|-------------|
+| Auth gate | Users can sign in, sign out, reset password, and have roles |
+| Data gate | Clients, services, leads, activities, and proposals persist in Supabase |
+| Lead gate | A public website form creates a lead in the CRM with source attribution |
+| Conversion gate | A won lead can become a client with service assignments and onboarding |
+| Revenue gate | MRR is computed from client-service assignments, not hardcoded data |
+| Workflow gate | Activities and follow-ups are required on open leads |
+| Quality gate | `lint`, `typecheck`, and `build` pass in GitHub Actions |
+| Deployment gate | Main branch deploys to a live staging URL |
+| Operator gate | One real operator can use the app for one week without spreadsheets |
+
+### Recommended Technical Decisions
+
+- Keep Vite + React for the internal CRM Beta.
+- Use Supabase Auth, Postgres, Storage, RLS, and Edge Functions as the backend foundation.
+- Use Supabase Edge Functions for website lead capture, lead conversion, and scheduled sync jobs.
+- Use generated database types as the source of truth for front-end data types.
+- Keep mock data only under `src/mocks/` for demos and tests, never mixed into production feature modules.
+- Add CI before adding more features.
+- Add a deployment target before adding integrations.
+- Reconsider Next.js only if the product needs server-rendered public marketing pages, advanced server routing, or a heavier API layer than Supabase Edge Functions can comfortably handle.
+
+### First Market-Focused Refactor
+
+Before adding new functionality, refactor in this order:
+
+1. Move `src/App.tsx` route definitions into `src/app/routes.tsx`.
+2. Move `Layout` and `Navbar` into `src/components/layout/`.
+3. Create `src/features/clients`, `src/features/leads`, and `src/features/services`.
+4. Move current page-specific components into their feature folders without changing behavior.
+5. Move mock data from `src/data/` to `src/mocks/`.
+6. Add `.env.example`.
+7. Add `supabase/migrations/0001_initial_schema.sql`.
+8. Add GitHub Actions for lint, typecheck, and build.
+
+This keeps the visual prototype intact while preparing the codebase for real persistence and production workflows.
 
 ---
 
@@ -1066,16 +1363,16 @@ PERMISSION_MATRIX (role-based)
 
 | Layer | Technology | Why |
 |-------|-----------|-----|
-| **Frontend** | Next.js 14 + Tailwind + shadcn/ui | SSR for SEO, React for interactivity |
-| **Backend API** | Next.js API Routes + tRPC | Type-safe, full-stack TypeScript |
-| **Database** | PostgreSQL (Supabase or Railway) | Reliable, scalable, relational |
-| **Auth** | Clerk or Supabase Auth | Production-ready, roles, SSO ready |
-| **Background Jobs** | Inngest or QStash | Scheduled syncs, webhooks |
-| **File Storage** | Supabase Storage or AWS S3 | Client assets, reports, documents |
+| **Frontend** | Vite + React + Tailwind + shadcn-style UI | Current repo already uses this successfully |
+| **Backend API** | Supabase Edge Functions | Lead capture, conversions, webhooks, scheduled jobs |
+| **Database** | Supabase Postgres | Reliable relational data, migrations, row-level security |
+| **Auth** | Supabase Auth | One auth layer for users, roles, and database security |
+| **Background Jobs** | Supabase scheduled functions first; Inngest/QStash later | Start simple, add heavier job tooling when integrations need it |
+| **File Storage** | Supabase Storage | Client assets, reports, onboarding documents |
 | **Email** | Resend or SendGrid | Transactional + marketing emails |
 | **Error Tracking** | Sentry | Production error monitoring |
 | **Analytics** | PostHog or Mixpanel | Product analytics |
-| **Hosting** | Vercel (frontend) + Render/Railway (DB) | Fast, reliable, cost-effective |
+| **Hosting** | Vercel + Supabase | Fast preview deploys with managed backend infrastructure |
 
 ## Database Schema Overview
 
@@ -1101,7 +1398,7 @@ users
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Your CRM (Next.js)                   │
+│                    SLASH-CRM (Vite + React)                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
 │  │  Dashboard   │  │   Reports    │  │   Client     │     │
 │  │   UI         │  │    UI        │  │   Portal     │     │
@@ -1111,15 +1408,15 @@ users
           └─────────────────┴─────────────────┘
                             │
                     ┌───────▼───────┐
-                    │   tRPC API     │
-                    │   (Backend)    │
+                    │ Supabase Edge  │
+                    │   Functions    │
                     └───────┬───────┘
                             │
         ┌───────────────────┼───────────────────┐
         │                   │                   │
    ┌────▼────┐       ┌─────▼─────┐      ┌──────▼──────┐
-   │PostgreSQL│      │  Inngest  │      │ External APIs│
-   │  (Data)  │      │  (Jobs)   │      └─────────────┘
+   │Supabase │      │ Scheduled │      │ External APIs│
+   │Postgres │      │ Functions │      └─────────────┘
    └──────────┘      └─────┬─────┘             │
                            │         ┌──────────┼──────────┐
                            │    ┌────▼────┐ ┌──▼───┐ ┌────▼─────┐
@@ -1229,15 +1526,17 @@ users
 |------|-------|-------|-------------|
 | 1 | Foundation | Set up project, database, auth | Team can log in |
 | 2 | Clients & Services | Build client CRUD, service catalog | Can add all 87 clients |
-| 3 | Revenue & Pipeline | MRR calc, lead pipeline | Dashboard shows real MRR |
-| 4 | Activity & Time | Activity logging, time tracking | Team can log daily work |
-| 5 | Invoicing & Reports | Invoice generation, CSV export | Can generate monthly invoices |
-| 6 | Polish & Internal Test | Fix bugs, onboard team | Team uses it for 1 week |
+| 3 | Revenue & Pipeline | MRR calc, lead pipeline, proposal flow | Dashboard shows real MRR |
+| 4 | Lead Capture & Conversion | Website forms, source attribution, lead-to-client conversion | Real inbound leads land in CRM |
+| 5 | Activity & Time | Activity logging, time tracking | Team can log daily work |
+| 6 | Invoicing & Reports | Invoice generation, CSV export | Can generate monthly invoices |
+| 7 | Polish & Internal Test | Fix bugs, onboard team | Team uses it for 1 week |
 
 ## Internal Rollout Checklist
 
 - [ ] Import all 87 clients from your current system (spreadsheet/QuickBooks/HubSpot)
 - [ ] Define exact prices for each client per service
+- [ ] Connect every website/contact form to CRM lead capture
 - [ ] Train team on logging activities (30-min session)
 - [ ] Set expectation: "All client communication goes in the CRM"
 - [ ] Weekly check-in: What's working? What's missing?
@@ -1294,7 +1593,7 @@ users
 | Meta API rate limits hit | Low | Medium | Implement caching, request batching |
 | Data import is messy | High | Medium | Clean data before import, validate |
 | Scope creep | High | High | Strict phase gates, "defer to v2" policy |
-| Security breach | Low | Critical | Clerk/Supabase auth, encrypted tokens, audit logs |
+| Security breach | Low | Critical | Supabase Auth, RLS policies, encrypted tokens, audit logs |
 | Client portal confuses clients | Medium | Medium | Simple UI, onboarding call, FAQ |
 
 ---
