@@ -225,7 +225,7 @@ SERVICE_METRIC_TEMPLATE
 | Service | Billing Type | Key Metrics to Track | Data Source |
 |---------|-------------|---------------------|-------------|
 | Ad Management | Flat fee + % of spend | ROAS, CTR, CPC, Conversions, Spend | Google Ads API, Meta Marketing API |
-| SEO | Flat fee | Keyword rankings, Organic traffic, Backlinks, Domain authority | SEMrush/Ahrefs API, GA4 |
+| SEO | Flat fee | Query visibility, Average position, Organic traffic, CTR, Pages indexed | Google Search Console API, GA4 |
 | Content Marketing | Flat fee | Blog traffic, Social shares, Email open rate, Leads generated | GA4, Mailchimp/ConvertKit API |
 | Social Media Mgmt | Flat fee | Follower growth, Engagement rate, Reach, Conversions | Meta API, LinkedIn API, GA4 |
 | Web Development | Hourly or project | Page load speed, Conversion rate, Uptime, Bug count | GTmetrix, GA4, Uptime monitors |
@@ -523,6 +523,31 @@ SEO_METRIC (weekly snapshots)
 ├── backlinks_count (integer)
 ├── pages_indexed (integer)
 └── created_at (timestamp)
+
+GSC_QUERY_SNAPSHOT (daily snapshots from Google Search Console)
+├── id (UUID)
+├── seo_project_id (FK)
+├── date (date)
+├── query (string)
+├── page_url (string, nullable)
+├── country (string, nullable)
+├── device (enum: desktop/mobile/tablet, nullable)
+├── clicks (integer)
+├── impressions (integer)
+├── ctr (decimal)
+├── average_position (decimal)
+└── created_at (timestamp)
+
+SEO_TARGET_KEYWORD
+├── id (UUID)
+├── seo_project_id (FK)
+├── keyword (string)
+├── target_page_url (string, nullable)
+├── target_country (string, nullable)
+├── target_device (enum: desktop/mobile/tablet, nullable)
+├── priority (enum: low/medium/high)
+├── source (enum: manual/gsc/serpbear/import)
+└── created_at (timestamp)
 ```
 
 ### API Options
@@ -535,16 +560,87 @@ SEO_METRIC (weekly snapshots)
 | **DataForSEO** | Pay-per-use (~$0.001/keyword) | Unlimited | On-demand | Medium |
 | **Google Search Console** | Free | All your keywords | Daily | High (your own data only) |
 
+### Free-First SEO Decision
+
+Do not start SEO tracking with SEMrush/Ahrefs. Start with Google Search Console because it is official, free, and good enough for the first market version when clients can grant access to their properties.
+
+Google Search Console gives:
+
+- queries
+- pages
+- clicks
+- impressions
+- CTR
+- average position
+- country/device breakdowns
+- sitemap and URL inspection data
+
+What it does not give:
+
+- competitor keyword rankings
+- backlink index quality like Ahrefs
+- keyword difficulty scores
+- search volume for arbitrary non-ranking keywords
+- exact clean-room rank checks for keywords where the client site has no impressions
+
+### Open-Source / GitHub Options Reviewed
+
+| Tool | Free? | What It Can Do | Limitation | Decision |
+|------|-------|----------------|------------|----------|
+| **Google Search Console API** | Free | Official query/page performance, clicks, impressions, CTR, average position | Only verified properties; not competitor research | **Primary SEO source for Beta/v1** |
+| **thenguyenvn90/claude-search-console** | Free/open source | Google Search Console CLI + Claude Code skills for SEO analysis workflows | Useful for agent/report workflows, not a production SaaS backend by itself | **Use as implementation inspiration / internal analysis skill** |
+| **jakenuts/agent-skills/google-search-console** | Free/open source | Claude skill for Search Console analysis, URL inspection, sitemap workflows | Assistant workflow, not persistent product infrastructure | **Useful for operator analysis, not core product** |
+| **SerpBear** | Free/open source MIT | Self-hosted rank tracker, unlimited keywords, email alerts, SERP API, GSC integration | Exact rank tracking still relies on scraping services or proxies; free scraping is limited and fragile | **Optional add-on for exact rank checks** |
+| **SerpLynx** | Free/open source claim | Self-hostable SERP rank tracking, notifications, multi-location checks | Newer project; needs production validation before relying on it | **Research later, not v1 core** |
+| **Serposcope** | Free/open source | Legacy rank tracker | Archived/read-only and self-described legacy code | **Do not use for production** |
+| **claude-seo-audit-skill** | Free skill | SEO audit workflow using GSC + SerpAPI | Requires SerpAPI for keyword research, so not truly free end-to-end | **Do not use as free replacement** |
+
+### Recommended Free SEO Architecture
+
+Use a two-layer SEO model:
+
+1. **Official performance layer:** Google Search Console API pulls daily query/page/device/country snapshots into `GSC_QUERY_SNAPSHOT`.
+2. **Target keyword layer:** `SEO_TARGET_KEYWORD` lets the agency choose important keywords and map them to pages.
+
+For each target keyword, show:
+
+- latest average position from GSC when available
+- clicks and impressions trend
+- CTR trend
+- target page performance
+- movement over 7/30/90 days
+- "missing opportunity" flag when impressions are high but CTR is low
+- "ranking opportunity" flag when average position is 8-20 and impressions are meaningful
+
+Only add exact SERP rank checking later with SerpBear if a client specifically needs independent rank checks by city/device. Treat this as an optional module because scraping Google search results is operationally fragile and may require proxies or paid scraping services.
+
+### SEO MVP Output Without Paid APIs
+
+The CRM can still produce valuable SEO reports for free:
+
+- "Top growing queries"
+- "Top declining queries"
+- "Pages losing impressions"
+- "High impression / low CTR opportunities"
+- "Keywords ranking positions 8-20"
+- "Keyword-to-page map"
+- "Organic traffic value estimate"
+- "SEO ROI estimate"
+
+This is enough for retention reporting in Beta/v1 because it proves whether SEO work is producing visibility, traffic, and opportunity.
+
 ### Functional Requirements
 
 | # | Function | Priority | Beta | v1 | v2 |
 |---|----------|----------|------|-----|-----|
-| 1 | Add keywords to track per client | P1 | — | ✅ | ✅ |
-| 2 | Check keyword positions (weekly) | P1 | — | ✅ | ✅ |
-| 3 | Show position history chart | P1 | — | ✅ | ✅ |
-| 4 | Track organic traffic from GA4 | P1 | — | ✅ | ✅ |
-| 5 | Calculate traffic value (what would this cost in ads?) | P2 | — | — | ✅ |
-| 6 | Competitor keyword gap analysis | P3 | — | — | ✅ |
+| 1 | Connect Google Search Console property | P1 | — | ✅ | ✅ |
+| 2 | Pull daily query/page performance snapshots | P1 | — | ✅ | ✅ |
+| 3 | Add target keywords per client | P1 | — | ✅ | ✅ |
+| 4 | Show GSC average position history chart | P1 | — | ✅ | ✅ |
+| 5 | Track organic traffic from GA4 | P1 | — | ✅ | ✅ |
+| 6 | Calculate traffic value (what would this cost in ads?) | P2 | — | — | ✅ |
+| 7 | Optional exact SERP rank checks via SerpBear | P2 | — | — | ✅ |
+| 8 | Competitor keyword gap analysis | P3 | — | — | ✅ |
 
 ### The "SEO Value" Formula
 
@@ -1073,8 +1169,8 @@ Beta is not just for existing clients. Beta must also prove that a real lead can
 | Ad Tracking | Meta Ads OAuth + campaign sync | 10-12 | High |
 | Ad Tracking | Daily metric sync (automated) | 11-13 | High |
 | Ad Tracking | ROAS calculation + alerts | 13 | Medium |
-| SEO | Keyword tracking (SEMrush API) | 11-13 | Medium |
-| SEO | Position history charts | 13 | Low |
+| SEO | Google Search Console OAuth + query/page sync | 11-13 | Medium |
+| SEO | GSC average position and opportunity charts | 13 | Low |
 | Content | GA4 integration for blog traffic | 12 | Medium |
 | Social | Manual entry + follower tracking | 12 | Low |
 | Web | PageSpeed + uptime monitoring | 13 | Low |
@@ -1097,7 +1193,7 @@ Beta is not just for existing clients. Beta must also prove that a real lead can
 
 ### v1.0 Success Criteria
 - [ ] Ad metrics update automatically every 6 hours
-- [ ] SEO keyword positions update daily
+- [ ] Search Console query/page snapshots update daily
 - [ ] Client portal shows real data
 - [ ] Monthly reports generate and email automatically
 - [ ] Health scores reflect real metrics
@@ -1420,7 +1516,7 @@ users
    └──────────┘      └─────┬─────┘             │
                            │         ┌──────────┼──────────┐
                            │    ┌────▼────┐ ┌──▼───┐ ┌────▼─────┐
-                           │    │Google  │ │Meta  │ │SEMrush   │
+                           │    │Google  │ │Meta  │ │GSC       │
                            │    │Ads API │ │API   │ │API       │
                            │    └─────────┘ └──────┘ └──────────┘
                            │
@@ -1453,7 +1549,7 @@ users
 │  ├──────────────┤    ├──────────────┤    ├──────────────┤                   │
 │  │ SEO          │ →  │ $1,800/mo    │ →  │ Organic      │                   │
 │  │              │    │              │    │ traffic val  │                   │
-│  │              │    │              │    │ (SEMrush)    │                   │
+│  │              │    │              │    │ (GSC + GA4)  │                   │
 │  ├──────────────┤    ├──────────────┤    ├──────────────┤                   │
 │  │ Content      │ →  │ $3,200/mo    │ →  │ Leads from   │                   │
 │  │              │    │              │    │ content ×    │                   │
@@ -1565,10 +1661,11 @@ users
 | Inngest / QStash | Free tier | $20 | $50 |
 | Resend Email | Free tier | $20 | $50 |
 | Sentry | Free tier | $26 | $80 |
-| SEMrush API | — | $120 | $120 |
+| Google Search Console API | Free | Free | Free |
+| Optional paid SEO provider | — | — | $120+ |
 | Google Ads API | Free | Free | Free |
 | Meta Marketing API | Free | Free | Free |
-| **Total** | **~$45/mo** | **~$251/mo** | **~$425/mo** |
+| **Total** | **~$45/mo** | **~$131/mo** | **~$425/mo if paid SEO is added** |
 
 ## Development (One-Time)
 
