@@ -1,73 +1,150 @@
-# React + TypeScript + Vite
+# SLASH-CRM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SLASH-CRM is a modern CRM prototype for client-service businesses that need a cleaner way to manage the full customer lifecycle, from prospecting and onboarding to revenue visibility, reporting, retention, and offboarding.
 
-Currently, two official plugins are available:
+The current build presents a polished front-end experience for an agency-focused CRM product, with dashboard workflows, client views, onboarding flows, earnings tracking, and reporting screens designed to validate the product direction before backend implementation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## React Compiler
+This repository contains a React and TypeScript application built with Vite. The product experience is designed around agency operations and client lifecycle management, with an emphasis on:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- prospect and pipeline visibility
+- structured onboarding workflows
+- client records and client detail views
+- earnings and revenue tracking
+- reporting and performance summaries
+- service management
+- offboarding workflows
+- settings and integration surfaces
 
-## Expanding the ESLint configuration
+The app currently uses mock data and front-end flows to demonstrate the intended product behavior and UI direction.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Current Product Scope
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The prototype includes the following major sections:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Landing page for the CRM product experience
+- Dashboard with KPI cards, charts, activity feed, onboarding preview, and AI-style quick actions
+- Clients directory with filtering, pagination, and detailed client drill-down
+- Client detail workspace with overview, earnings, onboarding, services, activity, and documents tabs
+- Prospects pipeline views
+- Onboarding workspace with phased setup flows and task tracking
+- Offboarding workflow management
+- Earnings and revenue reporting screens
+- Services management views
+- Reports generation and scheduling experience
+- Settings area for team, roles, notifications, API, and integration concepts
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- React 19
+- TypeScript
+- Vite 7
+- React Router 7
+- Tailwind CSS 3
+- Radix UI
+- shadcn-style component patterns
+- Framer Motion
+- Recharts
+- Lucide React
+
+## Project Structure
+
+```text
+SLASH-CRM/
+├── public/                 Static assets and product imagery
+├── src/
+│   ├── components/         Shared layout and UI building blocks
+│   ├── data/               Mock data powering the prototype
+│   ├── hooks/              Utility hooks
+│   ├── lib/                Shared helpers
+│   ├── pages/              Route-level screens
+│   ├── App.tsx             Route definitions
+│   ├── App.css             App-specific styles
+│   ├── index.css           Global styles
+│   └── main.tsx            App bootstrap
+├── MASTER_PLAN.md          Product and architecture planning document
+├── info.md                 Environment and generated component notes
+└── package.json            Scripts and dependencies
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Routes Included
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The app currently ships with these primary routes:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `/` - product landing page
+- `/app` - main dashboard
+- `/app/clients`
+- `/app/clients/:id`
+- `/app/prospects`
+- `/app/onboarding`
+- `/app/offboarding`
+- `/app/earnings`
+- `/app/services`
+- `/app/reports`
+- `/app/settings`
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20 or newer
+- npm
+
+### Install
+
+```bash
+npm install
 ```
+
+### Run the development server
+
+```bash
+npm run dev
+```
+
+### Create a production build
+
+```bash
+npm run build
+```
+
+### Preview the production build
+
+```bash
+npm run preview
+```
+
+## Development Notes
+
+- This is currently a front-end prototype and product exploration build.
+- The application is powered by mock data in `src/data/`.
+- No production authentication, database, billing, or third-party integrations are wired yet.
+- `MASTER_PLAN.md` captures the broader vision for evolving this prototype into a production-ready CRM platform.
+
+## Product Direction
+
+The long-term goal of SLASH-CRM is to become an operations-focused CRM for agencies and service businesses that need more than a traditional sales pipeline. The product direction centers on unifying:
+
+- lead and client management
+- service delivery workflows
+- client onboarding and offboarding
+- revenue attribution and ROI visibility
+- reporting automation
+- retention and account health tracking
+
+## Repository Status
+
+Current status: active prototype / UI foundation
+
+Recommended next steps:
+
+- connect the UI to a real backend and database
+- define authentication and user roles
+- convert mock data into live services
+- add form persistence and validation workflows
+- introduce deployment and CI
+
+## License
+
+No license has been added yet. If this repository is intended for public reuse, add a license before accepting outside contributions or redistribution.
