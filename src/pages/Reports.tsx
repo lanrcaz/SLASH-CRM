@@ -8,7 +8,7 @@ import {
 import {
   quickReports, scheduledReports, recentReports,
   reportDataSourceOptions, reportMetricsBySource,
-} from "@/data/earningsMock";
+} from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
 const NAVY_950 = "#0a0e27";

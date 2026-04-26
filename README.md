@@ -54,15 +54,19 @@ The prototype includes the following major sections:
 SLASH-CRM/
 ├── public/                 Static assets and product imagery
 ├── src/
+│   ├── app/                App shell, providers, and route definitions
 │   ├── components/         Shared layout and UI building blocks
-│   ├── data/               Mock data powering the prototype
+│   ├── features/           Market-critical workflow modules
 │   ├── hooks/              Utility hooks
 │   ├── lib/                Shared helpers
+│   ├── mocks/              Mock data powering the prototype
 │   ├── pages/              Route-level screens
-│   ├── App.tsx             Route definitions
+│   ├── types/              Shared generated/project types
 │   ├── App.css             App-specific styles
 │   ├── index.css           Global styles
 │   └── main.tsx            App bootstrap
+├── docs/                   Setup, deployment, release, and import notes
+├── supabase/               Database migrations and Edge Function scaffolds
 ├── MASTER_PLAN.md          Product and architecture planning document
 ├── info.md                 Environment and generated component notes
 └── package.json            Scripts and dependencies
@@ -118,7 +122,7 @@ npm run preview
 ## Development Notes
 
 - This is currently a front-end prototype and product exploration build.
-- The application is powered by mock data in `src/data/`.
+- The application is powered by mock data in `src/mocks/`.
 - No production authentication, database, billing, or third-party integrations are wired yet.
 - `MASTER_PLAN.md` captures the broader vision for evolving this prototype into a production-ready CRM platform.
 

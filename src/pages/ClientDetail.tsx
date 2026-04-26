@@ -38,7 +38,7 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import type { ClientStatus } from '@/data/mockData';
+import type { ClientStatus } from '@/mocks/mockData';
 import {
   getClientById,
   getClientEarnings,
@@ -46,7 +46,7 @@ import {
   getClientServices,
   getClientOnboardingSteps,
   getClientDocuments,
-} from '@/data/mockData';
+} from '@/mocks/mockData';
 import { cn } from '@/lib/utils';
 /* ------------------------------------------------------------------ */
 /*  Easing                                                             */

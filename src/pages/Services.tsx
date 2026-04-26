@@ -12,7 +12,7 @@ import {
 import {
   servicesKPI, servicesData, serviceIcons, serviceColors,
   type Service,
-} from "@/data/earningsMock";
+} from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
 const NAVY_950 = "#0a0e27";

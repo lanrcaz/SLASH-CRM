@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import {
   prospects, pipelineStages, type Prospect, type ProspectStage,
-} from '@/data/dashboardMock';
+} from '@/mocks/dashboardMock';
 
 /* ------------------------------------------------------------------ */
 /*  Animation helpers                                                  */

@@ -1279,14 +1279,14 @@ Current repository: `lanrcaz/SLASH-CRM`
 | Area | Current State | Market-Ready Gap | Improvement |
 |------|---------------|------------------|-------------|
 | App shell | React + Vite app with full route surface | No authenticated route protection | Add auth guard, tenant context, and role-based navigation |
-| Data | All pages read from `src/data/*Mock.ts` | No persisted records | Replace mocks with Supabase queries/mutations behind feature APIs |
+| Data | Prototype data is isolated in `src/mocks/*` | No persisted records | Replace mocks with Supabase queries/mutations behind feature APIs |
 | Pages | Large route files, many 600-1,200+ lines | Hard to maintain and test | Split into feature modules, components, hooks, and data adapters |
 | Backend | None in repo | No lead capture, CRUD, jobs, or integrations | Add Supabase schema, RLS policies, Edge Functions, and migrations |
 | Lead capture | UI-only prospects board | No real source of leads | Add public lead intake endpoint, UTM capture, duplicate detection, assignment rules |
 | Testing | No test setup | No confidence before deploy | Add typecheck, lint, unit tests for domain logic, Playwright smoke tests |
 | CI/CD | No GitHub Actions | Manual quality gate | Add GitHub workflow for lint, typecheck, build, and smoke tests |
 | Deployment | No deployment config | Not market-accessible | Add Vercel deployment, environment docs, and preview deploy flow |
-| Product identity | `package.json` still named `my-app` | Weak project identity | Rename package to `slash-crm` and add project metadata |
+| Product identity | `package.json` is named `slash-crm` | Add release metadata as product matures | Keep project metadata aligned with launch positioning |
 | Docs | README + master plan | No operator setup docs | Add `.env.example`, setup guide, deployment guide, and data import guide |
 
 ### Recommended Repo Structure
@@ -1393,18 +1393,18 @@ Do not call the product "Beta" until these gates pass:
 - Add a deployment target before adding integrations.
 - Reconsider Next.js only if the product needs server-rendered public marketing pages, advanced server routing, or a heavier API layer than Supabase Edge Functions can comfortably handle.
 
-### First Market-Focused Refactor
+### First Market-Focused Refactor Status
 
-Before adding new functionality, refactor in this order:
+Track this before adding new functionality:
 
-1. Move `src/App.tsx` route definitions into `src/app/routes.tsx`.
-2. Move `Layout` and `Navbar` into `src/components/layout/`.
-3. Create `src/features/clients`, `src/features/leads`, and `src/features/services`.
-4. Move current page-specific components into their feature folders without changing behavior.
-5. Move mock data from `src/data/` to `src/mocks/`.
-6. Add `.env.example`.
-7. Add `supabase/migrations/0001_initial_schema.sql`.
-8. Add GitHub Actions for lint, typecheck, and build.
+1. [x] Move `src/App.tsx` route definitions into `src/app/routes.tsx`.
+2. [x] Move `Layout` and `Navbar` into `src/components/layout/`.
+3. [x] Create `src/features/clients`, `src/features/leads`, and `src/features/services`.
+4. [ ] Move current page-specific components into their feature folders without changing behavior.
+5. [x] Move mock data from `src/data/` to `src/mocks/`.
+6. [x] Add `.env.example`.
+7. [x] Add `supabase/migrations/0001_initial_schema.sql`.
+8. [x] Add GitHub Actions for lint, typecheck, and build.
 
 This keeps the visual prototype intact while preparing the codebase for real persistence and production workflows.
 

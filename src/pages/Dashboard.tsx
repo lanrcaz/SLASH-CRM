@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -15,7 +15,7 @@ import {
   dashboardKPIs, revenueChartData, activities,
   onboardingPreview, earningsQuickView, topEarningClients,
   prospects, type Activity,
-} from '@/data/dashboardMock';
+} from '@/mocks/dashboardMock';
 
 /* ------------------------------------------------------------------ */
 /*  Animation helpers                                                  */
@@ -31,6 +31,13 @@ const fadeSlideUp = (delay = 0) => ({
 const staggerContainer = (stagger = 0.08) => ({
   animate: { transition: { staggerChildren: stagger } },
 });
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour >= 12 && hour < 17) return 'Good afternoon';
+  if (hour >= 17) return 'Good evening';
+  return 'Good morning';
+}
 
 /* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
@@ -489,14 +496,7 @@ function RecentProspects() {
 /* ------------------------------------------------------------------ */
 
 export default function Dashboard() {
-  const [greeting, setGreeting] = useState('Good morning');
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 12 && hour < 17) setGreeting('Good afternoon');
-    else if (hour >= 17) setGreeting('Good evening');
-    else setGreeting('Good morning');
-  }, []);
+  const greeting = getGreeting();
 
   const today = useMemo(() => {
     return new Date().toLocaleDateString('en-US', {

@@ -37,8 +37,8 @@ import {
   activeOffboardings,
   completedOffboardings,
   churnReasons,
-} from '@/data/lifecycleMock';
-import type { OffboardingClient, OffboardingStep } from '@/data/lifecycleMock';
+} from '@/mocks/lifecycleMock';
+import type { OffboardingClient, OffboardingStep } from '@/mocks/lifecycleMock';
 
 // ─── Animation Variants ────────────────────────────────────────────────
 
@@ -199,8 +199,6 @@ function OffboardingStepTracker({ steps, currentStep }: { steps: OffboardingStep
 // ─── Step Detail Panel ─────────────────────────────────────────────────
 
 function StepDetailPanel({ client }: { client: OffboardingClient }) {
-  const [_expandedStep, _setExpandedStep] = useState<number>(client.currentStep);
-  const [_checklist, _setChecklist] = useState<Record<string, boolean>>({});
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [recommendValue, setRecommendValue] = useState<'yes' | 'no' | 'maybe' | null>(null);
 

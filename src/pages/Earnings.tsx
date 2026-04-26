@@ -14,7 +14,7 @@ import {
   milestones, earningsFeed, topClients, payoutsList, payoutStats,
   aiProjections, aiInsight, miniBarData, sparklineData,
   type Milestone,
-} from "@/data/earningsMock";
+} from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
 const NAVY_900 = "#0f1535";
@@ -156,8 +156,8 @@ function ConfettiBurst({ x, y, active }: { x: number; y: number; active: boolean
   const particles = Array.from({ length: 20 }, (_, i) => ({
     id: i,
     angle: (i / 20) * Math.PI * 2,
-    dist: 30 + Math.random() * 50,
-    size: 3 + Math.random() * 4,
+    dist: 30 + ((i * 17) % 50),
+    size: 3 + ((i * 7) % 4),
   }));
   return (
     <div className="fixed pointer-events-none z-[9999]" style={{ left: x, top: y }}>

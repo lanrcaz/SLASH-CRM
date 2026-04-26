@@ -22,8 +22,8 @@ import {
   Building2,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import type { ClientStatus } from '@/data/mockData';
-import { clients } from '@/data/mockData';
+import type { ClientStatus } from '@/mocks/mockData';
+import { clients } from '@/mocks/mockData';
 import { cn } from '@/lib/utils';
 import {
   Dialog,

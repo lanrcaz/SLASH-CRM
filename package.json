@@ -1,12 +1,14 @@
 {
-  "name": "my-app",
+  "name": "slash-crm",
   "private": true,
   "version": "0.0.0",
+  "description": "Agency-focused CRM for lead capture, client lifecycle management, revenue tracking, and ROI reporting.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "typecheck": "tsc -b --pretty false",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -40,7 +42,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "confetti-react": "^2.6.0",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.38.0",

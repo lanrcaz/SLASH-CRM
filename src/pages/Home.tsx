@@ -3,7 +3,8 @@ import { Link } from 'react-router'
 import {
   UserPlus, TrendingUp, Sparkles, UserMinus,
   ArrowRight, Play, Check,
-  MessageSquare, BarChart3, Shield, Zap
+  MessageSquare, BarChart3, Shield, Zap,
+  type LucideIcon
 } from 'lucide-react'
 import CountUp from 'react-countup'
 
@@ -55,7 +56,7 @@ function Section({ children, className = '', id }: { children: React.ReactNode; 
 }
 
 /* ── Feature card ───────────────────────────────────────────────── */
-function FeatureCard({ icon: Icon, title, description }: { icon: any; title: string; description: string }) {
+function FeatureCard({ icon: Icon, title, description }: { icon: LucideIcon; title: string; description: string }) {
   return (
     <div className="bg-navy-900 border border-white/[0.06] rounded-2xl p-8 hover:border-neon-green/20 hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-neon-green opacity-60" />

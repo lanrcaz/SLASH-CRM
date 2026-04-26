@@ -16,8 +16,8 @@ import {
 import {
   teamMembers, integrations, invoices, notificationPrefs,
   activeSessions, loginHistory,
-} from '@/data/dashboardMock';
-import type { Integration, NotificationPref } from '@/data/dashboardMock';
+} from '@/mocks/dashboardMock';
+import type { Integration, NotificationPref } from '@/mocks/dashboardMock';
 
 /* ------------------------------------------------------------------ */
 /*  Animation helpers                                                  */

@@ -35,7 +35,7 @@ export default function Navbar() {
 
   return (
     <aside
-      className={`flex flex-col bg-navy-950 border-r border-navy-700 h-screen sticky top-0 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+      className={`flex flex-col bg-navy-950 border-r border-navy-700 h-screen sticky top-0 transition-all duration-300 ease-in-out ${
         collapsed ? 'w-16' : 'w-64'
       }`}
     >

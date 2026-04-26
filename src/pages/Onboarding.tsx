@@ -27,8 +27,8 @@ import {
   availableClients,
   availableTeam,
   availableServices,
-} from '@/data/lifecycleMock';
-import type { OnboardingClient, OnboardingTemplate } from '@/data/lifecycleMock';
+} from '@/mocks/lifecycleMock';
+import type { OnboardingClient, OnboardingTemplate } from '@/mocks/lifecycleMock';
 
 // ─── Animation Variants ────────────────────────────────────────────────
 
@@ -414,7 +414,6 @@ function TemplateCard({ template, index }: { template: OnboardingTemplate; index
 function OnboardingWizard({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState(1);
   const [selectedClient, setSelectedClient] = useState<string>('');
-  const [_selectedTemplate, _setSelectedTemplate] = useState<string>('tmpl-1');
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string[]>([]);
   const [startDate, setStartDate] = useState('');
