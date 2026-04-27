@@ -17,11 +17,11 @@ import {
 } from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
-const NAVY_900 = "#0f1535";
-const NAVY_800 = "#162044";
-const NAVY_700 = "#1c2960";
-const NAVY_950 = "#0a0e27";
-const NEON_GREEN = "#7eea57";
+const NAVY_900 = "#ffffff";
+const NAVY_800 = "#ffffff";
+const NAVY_700 = "#e4e6eb";
+const NAVY_950 = "#ffffff";
+const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
 const PURPLE = "#8b5cf6";
 const GRAY_500 = "#64748b";
@@ -222,7 +222,7 @@ function MilestoneNode({ m, index, onClick }: { m: Milestone; index: number; onC
 function PeriodTabs({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const tabs = ["7D", "30D", "90D", "1Y", "All"];
   return (
-    <div className="flex gap-1 bg-[#0a0e27] rounded-[10px] p-1">
+    <div className="flex gap-1 bg-[#ffffff] rounded-[10px] p-1">
       {tabs.map((t) => (
         <button
           key={t}

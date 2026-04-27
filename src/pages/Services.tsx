@@ -15,11 +15,11 @@ import {
 } from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
-const NAVY_950 = "#0a0e27";
-const NAVY_900 = "#0f1535";
-const NAVY_800 = "#162044";
-const NAVY_700 = "#1c2960";
-const NEON_GREEN = "#7eea57";
+const NAVY_950 = "#ffffff";
+const NAVY_900 = "#ffffff";
+const NAVY_800 = "#ffffff";
+const NAVY_700 = "#e4e6eb";
+const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
 const GRAY_500 = "#64748b";
 const WHITE = "#ffffff";
@@ -68,7 +68,7 @@ function ServiceIcon({ name, size = 22, color = NEON_GREEN }: { name: string; si
 /* ─── Status Badge ─── */
 function ServiceStatusBadge({ status }: { status: string }) {
   const config: Record<string, { bg: string; text: string }> = {
-    Active: { bg: "rgba(126,234,87,0.15)", text: "#7eea57" },
+    Active: { bg: "rgba(111,75,216,0.15)", text: "#6f4bd8" },
     Paused: { bg: "rgba(245,158,11,0.15)", text: "#f59e0b" },
     Archived: { bg: "rgba(100,116,139,0.15)", text: "#64748b" },
   };

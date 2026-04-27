@@ -81,19 +81,19 @@ function WorkspaceCard({
   return (
     <motion.section
       {...fadeIn(delay)}
-      className={cn('workspace-panel rounded-lg', className)}
+      className={cn('workspace-panel rounded-xl', className)}
     >
-      <div className="flex items-start justify-between border-b border-[#eceef2] px-5 py-4">
-        <div className="flex items-start gap-3">
-          <Icon className="mt-0.5 size-5 shrink-0 text-[#69707a]" strokeWidth={1.8} />
+      <div className="flex items-start justify-between border-b border-[#eceef2] px-5 py-3.5">
+        <div className="flex items-start gap-2.5">
+          <Icon className="mt-0.5 size-4 shrink-0 text-[#69707a]" strokeWidth={1.8} />
           <div>
-            <h2 className="text-[18px] font-bold leading-tight text-[#303238]">{title}</h2>
-            {subtitle && <p className="mt-0.5 text-[13px] text-[#6f747d]">{subtitle}</p>}
+            <h2 className="text-[14px] font-semibold leading-tight tracking-tight text-[#202124]">{title}</h2>
+            {subtitle && <p className="mt-0.5 text-[12.5px] font-normal text-[#6f747d]">{subtitle}</p>}
           </div>
         </div>
         {action ?? (
-          <button className="rounded-md border border-[#d9dde6] p-2 text-[#3f444c] transition-colors hover:bg-[#f3f4f7]">
-            <MoreVertical className="size-4" />
+          <button className="rounded-md border border-[#e4e6eb] p-1.5 text-[#5f6368] transition-colors hover:bg-[#f3f4f7] hover:text-[#202124]">
+            <MoreVertical className="size-3.5" />
           </button>
         )}
       </div>
@@ -111,20 +111,20 @@ function KpiStrip() {
       {dashboardKPIs.map((kpi) => (
         <div
           key={kpi.id}
-          className="rounded-lg border border-[#dfe2e8] bg-white px-4 py-3 shadow-[0_1px_2px_rgba(32,33,36,0.04)]"
+          className="rounded-xl border border-[#e4e6eb] bg-white px-4 py-3 transition-shadow hover:shadow-[0_4px_12px_rgba(15,23,42,0.04)]"
         >
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.04em] text-[#737984]">{kpi.label}</p>
-            <span className="rounded-full bg-[#f2efff] px-2 py-0.5 text-[11px] font-semibold text-[#6f4bd8]">
+            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#737984]">{kpi.label}</p>
+            <span className="rounded-full bg-[#f2efff] px-2 py-0.5 text-[10.5px] font-semibold text-[#6f4bd8]">
               {kpi.changeType === 'positive' ? 'Up' : kpi.changeType === 'warning' ? 'Watch' : 'Live'}
             </span>
           </div>
           <div className="mt-2 flex items-end justify-between gap-3">
             <div>
-              <p className="text-[26px] font-semibold leading-none text-[#24262c]">
+              <p className="text-[24px] font-bold leading-none tracking-tight text-[#202124]">
                 {formatKpiValue(kpi.id, kpi.value)}
               </p>
-              <p className="mt-1.5 text-[12px] text-[#747984]">{kpi.change}</p>
+              <p className="mt-1.5 text-[12px] font-normal text-[#747984]">{kpi.change}</p>
             </div>
             {kpi.sparklineData && (
               <div className="hidden h-8 w-20 sm:block">

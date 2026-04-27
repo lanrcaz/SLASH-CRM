@@ -11,11 +11,11 @@ import {
 } from "@/mocks/earningsMock";
 
 /* ─── design tokens ─── */
-const NAVY_950 = "#0a0e27";
-const NAVY_900 = "#0f1535";
-const NAVY_800 = "#162044";
-const NAVY_700 = "#1c2960";
-const NEON_GREEN = "#7eea57";
+const NAVY_950 = "#ffffff";
+const NAVY_900 = "#ffffff";
+const NAVY_800 = "#ffffff";
+const NAVY_700 = "#e4e6eb";
+const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
 const GRAY_500 = "#64748b";
 const GRAY_400 = "#94a3b8";
@@ -378,7 +378,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                 <input
                   type="checkbox"
                   id="includeCharts"
-                  className="w-4 h-4 rounded accent-[#7eea57]"
+                  className="w-4 h-4 rounded accent-[#6f4bd8]"
                   defaultChecked
                 />
                 <label htmlFor="includeCharts" className="text-[13px] text-white">Include charts and visualizations</label>

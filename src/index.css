@@ -183,9 +183,14 @@
   }
 
   .workspace-panel {
-    border: 1px solid var(--workspace-line);
+    border: 1px solid #e4e6eb;
     background: var(--workspace-surface);
-    box-shadow: 0 14px 34px rgba(32, 33, 36, 0.06);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    transition: box-shadow 200ms ease;
+  }
+
+  .workspace-panel:hover {
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   }
 
   .workspace-empty-illustration {

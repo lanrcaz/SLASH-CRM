@@ -44,11 +44,11 @@ import { Switch } from '@/components/ui/switch';
 /*  Status config                                                      */
 /* ------------------------------------------------------------------ */
 const statusConfig: Record<ClientStatus, { bg: string; text: string; border: string; dot: string }> = {
-  Active:       { bg: 'rgba(126,234,87,0.15)',  text: '#7eea57', border: '1px solid rgba(126,234,87,0.3)',  dot: '#7eea57' },
-  Onboarding:   { bg: 'rgba(59,130,246,0.15)',  text: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)',  dot: '#3b82f6' },
-  Offboarding:  { bg: 'rgba(245,158,11,0.15)',  text: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)',  dot: '#f59e0b' },
-  Churned:      { bg: 'rgba(239,68,68,0.15)',   text: '#ef4444', border: '1px solid rgba(239,68,68,0.3)',   dot: '#ef4444' },
-  Prospect:     { bg: 'rgba(139,92,246,0.15)',  text: '#8b5cf6', border: '1px solid rgba(139,92,246,0.3)',  dot: '#8b5cf6' },
+  Active:       { bg: '#ecfdf5', text: '#047857', border: '1px solid #a7f3d0', dot: '#10b981' },
+  Onboarding:   { bg: '#eff6ff', text: '#1d4ed8', border: '1px solid #bfdbfe', dot: '#3b82f6' },
+  Offboarding:  { bg: '#fffbeb', text: '#b45309', border: '1px solid #fde68a', dot: '#f59e0b' },
+  Churned:      { bg: '#fef2f2', text: '#b91c1c', border: '1px solid #fecaca', dot: '#ef4444' },
+  Prospect:     { bg: '#f2efff', text: '#4b3bb4', border: '1px solid #d8cffa', dot: '#6f4bd8' },
 };
 
 const statusOptions: ClientStatus[] = ['Active', 'Onboarding', 'Offboarding', 'Churned', 'Prospect'];
@@ -73,7 +73,7 @@ function StatusBadge({ status }: { status: ClientStatus }) {
 /* ------------------------------------------------------------------ */
 /*  Mini sparkline (SVG)                                               */
 /* ------------------------------------------------------------------ */
-function MiniSparkline({ data, color = '#7eea57' }: { data: number[]; color?: string }) {
+function MiniSparkline({ data, color = '#6f4bd8' }: { data: number[]; color?: string }) {
   const w = 60, h = 24;
   const max = Math.max(...data, 1);
   const min = Math.min(...data, 0);
@@ -158,7 +158,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         className="max-w-[560px] p-0 gap-0 overflow-hidden"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         showCloseButton={false}
       >
         <DialogHeader className="p-6 pb-4">
@@ -186,7 +186,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 animate={{ scale: [0, 1.2, 1] }}
                 transition={{ duration: 0.5, ease: easeOutExpo }}
               >
-                <CheckCircle2 className="h-12 w-12 text-[#7eea57] mb-4" />
+                <CheckCircle2 className="h-12 w-12 text-[#6f4bd8] mb-4" />
               </motion.div>
               <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 Client added successfully!
@@ -210,9 +210,9 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                       <div
                         className={cn(
                           'h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all',
-                          i < step && 'bg-[#7eea57] text-[#0a0e27]',
+                          i < step && 'bg-[#6f4bd8] text-[#ffffff]',
                           i === step && 'bg-[#3b82f6] text-white',
-                          i > step && 'bg-[#1c2960] text-[#64748b]'
+                          i > step && 'bg-[#e4e6eb] text-[#64748b]'
                         )}
                       >
                         {i < step ? <Check className="h-4 w-4" /> : i + 1}
@@ -222,7 +222,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                       </span>
                     </div>
                     {i < steps.length - 1 && (
-                      <div className={cn('h-0.5 w-12 -mt-5', i < step ? 'bg-[#7eea57]' : 'bg-[#1c2960]')} />
+                      <div className={cn('h-0.5 w-12 -mt-5', i < step ? 'bg-[#6f4bd8]' : 'bg-[#e4e6eb]')} />
                     )}
                   </div>
                 ))}
@@ -246,7 +246,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.name}
                           onChange={e => setForm({ ...form, name: e.target.value })}
                           placeholder="John Doe"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -255,7 +255,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.email}
                           onChange={e => setForm({ ...form, email: e.target.value })}
                           placeholder="john@company.com"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -264,7 +264,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.company}
                           onChange={e => setForm({ ...form, company: e.target.value })}
                           placeholder="Acme Corp"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -273,7 +273,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.phone}
                           onChange={e => setForm({ ...form, phone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -283,7 +283,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           onChange={e => setForm({ ...form, notes: e.target.value })}
                           placeholder="Additional notes..."
                           rows={3}
-                          className="w-full rounded-md bg-[#162044] border border-[#1c2960] text-white placeholder:text-[#64748b] p-3 text-sm outline-none focus-visible:border-[#7eea57] focus-visible:ring-1 focus-visible:ring-[#7eea57]/30 resize-none"
+                          className="w-full rounded-md bg-[#ffffff] border border-[#e4e6eb] text-white placeholder:text-[#64748b] p-3 text-sm outline-none focus-visible:border-[#6f4bd8] focus-visible:ring-1 focus-visible:ring-[#6f4bd8]/30 resize-none"
                         />
                       </div>
                     </div>
@@ -301,13 +301,13 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                             className={cn(
                               'flex flex-col items-start gap-2 p-4 rounded-xl border transition-all text-left',
                               selected
-                                ? 'border-[#7eea57] bg-[rgba(126,234,87,0.05)]'
-                                : 'border-[#1c2960] bg-[#162044] hover:border-[rgba(255,255,255,0.1)]'
+                                ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.05)]'
+                                : 'border-[#e4e6eb] bg-[#ffffff] hover:border-[rgba(255,255,255,0.1)]'
                             )}
                           >
                             <div className="flex items-center gap-2">
-                              <Icon className={cn('h-4 w-4', selected ? 'text-[#7eea57]' : 'text-[#64748b]')} />
-                              <span className={cn('text-sm font-medium', selected ? 'text-[#7eea57]' : 'text-white')}>
+                              <Icon className={cn('h-4 w-4', selected ? 'text-[#6f4bd8]' : 'text-[#64748b]')} />
+                              <span className={cn('text-sm font-medium', selected ? 'text-[#6f4bd8]' : 'text-white')}>
                                 {svc.name}
                               </span>
                             </div>
@@ -320,7 +320,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
 
                   {step === 2 && (
                     <div className="space-y-6">
-                      <div className="flex items-center justify-between p-4 rounded-xl bg-[#162044] border border-[#1c2960]">
+                      <div className="flex items-center justify-between p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
                         <div>
                           <p className="text-sm font-medium text-white">Send onboarding invitation email</p>
                           <p className="text-xs text-[#64748b] mt-0.5">Client will receive a welcome email with login instructions</p>
@@ -328,7 +328,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                         <Switch checked={sendInvite} onCheckedChange={setSendInvite} />
                       </div>
                       {sendInvite && (
-                        <div className="p-4 rounded-xl bg-[#0a0e27] border border-[#1c2960]">
+                        <div className="p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
                           <p className="text-xs text-[#64748b] mb-2">Email Preview:</p>
                           <div className="space-y-2">
                             <p className="text-sm text-white font-medium">Welcome to ClientVault!</p>
@@ -358,16 +358,16 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 {step < 2 ? (
                   <button
                     onClick={() => setStep(step + 1)}
-                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-                    style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+                    style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
                   >
                     Next
                   </button>
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-                    style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+                    style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
                   >
                     Add Client
                   </button>
@@ -449,7 +449,7 @@ export default function Clients() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: easeOutExpo }}
       className="min-h-screen p-6 lg:p-8"
-      style={{ background: '#0a0e27', fontFamily: 'Inter, sans-serif' }}
+      style={{ background: '#ffffff', fontFamily: 'Inter, sans-serif' }}
     >
       {/* Page Header */}
       <motion.div
@@ -471,7 +471,7 @@ export default function Clients() {
               {totalClients} total
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1 w-1 rounded-full bg-[#7eea57]" />
+              <span className="h-1 w-1 rounded-full bg-[#6f4bd8]" />
               {activeCount} active
             </span>
             <span className="flex items-center gap-1.5">
@@ -487,8 +487,8 @@ export default function Clients() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-            style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+            style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
           >
             <Plus className="h-4 w-4" />
             Add Client
@@ -506,7 +506,7 @@ export default function Clients() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.05 }}
         className="rounded-2xl p-5 mb-6"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
       >
         <div className="flex flex-wrap items-center gap-4">
           {/* Search */}
@@ -516,7 +516,7 @@ export default function Clients() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, email, company..."
-              className="pl-9 bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+              className="pl-9 bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
             />
           </div>
 
@@ -525,7 +525,7 @@ export default function Clients() {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value as ClientStatus | 'All')}
-              className="appearance-none bg-[#162044] border border-[#1c2960] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#7eea57] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               <option value="All">All Statuses</option>
               {statusOptions.map(s => (
@@ -540,7 +540,7 @@ export default function Clients() {
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
-              className="appearance-none bg-[#162044] border border-[#1c2960] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#7eea57] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               {sortOptions.map(s => (
                 <option key={s} value={s}>{s}</option>
@@ -553,8 +553,8 @@ export default function Clients() {
           {statusFilter !== 'All' && (
             <button
               onClick={() => setStatusFilter('All')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#7eea57]"
-              style={{ background: 'rgba(126,234,87,0.15)', border: '1px solid rgba(126,234,87,0.3)' }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#6f4bd8]"
+              style={{ background: 'rgba(111,75,216,0.15)', border: '1px solid rgba(111,75,216,0.3)' }}
             >
               {statusFilter}
               <X className="h-3 w-3" />
@@ -569,7 +569,7 @@ export default function Clients() {
           onClick={() => setViewMode('grid')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'grid' ? 'bg-[#162044] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'grid' ? 'bg-[#ffffff] text-white' : 'text-[#64748b] hover:text-white'
           )}
         >
           <LayoutGrid className="h-[18px] w-[18px]" />
@@ -578,7 +578,7 @@ export default function Clients() {
           onClick={() => setViewMode('list')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'list' ? 'bg-[#162044] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'list' ? 'bg-[#ffffff] text-white' : 'text-[#64748b] hover:text-white'
           )}
         >
           <List className="h-[18px] w-[18px]" />
@@ -598,7 +598,7 @@ export default function Clients() {
             {/* Table Header */}
             <div
               className="hidden lg:grid grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 px-5 py-3 text-xs font-medium uppercase tracking-wider text-[#64748b]"
-              style={{ background: '#0f1535', borderRadius: '16px 16px 0 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+              style={{ background: '#ffffff', borderRadius: '16px 16px 0 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
             >
               <span>Client</span>
               <span>Status</span>
@@ -624,7 +624,7 @@ export default function Clients() {
                     onClick={() => handleRowClick(client.id)}
                     className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 items-center p-5 rounded-2xl cursor-pointer transition-all hover:-translate-y-[1px]"
                     style={{
-                      background: '#0f1535',
+                      background: '#ffffff',
                       border: '1px solid rgba(255,255,255,0.04)',
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
@@ -661,7 +661,7 @@ export default function Clients() {
                       {client.servicesActive > 0 && (
                         <div className="flex -space-x-1">
                           {Array.from({ length: Math.min(client.servicesActive, 3) }).map((_, j) => (
-                            <div key={j} className="h-7 w-7 rounded-full bg-[#162044] border border-[#0f1535] flex items-center justify-center">
+                            <div key={j} className="h-7 w-7 rounded-full bg-[#ffffff] border border-[#ffffff] flex items-center justify-center">
                               <Target className="h-3 w-3 text-[#64748b]" />
                             </div>
                           ))}
@@ -685,7 +685,7 @@ export default function Clients() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="min-w-[160px] bg-[#162044] border-[#1c2960] text-white"
+                          className="min-w-[160px] bg-[#ffffff] border-[#e4e6eb] text-white"
                         >
                           <DropdownMenuItem onClick={() => handleRowClick(client.id)} className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
                             View
@@ -729,11 +729,11 @@ export default function Clients() {
                 onClick={() => handleRowClick(client.id)}
                 className="relative flex flex-col items-center p-6 rounded-2xl cursor-pointer transition-all hover:-translate-y-1"
                 style={{
-                  background: '#0f1535',
+                  background: '#ffffff',
                   border: '1px solid rgba(255,255,255,0.06)',
                 }}
                 onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
-                  (e.currentTarget as HTMLElement).style.border = '1px solid rgba(126,234,87,0.2)';
+                  (e.currentTarget as HTMLElement).style.border = '1px solid rgba(111,75,216,0.2)';
                   (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
                 }}
                 onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
@@ -752,9 +752,9 @@ export default function Clients() {
                 </h3>
                 <p className="text-[13px] text-[#64748b]">{client.company}</p>
 
-                <div className="w-full h-px my-4" style={{ background: '#1c2960' }} />
+                <div className="w-full h-px my-4" style={{ background: '#e4e6eb' }} />
 
-                <p className="text-xl font-medium text-[#7eea57]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                <p className="text-xl font-medium text-[#6f4bd8]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                   ${client.mrr.toLocaleString()}
                   <span className="text-xs text-[#64748b] ml-1">/mo</span>
                 </p>
@@ -762,7 +762,7 @@ export default function Clients() {
                 <div className="flex items-center gap-2 mt-3">
                   {client.servicesActive > 0 ? (
                     Array.from({ length: Math.min(client.servicesActive, 3) }).map((_, j) => (
-                      <div key={j} className="h-7 w-7 rounded-full bg-[#162044] flex items-center justify-center">
+                      <div key={j} className="h-7 w-7 rounded-full bg-[#ffffff] flex items-center justify-center">
                         <Target className="h-3 w-3 text-[#64748b]" />
                       </div>
                     ))
@@ -772,7 +772,7 @@ export default function Clients() {
                 </div>
 
                 <p
-                  className="mt-4 text-[13px] font-medium text-[#7eea57] hover:underline"
+                  className="mt-4 text-[13px] font-medium text-[#6f4bd8] hover:underline"
                   onClick={(e) => { e.stopPropagation(); handleRowClick(client.id); }}
                 >
                   View Details
@@ -806,7 +806,7 @@ export default function Clients() {
                   className={cn(
                     'h-9 w-9 rounded-full text-sm font-medium transition-all',
                     currentPage === pageNum
-                      ? 'bg-[#162044] text-white'
+                      ? 'bg-[#ffffff] text-white'
                       : 'text-[#64748b] hover:text-white'
                   )}
                 >

@@ -89,7 +89,7 @@ function ProfileTab() {
       {/* Personal Information */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Personal Information</h3>
 
@@ -101,7 +101,7 @@ function ProfileTab() {
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
-              className="border-[#1c2960] text-[#7eea57] hover:bg-[rgba(126,234,87,0.08)]"
+              className="border-[#e4e6eb] text-[#6f4bd8] hover:bg-[rgba(111,75,216,0.08)]"
             >
               <Upload className="size-4 mr-1.5" /> Change Avatar
             </Button>
@@ -123,7 +123,7 @@ function ProfileTab() {
                 type={type}
                 value={form[field as keyof typeof form]}
                 onChange={(e) => update(field, e.target.value)}
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
               />
             </motion.div>
           ))}
@@ -132,7 +132,7 @@ function ProfileTab() {
             <select
               value={form.timezone}
               onChange={(e) => update('timezone', e.target.value)}
-              className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
             >
               <option value="America/New_York">Eastern Time (ET)</option>
               <option value="America/Chicago">Central Time (CT)</option>
@@ -159,8 +159,8 @@ function ProfileTab() {
             className={cn(
               'font-semibold',
               hasChanges
-                ? 'bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446]'
-                : 'bg-[#1c2960] text-[#64748b] cursor-not-allowed'
+                ? 'bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4]'
+                : 'bg-[#e4e6eb] text-[#64748b] cursor-not-allowed'
             )}
           >
             Save Changes
@@ -171,7 +171,7 @@ function ProfileTab() {
       {/* Change Password */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Change Password</h3>
         <div className="flex flex-col gap-4 max-w-md">
@@ -180,7 +180,7 @@ function ProfileTab() {
             <Input
               type="password"
               placeholder="Enter current password"
-              className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
             />
           </div>
           <div>
@@ -188,7 +188,7 @@ function ProfileTab() {
             <Input
               type="password"
               placeholder="Enter new password"
-              className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
             />
             {/* Password strength */}
             <div className="mt-2 flex gap-1">
@@ -209,10 +209,10 @@ function ProfileTab() {
             <Input
               type="password"
               placeholder="Confirm new password"
-              className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
             />
           </div>
-          <Button className="mt-2 w-fit bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold">
+          <Button className="mt-2 w-fit bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
             Update Password
           </Button>
         </div>
@@ -230,7 +230,7 @@ function TeamTab() {
 
   const roleColors: Record<string, string> = {
     Owner: '#8b5cf6',
-    Admin: '#7eea57',
+    Admin: '#6f4bd8',
     Editor: '#3b82f6',
     Viewer: '#64748b',
   };
@@ -243,7 +243,7 @@ function TeamTab() {
     <div className="flex flex-col gap-6">
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-6"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
       >
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-[22px] font-semibold text-white">
@@ -251,7 +251,7 @@ function TeamTab() {
           </h3>
           <Button
             onClick={() => setInviteModalOpen(true)}
-            className="bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold"
+            className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold"
           >
             <Plus className="size-4 mr-1.5" /> Invite Member
           </Button>
@@ -267,9 +267,9 @@ function TeamTab() {
                 'rounded-full px-3 py-1 text-[12px] font-medium transition-all',
                 roleFilter === role || (!roleFilter && !role)
                   ? role === ''
-                    ? 'bg-[#162044] text-white'
-                    : 'text-[#0a0e27]'
-                  : 'border border-[#1c2960] text-[#94a3b8] hover:text-white'
+                    ? 'bg-[#ffffff] text-white'
+                    : 'text-[#ffffff]'
+                  : 'border border-[#e4e6eb] text-[#94a3b8] hover:text-white'
               )}
               style={
                 (roleFilter === role || (!roleFilter && !role)) && role !== ''
@@ -302,7 +302,7 @@ function TeamTab() {
             <motion.div
               key={member.id}
               variants={staggerItem}
-              className="grid grid-cols-[1fr_100px_100px_120px_80px] items-center gap-4 rounded-[10px] bg-[#162044] px-4 py-3"
+              className="grid grid-cols-[1fr_100px_100px_120px_80px] items-center gap-4 rounded-[10px] bg-[#ffffff] px-4 py-3"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[11px] font-medium text-white shrink-0">
@@ -359,7 +359,7 @@ function TeamTab() {
 
       {/* Invite Modal */}
       <Dialog open={inviteModalOpen} onOpenChange={setInviteModalOpen}>
-        <DialogContent className="max-w-[480px] border-[#1c2960] bg-[#0f1535] text-white">
+        <DialogContent className="max-w-[480px] border-[#e4e6eb] bg-[#ffffff] text-white">
           <DialogHeader>
             <DialogTitle className="text-[20px] font-semibold">Invite Team Member</DialogTitle>
           </DialogHeader>
@@ -368,7 +368,7 @@ function TeamTab() {
               <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Email Address</label>
               <Input
                 placeholder="colleague@company.com"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
               <p className="mt-1 text-[11px] text-[#64748b]">You can invite multiple by separating with commas</p>
             </div>
@@ -382,9 +382,9 @@ function TeamTab() {
                 ].map(({ role, desc }) => (
                   <label
                     key={role}
-                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#1c2960] bg-[#162044] p-3 transition-colors hover:border-[#64748b]"
+                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#e4e6eb] bg-[#ffffff] p-3 transition-colors hover:border-[#64748b]"
                   >
-                    <input type="radio" name="inviteRole" value={role} className="accent-[#7eea57]" />
+                    <input type="radio" name="inviteRole" value={role} className="accent-[#6f4bd8]" />
                     <div>
                       <p className="text-[13px] font-medium text-white">{role}</p>
                       <p className="text-[11px] text-[#64748b]">{desc}</p>
@@ -404,7 +404,7 @@ function TeamTab() {
             </Button>
             <Button
               onClick={() => setInviteModalOpen(false)}
-              className="bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold"
+              className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold"
             >
               Send Invitation
             </Button>
@@ -438,7 +438,7 @@ function IntegrationsTab() {
   return (
     <motion.div
       {...fadeSlideUp(0)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-6"
+      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
     >
       <h3 className="text-[22px] font-semibold text-white mb-6">Connected Integrations</h3>
       <motion.div
@@ -454,7 +454,7 @@ function IntegrationsTab() {
             className={cn(
               'rounded-[16px] border border-[rgba(255,255,255,0.06)] p-5 transition-all',
               integration.connected
-                ? 'border-l-[3px] border-l-[#7eea57]'
+                ? 'border-l-[3px] border-l-[#6f4bd8]'
                 : 'border-l-[3px] border-l-[#64748b]'
             )}
           >
@@ -463,7 +463,7 @@ function IntegrationsTab() {
                 <div
                   className={cn(
                     'flex size-10 items-center justify-center rounded-[10px]',
-                    integration.connected ? 'text-[#7eea57] bg-[rgba(126,234,87,0.1)]' : 'text-[#64748b] bg-[#162044]'
+                    integration.connected ? 'text-[#6f4bd8] bg-[rgba(111,75,216,0.1)]' : 'text-[#64748b] bg-[#ffffff]'
                   )}
                 >
                   {integrationIcons[integration.id]}
@@ -489,7 +489,7 @@ function IntegrationsTab() {
               </div>
               <div className="flex items-center gap-2">
                 {integration.connected && (
-                  <button className="text-[12px] text-[#7eea57] hover:underline">
+                  <button className="text-[12px] text-[#6f4bd8] hover:underline">
                     Configure →
                   </button>
                 )}
@@ -501,7 +501,7 @@ function IntegrationsTab() {
                     'text-[12px] font-medium',
                     integration.connected
                       ? 'text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:text-[#ef4444]'
-                      : 'bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446]'
+                      : 'bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4]'
                   )}
                 >
                   {integration.connected ? 'Disconnect' : 'Connect'}
@@ -524,14 +524,14 @@ function BillingTab() {
       {/* Current Plan */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Current Plan</h3>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span
               className="inline-block rounded-full px-3 py-1 text-[12px] font-semibold"
-              style={{ backgroundColor: 'rgba(126,234,87,0.15)', color: '#7eea57' }}
+              style={{ backgroundColor: 'rgba(111,75,216,0.15)', color: '#6f4bd8' }}
             >
               Growth
             </span>
@@ -542,7 +542,7 @@ function BillingTab() {
           <div className="flex flex-col gap-2">
             <Button
               variant="outline"
-              className="border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
             >
               Change Plan
             </Button>
@@ -554,7 +554,7 @@ function BillingTab() {
       {/* Usage */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Usage</h3>
         <div className="flex flex-col gap-5">
@@ -574,7 +574,7 @@ function BillingTab() {
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
                   <motion.div
-                    className="h-full rounded-full bg-[#7eea57]"
+                    className="h-full rounded-full bg-[#6f4bd8]"
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}
                     transition={{ duration: 0.8, ease: easeOutExpo }}
@@ -589,12 +589,12 @@ function BillingTab() {
       {/* Payment Method */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-4">Payment Method</h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex size-10 items-center justify-center rounded-[10px] bg-[#162044]">
+            <div className="flex size-10 items-center justify-center rounded-[10px] bg-[#ffffff]">
               <CreditCard className="size-5 text-[#94a3b8]" />
             </div>
             <div>
@@ -604,7 +604,7 @@ function BillingTab() {
           </div>
           <Button
             variant="outline"
-            className="border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
           >
             Update Card
           </Button>
@@ -614,7 +614,7 @@ function BillingTab() {
       {/* Invoice History */}
       <motion.div
         {...fadeSlideUp(0.2)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Invoice History</h3>
         <div className="overflow-x-auto">
@@ -647,7 +647,7 @@ function BillingTab() {
                     </span>
                   </td>
                   <td className="py-3 text-right">
-                    <button className="inline-flex items-center gap-1 text-[12px] text-[#7eea57] hover:underline">
+                    <button className="inline-flex items-center gap-1 text-[12px] text-[#6f4bd8] hover:underline">
                       <Download className="size-3" /> Download
                     </button>
                   </td>
@@ -684,7 +684,7 @@ function NotificationsTab() {
   return (
     <motion.div
       {...fadeSlideUp(0)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-6"
+      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
     >
       <h3 className="text-[22px] font-semibold text-white mb-6">Notification Preferences</h3>
 
@@ -706,7 +706,7 @@ function NotificationsTab() {
                   <motion.div
                     key={pref.id}
                     variants={staggerItem}
-                    className="flex items-center justify-between rounded-[10px] bg-[#162044] px-4 py-3"
+                    className="flex items-center justify-between rounded-[10px] bg-[#ffffff] px-4 py-3"
                   >
                     <div>
                       <p className="text-[14px] font-medium text-white">{pref.label}</p>
@@ -754,7 +754,7 @@ function SecurityTab() {
       {/* Two-Factor Authentication */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">
           Two-Factor Authentication
@@ -780,7 +780,7 @@ function SecurityTab() {
             <Switch checked={twoFAEnabled} onCheckedChange={setTwoFAEnabled} />
             <Button
               variant="outline"
-              className="border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
             >
               Reconfigure
             </Button>
@@ -791,14 +791,14 @@ function SecurityTab() {
       {/* Active Sessions */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Active Sessions</h3>
         <div className="flex flex-col gap-3">
           {sessions.map((session, i) => (
             <div
               key={i}
-              className="flex items-center justify-between rounded-[10px] bg-[#162044] px-4 py-3"
+              className="flex items-center justify-between rounded-[10px] bg-[#ffffff] px-4 py-3"
             >
               <div className="flex items-center gap-3">
                 <Monitor className="size-5 text-[#94a3b8]" />
@@ -806,7 +806,7 @@ function SecurityTab() {
                   <p className="text-[13px] font-medium text-white">
                     {session.device}
                     {session.current && (
-                      <span className="ml-2 text-[11px] text-[#7eea57]">(This device)</span>
+                      <span className="ml-2 text-[11px] text-[#6f4bd8]">(This device)</span>
                     )}
                   </p>
                   <p className="text-[11px] text-[#64748b]">
@@ -832,7 +832,7 @@ function SecurityTab() {
       {/* Login History */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Login History</h3>
         <div className="overflow-x-auto">
@@ -889,7 +889,7 @@ function PlatformTab() {
       {/* Appearance */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Appearance</h3>
 
@@ -908,15 +908,15 @@ function PlatformTab() {
                 className={cn(
                   'flex items-center gap-2 rounded-lg border px-4 py-3 text-[13px] font-medium transition-all',
                   theme === t.id
-                    ? 'border-[#7eea57] bg-[rgba(126,234,87,0.08)] text-[#7eea57]'
-                    : 'border-[#1c2960] bg-[#162044] text-[#94a3b8]',
+                    ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-[#6f4bd8]'
+                    : 'border-[#e4e6eb] bg-[#ffffff] text-[#94a3b8]',
                   t.disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
                 <t.icon className="size-4" />
                 {t.label}
                 {t.badge && (
-                  <span className="ml-1 rounded-full bg-[#1c2960] px-1.5 py-0.5 text-[9px] text-[#64748b]">
+                  <span className="ml-1 rounded-full bg-[#e4e6eb] px-1.5 py-0.5 text-[9px] text-[#64748b]">
                     {t.badge}
                   </span>
                 )}
@@ -936,8 +936,8 @@ function PlatformTab() {
                 className={cn(
                   'flex items-center gap-2 rounded-lg border px-4 py-3 text-[13px] font-medium capitalize transition-all',
                   density === d
-                    ? 'border-[#7eea57] bg-[rgba(126,234,87,0.08)] text-[#7eea57]'
-                    : 'border-[#1c2960] bg-[#162044] text-[#94a3b8]'
+                    ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-[#6f4bd8]'
+                    : 'border-[#e4e6eb] bg-[#ffffff] text-[#94a3b8]'
                 )}
               >
                 <Monitor className="size-4" />
@@ -951,7 +951,7 @@ function PlatformTab() {
       {/* Language & Region */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Language & Region</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -960,7 +960,7 @@ function PlatformTab() {
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
             >
               <option value="en">English</option>
               <option value="es">Spanish</option>
@@ -973,7 +973,7 @@ function PlatformTab() {
             <select
               value={dateFormat}
               onChange={(e) => setDateFormat(e.target.value)}
-              className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
             >
               <option value="MM/DD/YYYY">MM/DD/YYYY</option>
               <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -985,7 +985,7 @@ function PlatformTab() {
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
             >
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
@@ -999,13 +999,13 @@ function PlatformTab() {
       {/* Default Views */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Default Views</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Default Dashboard View</label>
-            <select className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]">
+            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]">
               <option>Overview</option>
               <option>Earnings</option>
               <option>Clients</option>
@@ -1013,7 +1013,7 @@ function PlatformTab() {
           </div>
           <div>
             <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Default Date Range</label>
-            <select className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]">
+            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]">
               <option>30D</option>
               <option>90D</option>
               <option>1Y</option>
@@ -1025,13 +1025,13 @@ function PlatformTab() {
       {/* Data Management */}
       <motion.div
         {...fadeSlideUp(0.2)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Data Management</h3>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <Button
             variant="outline"
-            className="border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
           >
             <Download className="size-4 mr-1.5" /> Export All Data
           </Button>
@@ -1070,7 +1070,7 @@ function APITab() {
       {/* API Documentation */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-4">API Documentation</h3>
         <p className="text-[14px] text-[#94a3b8] mb-4">
@@ -1079,25 +1079,25 @@ function APITab() {
         <div className="flex items-center gap-3">
           <a
             href="#"
-            className="inline-flex items-center gap-2 text-[13px] text-[#7eea57] hover:underline"
+            className="inline-flex items-center gap-2 text-[13px] text-[#6f4bd8] hover:underline"
           >
             <ExternalLink className="size-4" /> View API Documentation
           </a>
         </div>
-        <div className="mt-4 rounded-[10px] bg-[#162044] p-3">
+        <div className="mt-4 rounded-[10px] bg-[#ffffff] p-3">
           <p className="text-[11px] text-[#64748b] uppercase tracking-[0.06em]">Base URL</p>
-          <code className="mt-1 block text-[13px] text-[#7eea57]">https://api.clientvault.io/v1</code>
+          <code className="mt-1 block text-[13px] text-[#6f4bd8]">https://api.clientvault.io/v1</code>
         </div>
       </motion.div>
 
       {/* API Key */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">API Keys</h3>
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-3 rounded-[10px] bg-[#162044] p-4">
+          <div className="flex items-center gap-3 rounded-[10px] bg-[#ffffff] p-4">
             <div className="flex-1 min-w-0">
               <p className="text-[11px] text-[#64748b] uppercase tracking-[0.06em]">Live API Key</p>
               <div className="mt-1 flex items-center gap-2">
@@ -1137,7 +1137,7 @@ function APITab() {
       {/* Webhooks */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-8"
+        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
       >
         <h3 className="text-[22px] font-semibold text-white mb-6">Webhooks</h3>
         <div className="flex flex-col gap-4">
@@ -1147,9 +1147,9 @@ function APITab() {
               <Input
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
-                className="flex-1 border-[#1c2960] bg-[#162044] text-white focus-visible:border-[#7eea57]"
+                className="flex-1 border-[#e4e6eb] bg-[#ffffff] text-white focus-visible:border-[#6f4bd8]"
               />
-              <Button className="bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold">
+              <Button className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
                 Save
               </Button>
             </div>
@@ -1167,9 +1167,9 @@ function APITab() {
               ].map((event) => (
                 <label
                   key={event}
-                  className="flex items-center gap-2 rounded-full border border-[#1c2960] bg-[#162044] px-3 py-1.5 text-[12px] text-[#cbd5e1] cursor-pointer hover:border-[#64748b]"
+                  className="flex items-center gap-2 rounded-full border border-[#e4e6eb] bg-[#ffffff] px-3 py-1.5 text-[12px] text-[#cbd5e1] cursor-pointer hover:border-[#64748b]"
                 >
-                  <input type="checkbox" defaultChecked className="accent-[#7eea57]" />
+                  <input type="checkbox" defaultChecked className="accent-[#6f4bd8]" />
                   {event}
                 </label>
               ))}
@@ -1179,7 +1179,7 @@ function APITab() {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
             >
               Test Webhook
             </Button>
@@ -1194,7 +1194,7 @@ function APITab() {
                 { event: 'earning.paid', status: '200 OK', time: '5 hours ago' },
                 { event: 'prospect.converted', status: '200 OK', time: '1 day ago' },
               ].map((d, i) => (
-                <div key={i} className="flex items-center justify-between rounded-lg bg-[#162044] px-3 py-2">
+                <div key={i} className="flex items-center justify-between rounded-lg bg-[#ffffff] px-3 py-2">
                   <span className="text-[12px] text-[#cbd5e1]">{d.event}</span>
                   <div className="flex items-center gap-3">
                     <span
@@ -1234,7 +1234,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-full bg-[#0a0e27] p-6">
+    <div className="min-h-full bg-[#ffffff] p-6">
       {/* Page Header */}
       <motion.div
         initial={false}
@@ -1264,11 +1264,11 @@ export default function Settings() {
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-4 py-2.5 text-[13px] font-medium transition-all whitespace-nowrap',
                     isActive
-                      ? 'border-l-2 border-[#7eea57] bg-[rgba(126,234,87,0.08)] text-white'
+                      ? 'border-l-2 border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-white'
                       : 'border-l-2 border-transparent text-[#64748b] hover:text-[#cbd5e1]'
                   )}
                 >
-                  <tab.icon className={cn('size-4', isActive ? 'text-[#7eea57]' : 'text-[#64748b]')} />
+                  <tab.icon className={cn('size-4', isActive ? 'text-[#6f4bd8]' : 'text-[#64748b]')} />
                   {tab.label}
                 </button>
               );
