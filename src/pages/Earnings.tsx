@@ -512,14 +512,14 @@ export default function Earnings() {
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 pr-4" style={{ color: GRAY_500 }}>Rank</th>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>Client</th>
-                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>Total</th>
-                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>This Month</th>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 pl-4" style={{ color: GRAY_500 }}>Trend</th>
+                <tr className="border-y border-slate-200 bg-slate-50/60">
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Rank</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Client</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Total</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">This Month</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 text-slate-500">Trend</th>
                 </tr>
               </thead>
               <tbody>
@@ -529,9 +529,9 @@ export default function Earnings() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, ease: easeOutExpo, delay: 0.5 + i * 0.06 }}
-                    className="border-b transition-colors hover:bg-white/[0.02]" style={{ borderColor: "rgba(255,255,255,0.04)" }}
+                    className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
                   >
-                    <td className="py-3 pr-4">
+                    <td className="py-3 px-3 border-r border-slate-100">
                       <span
                         className="text-[13px] font-semibold"
                         style={{
@@ -541,21 +541,21 @@ export default function Earnings() {
                         #{c.rank}
                       </span>
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-3 px-3 border-r border-slate-100">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold" style={{ background: `${ELECTRIC_BLUE}20`, color: ELECTRIC_BLUE }}>
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold" style={{ background: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}>
                           {c.client.slice(0, 2).toUpperCase()}
                         </div>
                         <span className="text-[14px] font-medium text-slate-900">{c.client}</span>
                       </div>
                     </td>
-                    <td className="text-right text-[14px] font-semibold text-slate-900 py-3 px-2">
+                    <td className="text-right text-[14px] font-semibold text-slate-900 py-3 px-3 border-r border-slate-100">
                       ${c.total.toLocaleString()}
                     </td>
-                    <td className="text-right text-[13px] text-slate-900 py-3 px-2">
+                    <td className="text-right text-[13px] text-slate-900 py-3 px-3 border-r border-slate-100">
                       ${c.thisMonth.toLocaleString()}
                     </td>
-                    <td className="py-3 pl-4">
+                    <td className="py-3 px-3">
                       {c.trend === "up" ? (
                         <ArrowUpRight size={16} style={{ color: SUCCESS }} />
                       ) : (
@@ -601,29 +601,46 @@ export default function Earnings() {
               <p className="text-[20px] font-medium mt-1 text-slate-900">${payoutStats.totalPaid.toLocaleString()}</p>
             </div>
           </div>
-          <div className="space-y-2">
-            {payoutsList.map((p) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, x: -15 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.6 + p.id * 0.05 }}
-                className="flex items-center justify-between py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}
-              >
-                <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.date}</span>
-                <span className="text-[14px] font-medium text-slate-900">${p.amount.toLocaleString()}</span>
-                <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.method}</span>
-                <span
-                  className="text-[11px] font-medium uppercase tracking-wider px-3 py-1 rounded-full"
-                  style={{
-                    background: p.status === "Completed" ? "rgba(34,197,94,0.15)" : "rgba(59,130,246,0.15)",
-                    color: p.status === "Completed" ? SUCCESS : ELECTRIC_BLUE,
-                  }}
-                >
-                  {p.status}
-                </span>
-              </motion.div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-y border-slate-200 bg-slate-50/60">
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Date</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Amount</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Method</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 text-slate-500">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payoutsList.map((p) => (
+                  <motion.tr
+                    key={p.id}
+                    initial={{ opacity: 0, x: -15 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.6 + p.id * 0.05 }}
+                    className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
+                  >
+                    <td className="py-3 px-3 border-r border-slate-100 text-[13px] text-slate-500">{p.date}</td>
+                    <td className="py-3 px-3 border-r border-slate-100 text-right text-[14px] font-medium text-slate-900">
+                      ${p.amount.toLocaleString()}
+                    </td>
+                    <td className="py-3 px-3 border-r border-slate-100 text-[13px] text-slate-700">{p.method}</td>
+                    <td className="py-3 px-3 text-right">
+                      <span
+                        className="inline-flex items-center text-[11px] font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
+                        style={
+                          p.status === "Completed"
+                            ? { background: "#ecfdf5", color: "#047857", borderColor: "#a7f3d0" }
+                            : { background: "#f2efff", color: "#4b3bb4", borderColor: "#d8cffa" }
+                        }
+                      >
+                        {p.status}
+                      </span>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </motion.div>
 
