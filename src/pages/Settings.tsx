@@ -25,7 +25,7 @@ import type { Integration, NotificationPref } from '@/mocks/dashboardMock';
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const fadeSlideUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 20 },
+  initial: false,
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.4, delay, ease: easeOutExpo },
 });
@@ -35,7 +35,7 @@ const staggerContainer = (stagger = 0.04) => ({
 });
 
 const staggerItem = {
-  initial: { opacity: 0, y: 15 },
+  initial: { opacity: 1, y: 0 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: easeOutExpo } },
 };
 
@@ -1237,7 +1237,7 @@ export default function Settings() {
     <div className="min-h-full bg-[#0a0e27] p-6">
       {/* Page Header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: easeOutExpo }}
       >
@@ -1281,7 +1281,7 @@ export default function Settings() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}

@@ -1,616 +1,483 @@
 import { useMemo, useState } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell,
+  Area,
+  AreaChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
 } from 'recharts';
-import CountUp from 'react-countup';
 import {
-  Users, Rocket, DollarSign, AlertTriangle, TrendingUp,
-  ArrowUpRight, Zap, Plus,
-  Sparkles, Target, Clock,
+  ArrowUpRight,
+  Bot,
+  CheckCircle2,
+  ChevronDown,
+  CircleHelp,
+  Clock3,
+  Folder,
+  ListFilter,
+  MoreVertical,
+  PlusCircle,
+  Search,
+  Settings,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
-  dashboardKPIs, revenueChartData, activities,
-  onboardingPreview, earningsQuickView, topEarningClients,
-  prospects, type Activity,
+  activities,
+  dashboardKPIs,
+  onboardingPreview,
+  prospects,
+  revenueChartData,
 } from '@/mocks/dashboardMock';
 
-/* ------------------------------------------------------------------ */
-/*  Animation helpers                                                  */
-/* ------------------------------------------------------------------ */
+type IconComponent = ComponentType<{ className?: string; strokeWidth?: number }>;
+
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
-const fadeSlideUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
+const fadeIn = (delay = 0) => ({
+  initial: false,
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, delay, ease: easeOutExpo },
+  transition: { duration: 0.35, delay, ease: easeOutExpo },
 });
 
-const staggerContainer = (stagger = 0.08) => ({
-  animate: { transition: { staggerChildren: stagger } },
-});
-
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour >= 12 && hour < 17) return 'Good afternoon';
-  if (hour >= 17) return 'Good evening';
-  return 'Good morning';
+function formatKpiValue(id: string, value: number) {
+  if (id === 'monthly-revenue') return `$${value.toLocaleString()}`;
+  return value.toLocaleString();
 }
 
-/* ------------------------------------------------------------------ */
-/*  Sub-components                                                     */
-/* ------------------------------------------------------------------ */
+function EmptyIllustration({ icon: Icon }: { icon: IconComponent }) {
+  return (
+    <div className="relative mx-auto flex size-28 items-center justify-center">
+      <div className="absolute left-1 top-8 size-9 rounded-xl border border-[#b8b0fb] bg-[#f4f2ff]" />
+      <div className="absolute right-2 top-3 size-8 rounded-xl border border-[#c8c2ff] bg-white" />
+      <div className="absolute bottom-4 right-1 size-10 rounded-xl border border-[#b8b0fb] bg-[#f6f4ff]" />
+      <div className="workspace-empty-illustration relative flex size-20 items-center justify-center rounded-full border border-[#c8cbd4] shadow-sm">
+        <Icon className="size-9 text-[#9499a4]" strokeWidth={1.8} />
+      </div>
+      <div className="absolute bottom-1 h-1 w-24 rounded-full bg-[#dfe2e8]" />
+    </div>
+  );
+}
 
-function KPICard({ kpi, index }: { kpi: typeof dashboardKPIs[0]; index: number }) {
-  const icons: Record<string, React.ReactNode> = {
-    Users: <Users className="size-5" />,
-    Rocket: <Rocket className="size-5" />,
-    DollarSign: <DollarSign className="size-5" />,
-    AlertTriangle: <AlertTriangle className="size-5" />,
-  };
+function WorkspaceCard({
+  title,
+  subtitle,
+  icon: Icon,
+  children,
+  action,
+  delay,
+  className,
+}: {
+  title: string;
+  subtitle?: string;
+  icon: IconComponent;
+  children: ReactNode;
+  action?: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.section
+      {...fadeIn(delay)}
+      className={cn('workspace-panel rounded-lg', className)}
+    >
+      <div className="flex items-start justify-between border-b border-[#eceef2] px-5 py-4">
+        <div className="flex items-start gap-3">
+          <Icon className="mt-0.5 size-5 shrink-0 text-[#69707a]" strokeWidth={1.8} />
+          <div>
+            <h2 className="text-[18px] font-bold leading-tight text-[#303238]">{title}</h2>
+            {subtitle && <p className="mt-0.5 text-[13px] text-[#6f747d]">{subtitle}</p>}
+          </div>
+        </div>
+        {action ?? (
+          <button className="rounded-md border border-[#d9dde6] p-2 text-[#3f444c] transition-colors hover:bg-[#f3f4f7]">
+            <MoreVertical className="size-4" />
+          </button>
+        )}
+      </div>
+      {children}
+    </motion.section>
+  );
+}
 
-  const isRevenue = kpi.id === 'monthly-revenue';
-  const displayValue = isRevenue ? kpi.value : kpi.value;
-
+function KpiStrip() {
   return (
     <motion.div
-      {...fadeSlideUp(index * 0.1)}
-      className={cn(
-        'rounded-[16px] border border-[rgba(255,255,255,0.06)] p-6 transition-all duration-200',
-        'bg-[#0f1535] hover:-translate-y-0.5 hover:border-[rgba(126,234,87,0.2)] hover:shadow-[0_0_20px_rgba(126,234,87,0.15)]'
-      )}
-      style={{ borderTop: `2px solid ${kpi.accentColor}` }}
+      {...fadeIn(0.14)}
+      className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div
-            className="flex size-10 items-center justify-center rounded-full"
-            style={{ backgroundColor: `${kpi.accentColor}15`, color: kpi.accentColor }}
-          >
-            {icons[kpi.icon]}
-          </div>
-          <span className="text-[13px] font-medium text-[#94a3b8]">{kpi.label}</span>
-        </div>
-      </div>
-
-      <div className="mt-4 flex items-baseline gap-2">
-        <span className="text-[32px] font-medium tracking-[-0.02em] text-white leading-none">
-          {isRevenue ? '$' : ''}
-          <CountUp end={displayValue} separator="," duration={1.2} />
-        </span>
-      </div>
-
-      <div className="mt-2 flex items-center gap-1.5">
-        {kpi.changeType === 'positive' && <TrendingUp className="size-3.5 text-[#7eea57]" />}
-        <span
-          className={cn(
-            'text-[13px]',
-            kpi.changeType === 'positive' && 'text-[#7eea57]',
-            kpi.changeType === 'info' && 'text-[#3b82f6]',
-            kpi.changeType === 'warning' && 'text-[#f59e0b]',
-          )}
+      {dashboardKPIs.map((kpi) => (
+        <div
+          key={kpi.id}
+          className="rounded-lg border border-[#dfe2e8] bg-white px-4 py-3 shadow-[0_1px_2px_rgba(32,33,36,0.04)]"
         >
-          {kpi.change}
-        </span>
-      </div>
-
-      {/* Mini sparkline or progress bar */}
-      <div className="mt-4">
-        {kpi.id === 'active-onboarding' && kpi.progress && (
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-            <motion.div
-              className="h-full rounded-full"
-              style={{ backgroundColor: kpi.accentColor }}
-              initial={{ width: 0 }}
-              animate={{ width: `${kpi.progress}%` }}
-              transition={{ duration: 1, delay: 0.5, ease: easeOutExpo }}
-            />
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.04em] text-[#737984]">{kpi.label}</p>
+            <span className="rounded-full bg-[#f2efff] px-2 py-0.5 text-[11px] font-semibold text-[#6f4bd8]">
+              {kpi.changeType === 'positive' ? 'Up' : kpi.changeType === 'warning' ? 'Watch' : 'Live'}
+            </span>
           </div>
-        )}
-        {(kpi.id === 'total-clients' || kpi.id === 'monthly-revenue') && kpi.sparklineData && (
-          <div className="h-[30px] w-[80px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={kpi.sparklineData.map((v, i) => ({ i, v }))}>
-                <Area
-                  type="monotone"
-                  dataKey="v"
-                  stroke={kpi.accentColor}
-                  strokeWidth={2}
-                  fill={`${kpi.accentColor}20`}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-        {kpi.id === 'churn-risk' && kpi.avatars && (
-          <div className="flex -space-x-2">
-            {kpi.avatars.map((a, i) => (
-              <div
-                key={i}
-                className="flex size-6 items-center justify-center rounded-full border-2 border-[#0f1535] bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[10px] font-medium text-white"
-              >
-                {a}
+          <div className="mt-2 flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[26px] font-semibold leading-none text-[#24262c]">
+                {formatKpiValue(kpi.id, kpi.value)}
+              </p>
+              <p className="mt-1.5 text-[12px] text-[#747984]">{kpi.change}</p>
+            </div>
+            {kpi.sparklineData && (
+              <div className="hidden h-8 w-20 sm:block">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={kpi.sparklineData.map((value, index) => ({ index, value }))}>
+                    <Area
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#6f4bd8"
+                      strokeWidth={2}
+                      fill="#f2efff"
+                      isAnimationActive={false}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+function SearchBar() {
+  const [query, setQuery] = useState('');
+
+  return (
+    <motion.div {...fadeIn(0.08)} className="mx-auto mt-5 flex w-full max-w-[870px] items-center gap-2">
+      <button className="flex h-[50px] items-center gap-2 rounded-md border border-[#cbd0da] bg-white px-3 text-[#3f444c] shadow-sm">
+        <ListFilter className="size-4" />
+        <ChevronDown className="size-4" />
+      </button>
+      <label className="relative min-w-0 flex-1">
+        <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#4f5661]" />
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search clients, prospects, files, tasks..."
+          className="h-[50px] w-full min-w-0 rounded-md border border-[#cbd0da] bg-white pl-12 pr-4 text-[14px] font-medium text-[#303238] shadow-sm outline-none transition focus:border-[#6f4bd8] focus:ring-2 focus:ring-[#6f4bd8]/15 sm:text-[15px]"
+        />
+      </label>
+    </motion.div>
+  );
+}
+
+function LeadAssistantCard() {
+  const priorityProspects = prospects
+    .slice()
+    .sort((a, b) => b.aiScore - a.aiScore)
+    .slice(0, 3);
+
+  return (
+    <WorkspaceCard
+      title="AI"
+      subtitle="Lead intelligence and next-best actions"
+      icon={Sparkles}
+      delay={0.18}
+      action={
+        <button className="rounded-md border border-[#cbd0da] bg-white px-3 py-2 text-[14px] font-bold text-[#303238] transition-colors hover:bg-[#f3f4f7]">
+          Go to AI
+        </button>
+      }
+      className="min-h-[310px]"
+    >
+      <div className="space-y-3 p-5">
+        {priorityProspects.map((prospect) => (
+          <button
+            key={prospect.id}
+            className="flex w-full items-center gap-3 rounded-md border border-[#d4d8e1] bg-white px-3 py-3 text-left transition-colors hover:border-[#b8b0fb] hover:bg-[#fbfaff]"
+          >
+            <div className="flex size-10 items-center justify-center rounded-md bg-[#f1f2f5] text-[#6f4bd8]">
+              <Bot className="size-5" strokeWidth={1.8} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[15px] font-bold text-[#303238]">{prospect.company}</p>
+              <p className="truncate text-[13px] text-[#626872]">
+                {prospect.aiScore} AI score · {prospect.source} · ${(prospect.value / 1000).toFixed(0)}K pipeline
+              </p>
+            </div>
+            <ArrowUpRight className="size-4 text-[#6f747d]" />
+          </button>
+        ))}
+      </div>
+    </WorkspaceCard>
+  );
+}
+
+function TasksCard() {
+  const tasks = [
+    { label: 'Follow up with Titan Solutions', meta: 'Proposal feedback due today', status: 'Due' },
+    { label: 'Qualify NorthStar Ventures', meta: 'High-intent referral lead', status: 'Hot' },
+    { label: 'Prepare onboarding for Meridian Group', meta: 'Starts next week', status: 'Ready' },
+  ];
+
+  return (
+    <WorkspaceCard
+      title="Tasks Assigned To Me"
+      subtitle="Up to 50 of your recent CRM tasks will show up here"
+      icon={CheckCircle2}
+      delay={0.22}
+      className="min-h-[310px]"
+    >
+      <div className="p-5">
+        {tasks.length === 0 ? (
+          <div className="flex min-h-[230px] flex-col items-center justify-center text-center">
+            <EmptyIllustration icon={CheckCircle2} />
+            <h3 className="mt-5 text-[20px] font-bold text-[#303238]">You do not have any tasks assigned</h3>
+          </div>
+        ) : (
+          <div className="divide-y divide-[#eceef2]">
+            {tasks.map((task) => (
+              <label key={task.label} className="flex cursor-pointer items-start gap-3 py-3 first:pt-0 last:pb-0">
+                <input type="checkbox" className="mt-1 size-4 rounded border-[#b9bec9] accent-[#6f4bd8]" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[14px] font-bold text-[#303238]">{task.label}</span>
+                  <span className="text-[12px] text-[#747984]">{task.meta}</span>
+                </span>
+                <span className="rounded-full border border-[#d8dbe3] bg-[#f7f8fb] px-2 py-0.5 text-[11px] font-bold text-[#575d67]">
+                  {task.status}
+                </span>
+              </label>
             ))}
           </div>
         )}
       </div>
+    </WorkspaceCard>
+  );
+}
+
+function PipelineCard() {
+  const columns = [
+    { label: 'Shared', value: prospects.filter((p) => p.stage !== 'Closed').length, color: '#f4c84f' },
+    { label: 'Ferlan Racaza', value: onboardingPreview.length, color: '#9aa8f0' },
+  ];
+
+  return (
+    <motion.div {...fadeIn(0.12)} className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-7">
+      {columns.map((column) => (
+        <button key={column.label} className="flex items-center gap-2 text-[15px] font-bold text-[#303238]">
+          <span className="flex size-8 items-center justify-center rounded-md" style={{ backgroundColor: column.color }}>
+            <Folder className="size-4 text-white" fill="currentColor" strokeWidth={1.5} />
+          </span>
+          {column.label}
+          <span className="rounded-full bg-[#eef0f4] px-2 py-0.5 text-[11px] text-[#747984]">{column.value}</span>
+        </button>
+      ))}
     </motion.div>
   );
 }
 
-function ActivityIcon({ type }: { type: Activity['type'] }) {
-  const colors: Record<Activity['type'], string> = {
-    success: '#22c55e',
-    info: '#3b82f6',
-    warning: '#f59e0b',
-    purple: '#8b5cf6',
-  };
+function RevenueWorkspaceCard() {
   return (
-    <div
-      className="size-2 rounded-full shrink-0"
-      style={{ backgroundColor: colors[type] }}
-    />
-  );
-}
-
-function RevenueChart() {
-  const [period, setPeriod] = useState('1Y');
-  const periods = ['7D', '30D', '90D', '1Y'];
-
-  return (
-    <motion.div
-      {...fadeSlideUp(0.2)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-0"
+    <WorkspaceCard
+      title="Revenue Overview"
+      subtitle="Tracked from active clients and pipeline confidence"
+      icon={ArrowUpRight}
+      delay={0.28}
+      action={
+        <button className="rounded-md border border-[#cbd0da] bg-white px-3 py-2 text-[14px] font-bold text-[#303238] transition-colors hover:bg-[#f3f4f7]">
+          View report
+        </button>
+      }
     >
-      <div className="flex items-center justify-between px-5 py-5">
-        <h3 className="text-[18px] font-semibold text-white">Revenue Overview</h3>
-        <div className="flex gap-1">
-          {periods.map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={cn(
-                'rounded-full px-3 py-1 text-[13px] font-medium transition-all',
-                period === p
-                  ? 'bg-[#162044] text-white'
-                  : 'text-[#64748b] hover:text-[#94a3b8]'
-              )}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="px-2 pb-5" style={{ height: 280 }}>
+      <div className="h-[270px] px-4 pb-5 pt-4">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={revenueChartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+          <AreaChart data={revenueChartData} margin={{ top: 10, right: 18, left: 0, bottom: 0 }}>
             <defs>
-              <linearGradient id="revGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#7eea57" stopOpacity={0.2} />
-                <stop offset="100%" stopColor="#7eea57" stopOpacity={0} />
+              <linearGradient id="workspaceRevenue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6f4bd8" stopOpacity={0.22} />
+                <stop offset="100%" stopColor="#6f4bd8" stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
             <XAxis
               dataKey="month"
-              tick={{ fontSize: 12, fill: '#64748b' }}
-              axisLine={false}
+              tick={{ fontSize: 12, fill: '#777b84' }}
+              axisLine={{ stroke: '#e5e7ec' }}
               tickLine={false}
-            />
-            <YAxis
-              tick={{ fontSize: 12, fill: '#64748b' }}
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(v: number) => `$${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#162044',
-                border: '1px solid #1c2960',
-                borderRadius: '10px',
-                color: '#fff',
+                backgroundColor: '#fff',
+                border: '1px solid #dfe2e8',
+                borderRadius: 8,
+                color: '#303238',
+                boxShadow: '0 12px 28px rgba(32, 33, 36, 0.12)',
                 fontSize: 13,
               }}
-              formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+              formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
             />
             <Area
               type="monotone"
               dataKey="current"
-              stroke="#7eea57"
-              strokeWidth={2}
-              fill="url(#revGradient)"
+              stroke="#6f4bd8"
+              strokeWidth={2.5}
+              fill="url(#workspaceRevenue)"
+              isAnimationActive={false}
             />
             <Area
               type="monotone"
               dataKey="previous"
-              stroke="#3b82f6"
+              stroke="#9ba2ae"
               strokeWidth={1.5}
               strokeDasharray="5 5"
               fill="transparent"
+              isAnimationActive={false}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
-    </motion.div>
+    </WorkspaceCard>
   );
 }
 
-function ActivityFeed() {
+function RecentActivityCard() {
   return (
-    <motion.div
-      {...fadeSlideUp(0.3)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] flex flex-col"
-    >
-      <div className="px-5 py-5">
-        <h3 className="text-[18px] font-semibold text-white">Recent Activity</h3>
-      </div>
-      <div className="flex-1 overflow-y-auto max-h-[320px] px-0">
-        {activities.map((activity, i) => (
-          <motion.div
-            key={activity.id}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 + i * 0.06, ease: easeOutExpo }}
-            className="flex items-start gap-3 px-5 py-3 border-b border-[rgba(255,255,255,0.04)] last:border-b-0"
-          >
-            <div className="mt-1">
-              <ActivityIcon type={activity.type} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[13px] text-[#cbd5e1] leading-relaxed">{activity.description}</p>
-              <p className="text-[11px] text-[#475569] mt-0.5">{activity.time}</p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-function OnboardingPreview() {
-  return (
-    <motion.div
-      {...fadeSlideUp(0.4)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-5"
-    >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[18px] font-semibold text-white">Active Onboarding</h3>
-        <button className="flex items-center gap-1 text-[13px] text-[#7eea57] hover:underline">
-          View All <ArrowUpRight className="size-3.5" />
+    <WorkspaceCard
+      title="Recent files"
+      subtitle="Client updates, proposals, payouts, and system events"
+      icon={Clock3}
+      delay={0.34}
+      action={
+        <button className="rounded-md border border-[#cbd0da] bg-white px-3 py-2 text-[14px] font-bold text-[#303238] transition-colors hover:bg-[#f3f4f7]">
+          View all recents
         </button>
-      </div>
-      <div className="flex flex-col gap-3">
-        {onboardingPreview.map((client) => (
-          <div
-            key={client.id}
-            className="flex items-center gap-3 rounded-[10px] bg-[#162044] p-4"
-          >
-            <div className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] text-[12px] font-medium text-white">
-              {client.avatar}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[15px] font-medium text-white truncate">{client.name}</p>
-              <p className="text-[12px] text-[#64748b]">{client.company}</p>
-            </div>
-            <div className="text-right shrink-0">
-              <p className="text-[13px] font-medium text-[#7eea57]">{client.progress}%</p>
-              <div className="mt-1 h-1 w-16 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-                <div
-                  className="h-full rounded-full bg-[#7eea57]"
-                  style={{ width: `${client.progress}%` }}
-                />
-              </div>
+      }
+    >
+      <div className="divide-y divide-[#eceef2] px-5">
+        {activities.slice(0, 6).map((activity) => (
+          <div key={activity.id} className="flex items-start gap-3 py-3">
+            <span className="mt-2 size-2 rounded-full bg-[#6f4bd8]" />
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[14px] font-semibold text-[#303238]">{activity.description}</p>
+              <p className="text-[12px] text-[#747984]">{activity.time}</p>
             </div>
           </div>
         ))}
       </div>
-    </motion.div>
+    </WorkspaceCard>
   );
 }
 
-function EarningsQuickView() {
-  const total = earningsQuickView.reduce((s, e) => s + e.value, 0);
-
+function RecentProspectsTable() {
   return (
-    <motion.div
-      {...fadeSlideUp(0.5)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-5"
-    >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[18px] font-semibold text-white">Earnings This Month</h3>
-        <button className="flex items-center gap-1 text-[13px] text-[#7eea57] hover:underline">
-          Details <ArrowUpRight className="size-3.5" />
-        </button>
-      </div>
-
-      <div className="flex items-center gap-6">
-        <div className="relative shrink-0" style={{ width: 120, height: 120 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={earningsQuickView}
-                cx="50%"
-                cy="50%"
-                innerRadius={35}
-                outerRadius={50}
-                dataKey="value"
-                stroke="none"
-              >
-                {earningsQuickView.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[18px] font-medium text-white">
-              ${(total / 1000).toFixed(1)}K
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2.5 flex-1">
-          {earningsQuickView.map((item) => (
-            <div key={item.name} className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <div className="size-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-[13px] text-[#cbd5e1]">{item.name}</span>
-              </div>
-              <div className="text-right">
-                <span className="text-[13px] font-medium text-white">
-                  ${(item.value / 1000).toFixed(1)}K
-                </span>
-                <span className="ml-2 text-[11px] text-[#64748b]">{item.percentage}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Mini horizontal bar chart */}
-      <div className="mt-5 flex flex-col gap-2">
-        {topEarningClients.map((client, i) => {
-          const maxEarnings = topEarningClients[0].earnings;
-          return (
-            <div key={i} className="flex items-center gap-3">
-              <span className="w-[90px] truncate text-[12px] text-[#94a3b8]">{client.name}</span>
-              <div className="flex-1 h-2 overflow-hidden rounded-full bg-[rgba(255,255,255,0.04)]">
-                <motion.div
-                  className="h-full rounded-full bg-[#7eea57]"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(client.earnings / maxEarnings) * 100}%` }}
-                  transition={{ duration: 0.8, delay: 0.6 + i * 0.1, ease: easeOutExpo }}
-                />
-              </div>
-              <span className="w-[45px] text-right text-[12px] font-medium text-white">
-                ${(client.earnings / 1000).toFixed(1)}K
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </motion.div>
-  );
-}
-
-function AIChatTrigger() {
-  return (
-    <motion.div
-      {...fadeSlideUp(0.55)}
-      className="rounded-[16px] border border-[rgba(126,234,87,0.15)] bg-[#0f1535] p-5"
-    >
-      <div className="flex items-center gap-3 mb-3">
-        <div className="flex size-10 items-center justify-center rounded-full bg-[rgba(126,234,87,0.1)]">
-          <Sparkles className="size-5 text-[#7eea57]" />
-        </div>
+    <motion.section {...fadeIn(0.38)} className="workspace-panel mt-6 overflow-hidden rounded-lg">
+      <div className="flex items-center justify-between border-b border-[#eceef2] px-5 py-4">
         <div>
-          <h3 className="text-[16px] font-semibold text-white">AI Assistant</h3>
-          <p className="text-[12px] text-[#64748b]">Ask me anything about your business</p>
+          <h2 className="text-[18px] font-bold text-[#303238]">Prospect workflow</h2>
+          <p className="text-[13px] text-[#6f747d]">A compact table view aligned with your CRM pipeline.</p>
         </div>
-      </div>
-      <div className="flex flex-wrap gap-2 mt-3">
-        {['Show me at-risk clients', "What's our revenue this month?", 'Onboard new client'].map((cmd) => (
-          <button
-            key={cmd}
-            className="rounded-full border border-[#1c2960] px-3 py-1.5 text-[12px] text-[#94a3b8] transition-all hover:border-[#7eea57] hover:text-[#7eea57] hover:bg-[rgba(126,234,87,0.05)]"
-          >
-            {cmd}
-          </button>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-function RecentProspects() {
-  const recent = prospects.slice(0, 5);
-  const stageColors: Record<string, string> = {
-    Lead: '#64748b',
-    Qualified: '#3b82f6',
-    Proposal: '#8b5cf6',
-    Negotiation: '#f59e0b',
-    Closed: '#7eea57',
-  };
-
-  return (
-    <motion.div
-      {...fadeSlideUp(0.6)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-5"
-    >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[18px] font-semibold text-white">Recent Prospects</h3>
-        <button className="flex items-center gap-1 text-[13px] text-[#7eea57] hover:underline">
-          View All <ArrowUpRight className="size-3.5" />
+        <button className="inline-flex items-center gap-2 rounded-md bg-[#6f4bd8] px-4 py-2 text-[14px] font-bold text-white transition-colors hover:bg-[#5f3fd0]">
+          <PlusCircle className="size-4" /> Create lead
         </button>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full min-w-[760px] text-left">
           <thead>
-            <tr className="border-b border-[rgba(255,255,255,0.06)]">
-              <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Company</th>
-              <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Value</th>
-              <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Stage</th>
-              <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Score</th>
+            <tr className="border-b border-[#eceef2] bg-[#fafbfc] text-[12px] font-bold text-[#575d67]">
+              <th className="px-5 py-3">Company</th>
+              <th className="px-5 py-3">Status</th>
+              <th className="px-5 py-3">Source</th>
+              <th className="px-5 py-3">Assigned by</th>
+              <th className="px-5 py-3">Value</th>
+              <th className="px-5 py-3">Completion date</th>
             </tr>
           </thead>
-          <tbody>
-            {recent.map((p) => (
-              <tr key={p.id} className="border-b border-[rgba(255,255,255,0.04)] last:border-b-0">
-                <td className="py-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex size-7 items-center justify-center rounded-full bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] text-[10px] font-medium text-white">
-                      {p.company.slice(0, 2).toUpperCase()}
+          <tbody className="divide-y divide-[#eceef2]">
+            {prospects.slice(0, 6).map((prospect) => (
+              <tr key={prospect.id} className="text-[14px] hover:bg-[#fafbfc]">
+                <td className="px-5 py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-8 items-center justify-center rounded-full bg-[#f2efff] text-[11px] font-bold text-[#6f4bd8]">
+                      {prospect.company.slice(0, 2).toUpperCase()}
                     </div>
-                    <span className="text-[13px] font-medium text-white">{p.company}</span>
+                    <div>
+                      <p className="font-bold text-[#303238]">{prospect.company}</p>
+                      <p className="text-[12px] text-[#747984]">{prospect.name}</p>
+                    </div>
                   </div>
                 </td>
-                <td className="py-3 text-[13px] text-[#7eea57] font-medium">${(p.value / 1000).toFixed(0)}K</td>
-                <td className="py-3">
-                  <span
-                    className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium"
-                    style={{
-                      backgroundColor: `${stageColors[p.stage]}15`,
-                      color: stageColors[p.stage],
-                      border: `1px solid ${stageColors[p.stage]}30`,
-                    }}
-                  >
-                    {p.stage}
+                <td className="px-5 py-3">
+                  <span className="rounded-md border border-[#d8dbe3] bg-[#f7f8fb] px-2.5 py-1 text-[12px] font-bold text-[#575d67]">
+                    {prospect.stage}
                   </span>
                 </td>
-                <td className="py-3 text-[13px] text-white">{p.aiScore}</td>
+                <td className="px-5 py-3 text-[#575d67]">{prospect.source}</td>
+                <td className="px-5 py-3 text-[#575d67]">{prospect.assignee}</td>
+                <td className="px-5 py-3 font-bold text-[#303238]">${prospect.value.toLocaleString()}</td>
+                <td className="px-5 py-3 text-[#747984]">{prospect.lastContact}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </motion.div>
+    </motion.section>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Main Dashboard Page                                                */
-/* ------------------------------------------------------------------ */
-
 export default function Dashboard() {
-  const greeting = getGreeting();
-
   const today = useMemo(() => {
     return new Date().toLocaleDateString('en-US', {
-      weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
     });
   }, []);
 
   return (
-    <div className="min-h-full bg-[#0a0e27] p-6">
-      {/* Welcome Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: easeOutExpo }}
-        className={cn(
-          'rounded-[20px] border border-[rgba(126,234,87,0.1)] p-8',
-          'bg-gradient-to-r from-[#0f1535] to-[#162044]'
-        )}
-      >
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h1 className="text-[28px] font-semibold tracking-[-0.01em] text-white">
-              {greeting}, Alex
-            </h1>
-            <p className="mt-2 text-[15px] text-[#94a3b8]">
-              You have 8 clients onboarding and 3 pending payouts this week.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button className="inline-flex items-center gap-2 rounded-full bg-[#7eea57] px-4 py-2 text-[13px] font-semibold text-[#0a0e27] transition-all hover:bg-[#6dd446] hover:shadow-[0_0_20px_rgba(126,234,87,0.3)]">
-                <Plus className="size-4" /> Start Onboarding
-              </button>
-              <button className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.15)] px-4 py-2 text-[13px] font-medium text-white transition-all hover:bg-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.3)]">
-                <DollarSign className="size-4" /> View Earnings
-              </button>
-              <button className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.15)] px-4 py-2 text-[13px] font-medium text-white transition-all hover:bg-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.3)]">
-                <Target className="size-4" /> Check Pipeline
-              </button>
-            </div>
-          </div>
-          <div className="shrink-0 text-right">
-            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">This Month&apos;s Revenue</p>
-            <div className="mt-1 flex items-center gap-2 justify-end">
-              <span className="text-[32px] font-medium tracking-[-0.02em] text-[#7eea57]">
-                $<CountUp end={24850} separator="," duration={1.2} />
-              </span>
-              <span className="inline-flex items-center gap-0.5 rounded-full bg-[rgba(126,234,87,0.15)] px-2 py-0.5 text-[12px] font-medium text-[#7eea57]">
-                <ArrowUpRight className="size-3" /> +12%
-              </span>
-            </div>
-            <p className="mt-1 text-[12px] text-[#475569]">{today}</p>
-          </div>
+    <div className="min-h-full px-4 py-4 sm:px-6 md:px-10">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <button className="inline-flex items-center gap-2 rounded-md bg-[#d9dce3] px-3 py-2 text-[14px] font-bold text-white opacity-80">
+          <PlusCircle className="size-4" /> Create <ChevronDown className="size-3.5" />
+        </button>
+        <div className="flex items-center gap-3">
+          <button className="rounded-md border border-[#d9dde6] bg-white p-2.5 text-[#4f5661] shadow-sm transition-colors hover:bg-[#f3f4f7]">
+            <Settings className="size-5" strokeWidth={1.8} />
+          </button>
+          <button className="rounded-md border border-[#d9dde6] bg-white p-2.5 text-[#4f5661] shadow-sm transition-colors hover:bg-[#f3f4f7]">
+            <CircleHelp className="size-5" strokeWidth={1.8} />
+          </button>
         </div>
-      </motion.div>
+      </div>
 
-      {/* KPI Cards Row */}
-      <motion.div
-        variants={staggerContainer(0.1)}
-        initial="initial"
-        animate="animate"
-        className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {dashboardKPIs.map((kpi, i) => (
-          <KPICard key={kpi.id} kpi={kpi} index={i} />
-        ))}
-      </motion.div>
+      <motion.header {...fadeIn(0)} className="mx-auto mt-6 max-w-[980px] text-center">
+        <div className="mx-auto mb-5 flex size-11 items-center justify-center text-[#13324f]">
+          <Sparkles className="size-10 text-[#6f4bd8]" strokeWidth={1.9} />
+        </div>
+        <h1 className="text-[29px] font-medium leading-tight text-[#4a4d55] sm:text-[34px] md:text-[40px]">
+          Welcome, Ferlan
+        </h1>
+        <p className="mt-2 text-[14px] font-medium text-[#777b84]">
+          {today} · Your CRM workspace for leads, client operations, and revenue clarity.
+        </p>
+      </motion.header>
 
-      {/* Main Content Grid */}
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-5">
-        {/* Left Column - 60% */}
-        <div className="lg:col-span-3 flex flex-col gap-6">
-          <RevenueChart />
+      <SearchBar />
+      <PipelineCard />
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <OnboardingPreview />
-            <EarningsQuickView />
-          </div>
+      <div className="mx-auto mt-8 max-w-[1680px]">
+        <KpiStrip />
 
-          <AIChatTrigger />
-          <RecentProspects />
+        <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <LeadAssistantCard />
+          <TasksCard />
         </div>
 
-        {/* Right Column - 40% */}
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          <ActivityFeed />
-
-          {/* Quick Stats */}
-          <motion.div
-            {...fadeSlideUp(0.45)}
-            className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-5"
-          >
-            <h3 className="text-[18px] font-semibold text-white mb-4">Quick Stats</h3>
-            <div className="flex flex-col gap-3">
-              {[
-                { label: 'Win Rate', value: '68%', icon: Target, color: '#7eea57' },
-                { label: 'Avg. Deal Size', value: '$24.5K', icon: DollarSign, color: '#3b82f6' },
-                { label: 'Pipeline Value', value: '$284K', icon: Zap, color: '#8b5cf6' },
-                { label: 'Days to Close', value: '23', icon: Clock, color: '#f59e0b' },
-              ].map((stat) => (
-                <div key={stat.label} className="flex items-center justify-between rounded-[10px] bg-[#162044] p-3">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="flex size-8 items-center justify-center rounded-full"
-                      style={{ backgroundColor: `${stat.color}15`, color: stat.color }}
-                    >
-                      <stat.icon className="size-4" />
-                    </div>
-                    <span className="text-[13px] text-[#cbd5e1]">{stat.label}</span>
-                  </div>
-                  <span className="text-[16px] font-medium text-white">{stat.value}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+        <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+          <RevenueWorkspaceCard />
+          <RecentActivityCard />
         </div>
+
+        <RecentProspectsTable />
       </div>
     </div>
   );

@@ -10,9 +10,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-navy-950">
+    <div className="app-workspace flex min-h-screen bg-[#f7f8fb] text-[#2f3137]">
       <Navbar />
-      <main className="flex-1 overflow-auto">
+      <main className="min-w-0 flex-1 overflow-auto">
         {children}
       </main>
     </div>

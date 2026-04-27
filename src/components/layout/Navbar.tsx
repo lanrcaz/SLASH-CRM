@@ -1,31 +1,38 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import {
-  LayoutDashboard,
-  Users,
-  UserPlus,
-  UserMinus,
-  Target,
-  TrendingUp,
-  Layers,
-  FileText,
-  Settings,
-  MessageSquare,
+  Blocks,
+  BriefcaseBusiness,
+  ChartNoAxesCombined,
   ChevronLeft,
   ChevronRight,
+  ClipboardCheck,
+  Home,
+  Layers,
+  MessageSquare,
+  Settings,
   Sparkles,
+  Target,
+  UserMinus,
+  UserPlus,
+  Users,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const navItems = [
-  { path: '/app', icon: LayoutDashboard, label: 'Dashboard' },
+const primaryNavItems = [
+  { path: '/app', icon: Home, label: 'Home' },
   { path: '/app/clients', icon: Users, label: 'Clients' },
+  { path: '/app/prospects', icon: Target, label: 'Prospects' },
   { path: '/app/onboarding', icon: UserPlus, label: 'Onboarding' },
   { path: '/app/offboarding', icon: UserMinus, label: 'Offboarding' },
-  { path: '/app/prospects', icon: Target, label: 'Prospects' },
-  { path: '/app/earnings', icon: TrendingUp, label: 'Earnings' },
   { path: '/app/services', icon: Layers, label: 'Services' },
-  { path: '/app/reports', icon: FileText, label: 'Reports' },
+  { path: '/app/earnings', icon: ChartNoAxesCombined, label: 'Earnings' },
+  { path: '/app/reports', icon: ClipboardCheck, label: 'Reports' },
+];
+
+const secondaryNavItems = [
   { path: '/app/settings', icon: Settings, label: 'Settings' },
+  { path: '/app/settings', icon: Blocks, label: 'Apps & Integrations', neverActive: true },
 ];
 
 export default function Navbar() {
@@ -33,70 +40,102 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const renderNavItem = (item: (typeof primaryNavItems)[number] | (typeof secondaryNavItems)[number]) => {
+    const isActive = !('neverActive' in item) && (location.pathname === item.path || location.pathname.startsWith(`${item.path}/`));
+    const Icon = item.icon;
+
+    return (
+      <button
+        key={`${item.path}-${item.label}`}
+        onClick={() => navigate(item.path)}
+        className={cn(
+          'group flex w-full items-center gap-3 rounded-md border border-transparent px-3 py-2.5 text-left text-[15px] font-semibold transition-colors',
+          isActive
+            ? 'bg-[#ececef] text-[#26282d]'
+            : 'text-[#343741] hover:bg-[#f1f2f5] hover:text-[#202124]',
+          collapsed ? 'justify-center px-2' : 'justify-center px-2 lg:justify-start lg:px-3'
+        )}
+        title={collapsed ? item.label : undefined}
+      >
+        <Icon
+          className={cn(
+            'size-[19px] shrink-0 transition-colors',
+            isActive ? 'text-[#6f4bd8]' : 'text-[#5f6368] group-hover:text-[#3c4043]'
+          )}
+          strokeWidth={1.8}
+        />
+        {!collapsed && <span className="hidden truncate lg:inline">{item.label}</span>}
+      </button>
+    );
+  };
+
   return (
     <aside
-      className={`flex flex-col bg-navy-950 border-r border-navy-700 h-screen sticky top-0 transition-all duration-300 ease-in-out ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
+      className={cn(
+        'sticky top-0 flex h-screen shrink-0 flex-col border-r border-[#dfe2e8] bg-white transition-[width] duration-200 ease-out',
+        collapsed ? 'w-[74px]' : 'w-[74px] lg:w-[286px]'
+      )}
     >
-      {/* Logo */}
-      <div className={`flex items-center h-16 border-b border-navy-700 ${collapsed ? 'justify-center px-2' : 'px-5'}`}>
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/app')}>
-          <div className="w-8 h-8 rounded-lg bg-neon-green flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-5 h-5 text-navy-950" />
+      <div className={cn('flex h-[62px] items-center border-b border-[#e4e6eb]', collapsed ? 'justify-center px-2' : 'justify-center px-2 lg:justify-start lg:px-4')}>
+        <button
+          onClick={() => navigate('/app')}
+          className={cn('flex items-center gap-3 rounded-md text-left transition-colors hover:bg-[#f5f6f8]', collapsed ? 'p-2' : 'px-2 py-2')}
+        >
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-md border border-[#d9dde6] bg-[#f7f8fb] text-[#6f4bd8]">
+            <Sparkles className="size-[18px]" strokeWidth={2} />
           </div>
           {!collapsed && (
-            <span className="font-heading font-bold text-lg tracking-tight">
-              <span className="text-white">Client</span>
-              <span className="text-neon-green">Vault</span>
-            </span>
+            <div className="hidden min-w-0 lg:block">
+              <p className="truncate text-[15px] font-bold leading-tight text-[#202124]">SLASH CRM</p>
+              <p className="truncate text-[11px] font-medium text-[#777b84]">Client operations workspace</p>
+            </div>
           )}
-        </div>
-      </div>
-
-      {/* Nav Items */}
-      <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
-                isActive
-                  ? 'bg-[rgba(126,234,87,0.1)] text-neon-green border-l-2 border-neon-green'
-                  : 'text-gray-400 hover:text-white hover:bg-white/[0.03] border-l-2 border-transparent'
-              } ${collapsed ? 'justify-center' : ''}`}
-              title={collapsed ? item.label : undefined}
-            >
-              <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-neon-green' : 'group-hover:text-white'}`} />
-              {!collapsed && (
-                <span className="text-sm font-medium">{item.label}</span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* AI Chat Trigger */}
-      <div className="px-3 pb-2">
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-purple-vibrant/10 text-purple-vibrant hover:bg-purple-vibrant/20 transition-all duration-200 ${collapsed ? 'justify-center' : ''}`}
-          title={collapsed ? 'AI Assistant' : undefined}
-        >
-          <MessageSquare className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span className="text-sm font-medium">AI Assistant</span>}
         </button>
       </div>
 
-      {/* Collapse Toggle */}
-      <div className="px-3 pb-4">
+      <nav className="flex-1 overflow-y-auto px-3 py-3">
+        <div className="space-y-1">
+          {primaryNavItems.map(renderNavItem)}
+        </div>
+
+        <div className="my-4 border-t border-[#e5e7ec]" />
+
+        <div className="space-y-1">
+          {secondaryNavItems.map(renderNavItem)}
+        </div>
+      </nav>
+
+      <div className="border-t border-[#e5e7ec] px-3 py-3">
+        <button
+          className={cn(
+            'mb-2 flex w-full items-center gap-3 rounded-md border border-[#d9dde6] bg-[#fbfbfc] px-3 py-2.5 text-[14px] font-semibold text-[#4b3bb4] transition-colors hover:border-[#bdb7ee] hover:bg-[#f5f3ff]',
+            collapsed ? 'justify-center px-2' : 'justify-center px-2 lg:justify-start lg:px-3'
+          )}
+          title={collapsed ? 'AI Assistant' : undefined}
+        >
+          <MessageSquare className="size-[18px] shrink-0" strokeWidth={1.9} />
+          {!collapsed && <span className="hidden lg:inline">AI Assistant</span>}
+        </button>
+
+        {!collapsed && (
+          <div className="mb-3 hidden rounded-md border border-[#e4e6eb] bg-[#f7f8fb] px-3 py-2 lg:block">
+            <div className="flex items-center gap-2 text-[12px] font-semibold text-[#4a4d55]">
+              <BriefcaseBusiness className="size-3.5 text-[#6f4bd8]" />
+              Market readiness
+            </div>
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e1e4ea]">
+              <div className="h-full w-[62%] rounded-full bg-[#6f4bd8]" />
+            </div>
+            <p className="mt-1.5 text-[11px] text-[#777b84]">Phase 1 foundation in progress</p>
+          </div>
+        )}
+
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center justify-center py-2 rounded-lg text-gray-500 hover:text-white hover:bg-white/[0.03] transition-all duration-200"
+          className="flex w-full items-center justify-center rounded-md border border-[#d9dde6] bg-white py-2 text-[#5f6368] transition-colors hover:bg-[#f5f6f8] hover:text-[#202124]"
+          aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
         >
-          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          {collapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
         </button>
       </div>
     </aside>
