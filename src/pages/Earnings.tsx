@@ -96,15 +96,15 @@ function KPICard({ label, value, sub, subColor, topColor, sparkline, barData, de
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: easeOutExpo, delay }}
-      className="rounded-xl p-6 relative overflow-hidden"
+      className="rounded-xl px-4 py-3 relative overflow-hidden"
       style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
     >
       <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: topColor }} />
-      <p className="text-[13px] text-slate-500 font-medium">{label}</p>
-      <p className="text-[32px] font-medium tracking-tight mt-1" style={{ color: topColor }}>{value}</p>
-      <p className="text-[13px] mt-1" style={{ color: subColor }}>{sub}</p>
+      <p className="text-[11px] uppercase tracking-[0.06em] text-slate-500 font-medium">{label}</p>
+      <p className="text-[24px] font-bold tracking-tight mt-1 leading-none" style={{ color: topColor }}>{value}</p>
+      <p className="text-[12px] mt-1.5" style={{ color: subColor }}>{sub}</p>
       {sparkline && (
-        <div className="mt-3 h-[40px] w-full">
+        <div className="mt-2 h-[32px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={sparklineData.slice(-7)}>
               <defs>
@@ -119,7 +119,7 @@ function KPICard({ label, value, sub, subColor, topColor, sparkline, barData, de
         </div>
       )}
       {barData && (
-        <div className="mt-3 h-[40px] w-full">
+        <div className="mt-2 h-[32px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={miniBarData}>
               <Bar dataKey="value" fill={topColor} radius={[3, 3, 0, 0]} />
@@ -274,19 +274,17 @@ export default function Earnings() {
         <ConfettiBurst x={showConfetti.x} y={showConfetti.y} active={true} />
       )}
 
-      <div className="max-w-[1400px] mx-auto px-6 py-8">
+      <div className="max-w-[1240px] mx-auto px-5 py-6">
         {/* ── Page Header ── */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: easeOutExpo }}
-          className="flex flex-col md:flex-row md:items-center justify-between mb-6"
+          className="flex flex-col md:flex-row md:items-center justify-between mb-5"
         >
           <div>
-            <h1 className="text-[36px] font-bold tracking-tight text-slate-900" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-              Earnings
-            </h1>
-            <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>
+            <h1 className="text-[28px] font-bold tracking-tight text-slate-900">Earnings</h1>
+            <p className="text-[13px] mt-1" style={{ color: GRAY_500 }}>
               Tracking $1.2M total · $24.8K this month · 87 clients
             </p>
           </div>
@@ -305,7 +303,7 @@ export default function Earnings() {
         </motion.div>
 
         {/* ── KPI Row ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
           <KPICard label="Total Earnings" value={totalEarnings} sub="Lifetime earnings across all clients" subColor={GRAY_500} topColor={NEON_GREEN} sparkline delay={0} />
           <KPICard label="This Month" value={thisMonth} sub="+12% vs last month" subColor={NEON_GREEN} topColor={WHITE} barData delay={0.1} />
           <KPICard label="Pending Payouts" value={pendingPayouts} sub="12 invoices pending" subColor={WARNING} topColor={WARNING} delay={0.2} />
@@ -317,10 +315,10 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easeOutExpo, delay: 0.2 }}
-          className="rounded-xl p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-5">
             <h2 className="text-[22px] font-semibold text-slate-900" style={{ letterSpacing: "-0.01em" }}>Earnings Trajectory</h2>
             <PeriodTabs value={period} onChange={setPeriod} />
           </div>
@@ -359,7 +357,7 @@ export default function Earnings() {
             </ResponsiveContainer>
           </div>
 
-          <div className="flex items-center gap-6 mt-4 text-[12px]">
+          <div className="flex items-center gap-4 mt-3 text-[12px]">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: NEON_GREEN }} />
               <span style={{ color: GRAY_500 }}>Earnings</span>
@@ -372,12 +370,12 @@ export default function Earnings() {
         </motion.div>
 
         {/* ── Revenue Source Breakdown ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.3 }}
-            className="rounded-xl p-6"
+            className="rounded-xl p-5"
             style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
           >
             <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Revenue Sources</h3>
@@ -426,7 +424,7 @@ export default function Earnings() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.4 }}
-            className="rounded-xl p-6"
+            className="rounded-xl p-5"
             style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
           >
             <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Source Performance</h3>
@@ -473,11 +471,11 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easeOutExpo, delay: 0.4 }}
-          className="rounded-xl p-8 mb-6"
+          className="rounded-xl p-6 mb-4"
           style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <h3 className="text-[22px] font-semibold text-slate-900" style={{ letterSpacing: "-0.01em" }}>Earnings Milestones</h3>
-          <p className="text-[15px] mt-1 mb-8" style={{ color: GRAY_500 }}>
+          <h3 className="text-[18px] font-semibold tracking-tight text-slate-900">Earnings Milestones</h3>
+          <p className="text-[13px] mt-0.5 mb-5" style={{ color: GRAY_500 }}>
             Celebrate every breakthrough on the journey from $0 to 100x
           </p>
           {/* Progress track */}
@@ -504,7 +502,7 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.5 }}
-          className="rounded-xl p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -576,7 +574,7 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.6 }}
-          className="rounded-xl p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <div className="flex items-center justify-between mb-4">
@@ -585,7 +583,7 @@ export default function Earnings() {
               <DollarSign size={14} /> Request Payout
             </button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
               <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Available</p>
               <p className="text-[20px] font-medium mt-1" style={{ color: NEON_GREEN }}>${payoutStats.available.toLocaleString()}</p>
@@ -634,7 +632,7 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.7 }}
-          className="rounded-xl p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{
             background: `linear-gradient(135deg, ${NAVY_900}, ${NAVY_800})`,
             border: `1px solid rgba(59,130,246,0.2)`,
@@ -644,7 +642,7 @@ export default function Earnings() {
             <Sparkles size={18} style={{ color: PURPLE }} />
             <h3 className="text-[18px] font-semibold text-slate-900">AI Revenue Forecast</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
             {aiProjections.map((proj, i) => (
               <motion.div
                 key={proj.scenario}
@@ -685,7 +683,7 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.5 }}
-          className="rounded-xl p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Recent Earnings Activity</h3>
