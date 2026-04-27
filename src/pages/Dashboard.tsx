@@ -87,12 +87,12 @@ function WorkspaceCard({
         <div className="flex items-start gap-2.5">
           <Icon className="mt-0.5 size-4 shrink-0 text-[#69707a]" strokeWidth={1.8} />
           <div>
-            <h2 className="text-[14px] font-semibold leading-tight tracking-tight text-[#202124]">{title}</h2>
-            {subtitle && <p className="mt-0.5 text-[12.5px] font-normal text-[#6f747d]">{subtitle}</p>}
+            <h2 className="text-[14px] font-semibold leading-tight tracking-tight text-slate-900">{title}</h2>
+            {subtitle && <p className="mt-0.5 text-[12.5px] font-normal text-slate-500">{subtitle}</p>}
           </div>
         </div>
         {action ?? (
-          <button className="rounded-md border border-[#e4e6eb] p-1.5 text-[#5f6368] transition-colors hover:bg-[#f3f4f7] hover:text-[#202124]">
+          <button className="rounded-md border border-[#e4e6eb] p-1.5 text-[#5f6368] transition-colors hover:bg-[#f3f4f7] hover:text-slate-900">
             <MoreVertical className="size-3.5" />
           </button>
         )}
@@ -114,17 +114,17 @@ function KpiStrip() {
           className="rounded-xl border border-[#e4e6eb] bg-white px-4 py-3 transition-shadow hover:shadow-[0_4px_12px_rgba(15,23,42,0.04)]"
         >
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#737984]">{kpi.label}</p>
+            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">{kpi.label}</p>
             <span className="rounded-full bg-[#f2efff] px-2 py-0.5 text-[10.5px] font-semibold text-[#6f4bd8]">
               {kpi.changeType === 'positive' ? 'Up' : kpi.changeType === 'warning' ? 'Watch' : 'Live'}
             </span>
           </div>
           <div className="mt-2 flex items-end justify-between gap-3">
             <div>
-              <p className="text-[24px] font-bold leading-none tracking-tight text-[#202124]">
+              <p className="text-[24px] font-bold leading-none tracking-tight text-slate-900">
                 {formatKpiValue(kpi.id, kpi.value)}
               </p>
-              <p className="mt-1.5 text-[12px] font-normal text-[#747984]">{kpi.change}</p>
+              <p className="mt-1.5 text-[12px] font-normal text-slate-500">{kpi.change}</p>
             </div>
             {kpi.sparklineData && (
               <div className="hidden h-8 w-20 sm:block">
@@ -205,7 +205,7 @@ function LeadAssistantCard() {
                 {prospect.aiScore} AI score · {prospect.source} · ${(prospect.value / 1000).toFixed(0)}K pipeline
               </p>
             </div>
-            <ArrowUpRight className="size-4 text-[#6f747d]" />
+            <ArrowUpRight className="size-4 text-slate-500" />
           </button>
         ))}
       </div>
@@ -241,7 +241,7 @@ function TasksCard() {
                 <input type="checkbox" className="mt-1 size-4 rounded border-[#b9bec9] accent-[#6f4bd8]" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[14px] font-bold text-[#303238]">{task.label}</span>
-                  <span className="text-[12px] text-[#747984]">{task.meta}</span>
+                  <span className="text-[12px] text-slate-500">{task.meta}</span>
                 </span>
                 <span className="rounded-full border border-[#d8dbe3] bg-[#f7f8fb] px-2 py-0.5 text-[11px] font-bold text-[#575d67]">
                   {task.status}
@@ -269,7 +269,7 @@ function PipelineCard() {
             <Folder className="size-4 text-white" fill="currentColor" strokeWidth={1.5} />
           </span>
           {column.label}
-          <span className="rounded-full bg-[#eef0f4] px-2 py-0.5 text-[11px] text-[#747984]">{column.value}</span>
+          <span className="rounded-full bg-[#eef0f4] px-2 py-0.5 text-[11px] text-slate-500">{column.value}</span>
         </button>
       ))}
     </motion.div>
@@ -358,7 +358,7 @@ function RecentActivityCard() {
             <span className="mt-2 size-2 rounded-full bg-[#6f4bd8]" />
             <div className="min-w-0 flex-1">
               <p className="truncate text-[14px] font-semibold text-[#303238]">{activity.description}</p>
-              <p className="text-[12px] text-[#747984]">{activity.time}</p>
+              <p className="text-[12px] text-slate-500">{activity.time}</p>
             </div>
           </div>
         ))}
@@ -373,7 +373,7 @@ function RecentProspectsTable() {
       <div className="flex items-center justify-between border-b border-[#eceef2] px-5 py-4">
         <div>
           <h2 className="text-[18px] font-bold text-[#303238]">Prospect workflow</h2>
-          <p className="text-[13px] text-[#6f747d]">A compact table view aligned with your CRM pipeline.</p>
+          <p className="text-[13px] text-slate-500">A compact table view aligned with your CRM pipeline.</p>
         </div>
         <button className="inline-flex items-center gap-2 rounded-md bg-[#6f4bd8] px-4 py-2 text-[14px] font-bold text-white transition-colors hover:bg-[#5f3fd0]">
           <PlusCircle className="size-4" /> Create lead
@@ -402,7 +402,7 @@ function RecentProspectsTable() {
                     </div>
                     <div>
                       <p className="font-bold text-[#303238]">{prospect.company}</p>
-                      <p className="text-[12px] text-[#747984]">{prospect.name}</p>
+                      <p className="text-[12px] text-slate-500">{prospect.name}</p>
                     </div>
                   </div>
                 </td>
@@ -414,7 +414,7 @@ function RecentProspectsTable() {
                 <td className="px-5 py-3 text-[#575d67]">{prospect.source}</td>
                 <td className="px-5 py-3 text-[#575d67]">{prospect.assignee}</td>
                 <td className="px-5 py-3 font-bold text-[#303238]">${prospect.value.toLocaleString()}</td>
-                <td className="px-5 py-3 text-[#747984]">{prospect.lastContact}</td>
+                <td className="px-5 py-3 text-slate-500">{prospect.lastContact}</td>
               </tr>
             ))}
           </tbody>
@@ -453,10 +453,10 @@ export default function Dashboard() {
         <div className="mx-auto mb-5 flex size-11 items-center justify-center text-[#13324f]">
           <Sparkles className="size-10 text-[#6f4bd8]" strokeWidth={1.9} />
         </div>
-        <h1 className="text-[29px] font-medium leading-tight text-[#4a4d55] sm:text-[34px] md:text-[40px]">
+        <h1 className="text-[29px] font-medium leading-tight text-slate-700 sm:text-[34px] md:text-[40px]">
           Welcome, Ferlan
         </h1>
-        <p className="mt-2 text-[14px] font-medium text-[#777b84]">
+        <p className="mt-2 text-[14px] font-medium text-slate-500">
           {today} · Your CRM workspace for leads, client operations, and revenue clarity.
         </p>
       </motion.header>

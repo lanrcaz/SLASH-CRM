@@ -89,13 +89,13 @@ function ProfileTab() {
       {/* Personal Information */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Personal Information</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Personal Information</h3>
 
         {/* Avatar */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[22px] font-semibold text-[#202124]">
+          <div className="flex size-20 items-center justify-center rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[22px] font-semibold text-slate-900">
             AM
           </div>
           <div className="flex items-center gap-3">
@@ -118,21 +118,21 @@ function ProfileTab() {
         >
           {fields.map(({ label, field, type }) => (
             <motion.div key={field} variants={staggerItem}>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">{label}</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">{label}</label>
               <Input
                 type={type}
                 value={form[field as keyof typeof form]}
                 onChange={(e) => update(field, e.target.value)}
-                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
               />
             </motion.div>
           ))}
           <motion.div variants={staggerItem}>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Time Zone</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Time Zone</label>
             <select
               value={form.timezone}
               onChange={(e) => update('timezone', e.target.value)}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
             >
               <option value="America/New_York">Eastern Time (ET)</option>
               <option value="America/Chicago">Central Time (CT)</option>
@@ -149,7 +149,7 @@ function ProfileTab() {
           <Button
             variant="ghost"
             onClick={() => { setHasChanges(false); }}
-            className="text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+            className="text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
           >
             Cancel
           </Button>
@@ -160,7 +160,7 @@ function ProfileTab() {
               'font-semibold',
               hasChanges
                 ? 'bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4]'
-                : 'bg-[#e4e6eb] text-[#64748b] cursor-not-allowed'
+                : 'bg-[#e4e6eb] text-slate-500 cursor-not-allowed'
             )}
           >
             Save Changes
@@ -171,24 +171,24 @@ function ProfileTab() {
       {/* Change Password */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Change Password</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Change Password</h3>
         <div className="flex flex-col gap-4 max-w-md">
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Current Password</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Current Password</label>
             <Input
               type="password"
               placeholder="Enter current password"
-              className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">New Password</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">New Password</label>
             <Input
               type="password"
               placeholder="Enter new password"
-              className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
             />
             {/* Password strength */}
             <div className="mt-2 flex gap-1">
@@ -202,14 +202,14 @@ function ProfileTab() {
                 />
               ))}
             </div>
-            <p className="mt-1 text-[11px] text-[#64748b]">Medium strength</p>
+            <p className="mt-1 text-[11px] text-slate-500">Medium strength</p>
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Confirm New Password</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Confirm New Password</label>
             <Input
               type="password"
               placeholder="Confirm new password"
-              className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+              className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
             />
           </div>
           <Button className="mt-2 w-fit bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
@@ -243,10 +243,10 @@ function TeamTab() {
     <div className="flex flex-col gap-6">
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-6"
       >
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-[22px] font-semibold text-[#202124]">
+          <h3 className="text-[22px] font-semibold text-slate-900">
             Team Members ({teamMembers.length})
           </h3>
           <Button
@@ -267,9 +267,9 @@ function TeamTab() {
                 'rounded-full px-3 py-1 text-[12px] font-medium transition-all',
                 roleFilter === role || (!roleFilter && !role)
                   ? role === ''
-                    ? 'bg-[#ffffff] text-[#202124]'
+                    ? 'bg-[#ffffff] text-slate-900'
                     : 'text-[#ffffff]'
-                  : 'border border-[#e4e6eb] text-[#94a3b8] hover:text-[#202124]'
+                  : 'border border-[#e4e6eb] text-slate-400 hover:text-slate-900'
               )}
               style={
                 (roleFilter === role || (!roleFilter && !role)) && role !== ''
@@ -290,7 +290,7 @@ function TeamTab() {
           className="flex flex-col gap-2"
         >
           {/* Table Header */}
-          <div className="grid grid-cols-[1fr_100px_100px_120px_80px] gap-4 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">
+          <div className="grid grid-cols-[1fr_100px_100px_120px_80px] gap-4 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">
             <span>Member</span>
             <span>Role</span>
             <span>Status</span>
@@ -305,12 +305,12 @@ function TeamTab() {
               className="grid grid-cols-[1fr_100px_100px_120px_80px] items-center gap-4 rounded-[10px] bg-[#ffffff] px-4 py-3"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[11px] font-medium text-[#202124] shrink-0">
+                <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-[#8b5cf6] to-[#3b82f6] text-[11px] font-medium text-slate-900 shrink-0">
                   {member.avatar}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[13px] font-medium text-[#202124] truncate">{member.name}</p>
-                  <p className="text-[11px] text-[#64748b] truncate">{member.email}</p>
+                  <p className="text-[13px] font-medium text-slate-900 truncate">{member.name}</p>
+                  <p className="text-[11px] text-slate-500 truncate">{member.email}</p>
                 </div>
               </div>
               <span
@@ -329,15 +329,15 @@ function TeamTab() {
                     member.status === 'active' ? 'bg-[#22c55e]' : 'bg-[#f59e0b]'
                   )}
                 />
-                <span className="text-[12px] text-[#94a3b8] capitalize">{member.status}</span>
+                <span className="text-[12px] text-slate-400 capitalize">{member.status}</span>
               </div>
-              <span className="text-[12px] text-[#94a3b8]">
+              <span className="text-[12px] text-slate-400">
                 {member.status === 'invited' ? '—' : member.name === 'Alex Morgan' ? 'Now' : 'Recently'}
               </span>
               <div className="flex justify-end gap-1">
                 {member.role !== 'Owner' && (
                   <>
-                    <button className="rounded-md p-1 text-[#64748b] hover:bg-[rgba(255,255,255,0.08)] hover:text-[#202124] transition-colors">
+                    <button className="rounded-md p-1 text-slate-500 hover:bg-[rgba(255,255,255,0.08)] hover:text-slate-900 transition-colors">
                       <span className="text-[11px]">Edit</span>
                     </button>
                     {member.status === 'invited' ? (
@@ -359,21 +359,21 @@ function TeamTab() {
 
       {/* Invite Modal */}
       <Dialog open={inviteModalOpen} onOpenChange={setInviteModalOpen}>
-        <DialogContent className="max-w-[480px] border-[#e4e6eb] bg-[#ffffff] text-[#202124]">
+        <DialogContent className="max-w-[480px] border-[#e4e6eb] bg-[#ffffff] text-slate-900">
           <DialogHeader>
             <DialogTitle className="text-[20px] font-semibold">Invite Team Member</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-4 py-4">
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Email Address</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Email Address</label>
               <Input
                 placeholder="colleague@company.com"
-                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
-              <p className="mt-1 text-[11px] text-[#64748b]">You can invite multiple by separating with commas</p>
+              <p className="mt-1 text-[11px] text-slate-500">You can invite multiple by separating with commas</p>
             </div>
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Role</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Role</label>
               <div className="flex flex-col gap-2">
                 {[
                   { role: 'Admin', desc: 'Full access to all settings and data' },
@@ -386,8 +386,8 @@ function TeamTab() {
                   >
                     <input type="radio" name="inviteRole" value={role} className="accent-[#6f4bd8]" />
                     <div>
-                      <p className="text-[13px] font-medium text-[#202124]">{role}</p>
-                      <p className="text-[11px] text-[#64748b]">{desc}</p>
+                      <p className="text-[13px] font-medium text-slate-900">{role}</p>
+                      <p className="text-[11px] text-slate-500">{desc}</p>
                     </div>
                   </label>
                 ))}
@@ -398,7 +398,7 @@ function TeamTab() {
             <Button
               variant="ghost"
               onClick={() => setInviteModalOpen(false)}
-              className="text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+              className="text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
             >
               Cancel
             </Button>
@@ -438,9 +438,9 @@ function IntegrationsTab() {
   return (
     <motion.div
       {...fadeSlideUp(0)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
+      className="rounded-xl border border-slate-200 bg-[#ffffff] p-6"
     >
-      <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Connected Integrations</h3>
+      <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Connected Integrations</h3>
       <motion.div
         variants={staggerContainer(0.08)}
         initial="initial"
@@ -452,7 +452,7 @@ function IntegrationsTab() {
             key={integration.id}
             variants={staggerItem}
             className={cn(
-              'rounded-[16px] border border-[rgba(255,255,255,0.06)] p-5 transition-all',
+              'rounded-xl border border-slate-200 p-5 transition-all',
               integration.connected
                 ? 'border-l-[3px] border-l-[#6f4bd8]'
                 : 'border-l-[3px] border-l-[#64748b]'
@@ -463,14 +463,14 @@ function IntegrationsTab() {
                 <div
                   className={cn(
                     'flex size-10 items-center justify-center rounded-[10px]',
-                    integration.connected ? 'text-[#6f4bd8] bg-[rgba(111,75,216,0.1)]' : 'text-[#64748b] bg-[#ffffff]'
+                    integration.connected ? 'text-[#6f4bd8] bg-[rgba(111,75,216,0.1)]' : 'text-slate-500 bg-[#ffffff]'
                   )}
                 >
                   {integrationIcons[integration.id]}
                 </div>
                 <div>
-                  <h4 className="text-[16px] font-semibold text-[#202124]">{integration.name}</h4>
-                  <p className="text-[12px] text-[#94a3b8] mt-0.5">{integration.description}</p>
+                  <h4 className="text-[16px] font-semibold text-slate-900">{integration.name}</h4>
+                  <p className="text-[12px] text-slate-400 mt-0.5">{integration.description}</p>
                 </div>
               </div>
             </div>
@@ -483,7 +483,7 @@ function IntegrationsTab() {
                     integration.connected ? 'bg-[#22c55e]' : 'bg-[#64748b]'
                   )}
                 />
-                <span className="text-[12px] text-[#94a3b8]">
+                <span className="text-[12px] text-slate-400">
                   {integration.connected ? 'Connected' : 'Not connected'}
                 </span>
               </div>
@@ -524,9 +524,9 @@ function BillingTab() {
       {/* Current Plan */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Current Plan</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Current Plan</h3>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span
@@ -535,14 +535,14 @@ function BillingTab() {
             >
               Growth
             </span>
-            <p className="mt-2 text-[20px] font-medium text-[#202124]">$49/month</p>
-            <p className="text-[13px] text-[#64748b]">Billed annually ($468/year — save $120)</p>
-            <p className="mt-2 text-[13px] text-[#64748b]">Next billing: July 15, 2025</p>
+            <p className="mt-2 text-[20px] font-medium text-slate-900">$49/month</p>
+            <p className="text-[13px] text-slate-500">Billed annually ($468/year — save $120)</p>
+            <p className="mt-2 text-[13px] text-slate-500">Next billing: July 15, 2025</p>
           </div>
           <div className="flex flex-col gap-2">
             <Button
               variant="outline"
-              className="border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
             >
               Change Plan
             </Button>
@@ -554,9 +554,9 @@ function BillingTab() {
       {/* Usage */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Usage</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Usage</h3>
         <div className="flex flex-col gap-5">
           {[
             { label: 'Clients', used: 24, total: 100 },
@@ -568,7 +568,7 @@ function BillingTab() {
               <div key={item.label}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[13px] text-[#cbd5e1]">{item.label}</span>
-                  <span className="text-[12px] text-[#94a3b8]">
+                  <span className="text-[12px] text-slate-400">
                     {item.unlimited ? 'Unlimited' : `${item.used} of ${item.total} used`}
                   </span>
                 </div>
@@ -589,22 +589,22 @@ function BillingTab() {
       {/* Payment Method */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-4">Payment Method</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-4">Payment Method</h3>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex size-10 items-center justify-center rounded-[10px] bg-[#ffffff]">
-              <CreditCard className="size-5 text-[#94a3b8]" />
+              <CreditCard className="size-5 text-slate-400" />
             </div>
             <div>
-              <p className="text-[14px] font-medium text-[#202124]">Visa ****4242</p>
-              <p className="text-[12px] text-[#64748b]">Expires 09/27</p>
+              <p className="text-[14px] font-medium text-slate-900">Visa ****4242</p>
+              <p className="text-[12px] text-slate-500">Expires 09/27</p>
             </div>
           </div>
           <Button
             variant="outline"
-            className="border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+            className="border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
           >
             Update Card
           </Button>
@@ -614,17 +614,17 @@ function BillingTab() {
       {/* Invoice History */}
       <motion.div
         {...fadeSlideUp(0.2)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Invoice History</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Invoice History</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[rgba(255,255,255,0.06)]">
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Date</th>
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Amount</th>
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Status</th>
-                <th className="pb-3 text-right text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Invoice</th>
+              <tr className="border-b border-slate-200">
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Date</th>
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Amount</th>
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Status</th>
+                <th className="pb-3 text-right text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -634,10 +634,10 @@ function BillingTab() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.04, ease: easeOutExpo }}
-                  className="border-b border-[rgba(255,255,255,0.04)] last:border-b-0"
+                  className="border-b border-slate-100 last:border-b-0"
                 >
                   <td className="py-3 text-[13px] text-[#cbd5e1]">{inv.date}</td>
-                  <td className="py-3 text-[13px] font-medium text-[#202124]">${inv.amount}</td>
+                  <td className="py-3 text-[13px] font-medium text-slate-900">${inv.amount}</td>
                   <td className="py-3">
                     <span
                       className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium"
@@ -684,14 +684,14 @@ function NotificationsTab() {
   return (
     <motion.div
       {...fadeSlideUp(0)}
-      className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-6"
+      className="rounded-xl border border-slate-200 bg-[#ffffff] p-6"
     >
-      <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Notification Preferences</h3>
+      <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Notification Preferences</h3>
 
       <div className="flex flex-col gap-8">
         {categories.map((category) => (
           <div key={category}>
-            <h4 className="text-[14px] font-semibold text-[#94a3b8] uppercase tracking-[0.06em] mb-4">
+            <h4 className="text-[14px] font-semibold text-slate-400 uppercase tracking-[0.06em] mb-4">
               {category}
             </h4>
             <motion.div
@@ -709,8 +709,8 @@ function NotificationsTab() {
                     className="flex items-center justify-between rounded-[10px] bg-[#ffffff] px-4 py-3"
                   >
                     <div>
-                      <p className="text-[14px] font-medium text-[#202124]">{pref.label}</p>
-                      <p className="text-[12px] text-[#64748b]">{pref.description}</p>
+                      <p className="text-[14px] font-medium text-slate-900">{pref.label}</p>
+                      <p className="text-[12px] text-slate-500">{pref.description}</p>
                     </div>
                     <div className="flex items-center gap-4 shrink-0">
                       <label className="flex items-center gap-2 cursor-pointer">
@@ -718,14 +718,14 @@ function NotificationsTab() {
                           checked={pref.email}
                           onCheckedChange={() => toggleEmail(pref.id)}
                         />
-                        <span className="text-[11px] text-[#94a3b8]">Email</span>
+                        <span className="text-[11px] text-slate-400">Email</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <Switch
                           checked={pref.inApp}
                           onCheckedChange={() => toggleInApp(pref.id)}
                         />
-                        <span className="text-[11px] text-[#94a3b8]">In-app</span>
+                        <span className="text-[11px] text-slate-400">In-app</span>
                       </label>
                     </div>
                   </motion.div>
@@ -754,9 +754,9 @@ function SecurityTab() {
       {/* Two-Factor Authentication */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">
           Two-Factor Authentication
         </h3>
         <div className="flex items-center justify-between">
@@ -773,14 +773,14 @@ function SecurityTab() {
                   <CheckCircle2 className="size-3" /> Enabled
                 </span>
               </div>
-              <p className="mt-1 text-[13px] text-[#94a3b8]">Method: Authenticator App</p>
+              <p className="mt-1 text-[13px] text-slate-400">Method: Authenticator App</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Switch checked={twoFAEnabled} onCheckedChange={setTwoFAEnabled} />
             <Button
               variant="outline"
-              className="border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
             >
               Reconfigure
             </Button>
@@ -791,9 +791,9 @@ function SecurityTab() {
       {/* Active Sessions */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Active Sessions</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Active Sessions</h3>
         <div className="flex flex-col gap-3">
           {sessions.map((session, i) => (
             <div
@@ -801,15 +801,15 @@ function SecurityTab() {
               className="flex items-center justify-between rounded-[10px] bg-[#ffffff] px-4 py-3"
             >
               <div className="flex items-center gap-3">
-                <Monitor className="size-5 text-[#94a3b8]" />
+                <Monitor className="size-5 text-slate-400" />
                 <div>
-                  <p className="text-[13px] font-medium text-[#202124]">
+                  <p className="text-[13px] font-medium text-slate-900">
                     {session.device}
                     {session.current && (
                       <span className="ml-2 text-[11px] text-[#6f4bd8]">(This device)</span>
                     )}
                   </p>
-                  <p className="text-[11px] text-[#64748b]">
+                  <p className="text-[11px] text-slate-500">
                     {session.location} · {session.lastActive}
                   </p>
                 </div>
@@ -832,27 +832,27 @@ function SecurityTab() {
       {/* Login History */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Login History</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Login History</h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[rgba(255,255,255,0.06)]">
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Date</th>
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Time</th>
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Device</th>
-                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Location</th>
-                <th className="pb-3 text-right text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">Status</th>
+              <tr className="border-b border-slate-200">
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Date</th>
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Time</th>
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Device</th>
+                <th className="pb-3 text-left text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Location</th>
+                <th className="pb-3 text-right text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">Status</th>
               </tr>
             </thead>
             <tbody>
               {loginHistory.map((log, i) => (
-                <tr key={i} className="border-b border-[rgba(255,255,255,0.04)] last:border-b-0">
+                <tr key={i} className="border-b border-slate-100 last:border-b-0">
                   <td className="py-3 text-[13px] text-[#cbd5e1]">{log.date}</td>
-                  <td className="py-3 text-[13px] text-[#94a3b8]">{log.time}</td>
-                  <td className="py-3 text-[13px] text-[#94a3b8]">{log.device}</td>
-                  <td className="py-3 text-[13px] text-[#94a3b8]">{log.location}</td>
+                  <td className="py-3 text-[13px] text-slate-400">{log.time}</td>
+                  <td className="py-3 text-[13px] text-slate-400">{log.device}</td>
+                  <td className="py-3 text-[13px] text-slate-400">{log.location}</td>
                   <td className="py-3 text-right">
                     <span
                       className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium"
@@ -889,13 +889,13 @@ function PlatformTab() {
       {/* Appearance */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Appearance</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Appearance</h3>
 
         {/* Theme */}
         <div className="mb-6">
-          <label className="mb-2 block text-[12px] font-medium text-[#94a3b8]">Theme</label>
+          <label className="mb-2 block text-[12px] font-medium text-slate-400">Theme</label>
           <div className="flex gap-3">
             {[
               { id: 'dark', label: 'Dark', icon: Moon },
@@ -909,14 +909,14 @@ function PlatformTab() {
                   'flex items-center gap-2 rounded-lg border px-4 py-3 text-[13px] font-medium transition-all',
                   theme === t.id
                     ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-[#6f4bd8]'
-                    : 'border-[#e4e6eb] bg-[#ffffff] text-[#94a3b8]',
+                    : 'border-[#e4e6eb] bg-[#ffffff] text-slate-400',
                   t.disabled && 'opacity-50 cursor-not-allowed'
                 )}
               >
                 <t.icon className="size-4" />
                 {t.label}
                 {t.badge && (
-                  <span className="ml-1 rounded-full bg-[#e4e6eb] px-1.5 py-0.5 text-[9px] text-[#64748b]">
+                  <span className="ml-1 rounded-full bg-[#e4e6eb] px-1.5 py-0.5 text-[9px] text-slate-500">
                     {t.badge}
                   </span>
                 )}
@@ -927,7 +927,7 @@ function PlatformTab() {
 
         {/* Density */}
         <div>
-          <label className="mb-2 block text-[12px] font-medium text-[#94a3b8]">Density</label>
+          <label className="mb-2 block text-[12px] font-medium text-slate-400">Density</label>
           <div className="flex gap-3">
             {['compact', 'default', 'comfortable'].map((d) => (
               <button
@@ -937,7 +937,7 @@ function PlatformTab() {
                   'flex items-center gap-2 rounded-lg border px-4 py-3 text-[13px] font-medium capitalize transition-all',
                   density === d
                     ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-[#6f4bd8]'
-                    : 'border-[#e4e6eb] bg-[#ffffff] text-[#94a3b8]'
+                    : 'border-[#e4e6eb] bg-[#ffffff] text-slate-400'
                 )}
               >
                 <Monitor className="size-4" />
@@ -951,16 +951,16 @@ function PlatformTab() {
       {/* Language & Region */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Language & Region</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Language & Region</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Language</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Language</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
             >
               <option value="en">English</option>
               <option value="es">Spanish</option>
@@ -969,11 +969,11 @@ function PlatformTab() {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Date Format</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Date Format</label>
             <select
               value={dateFormat}
               onChange={(e) => setDateFormat(e.target.value)}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
             >
               <option value="MM/DD/YYYY">MM/DD/YYYY</option>
               <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -981,11 +981,11 @@ function PlatformTab() {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Currency</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Currency</label>
             <select
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
             >
               <option value="USD">USD ($)</option>
               <option value="EUR">EUR (€)</option>
@@ -999,21 +999,21 @@ function PlatformTab() {
       {/* Default Views */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Default Views</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Default Views</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Default Dashboard View</label>
-            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]">
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Default Dashboard View</label>
+            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]">
               <option>Overview</option>
               <option>Earnings</option>
               <option>Clients</option>
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Default Date Range</label>
-            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]">
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Default Date Range</label>
+            <select className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]">
               <option>30D</option>
               <option>90D</option>
               <option>1Y</option>
@@ -1025,13 +1025,13 @@ function PlatformTab() {
       {/* Data Management */}
       <motion.div
         {...fadeSlideUp(0.2)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Data Management</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Data Management</h3>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <Button
             variant="outline"
-            className="border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+            className="border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
           >
             <Download className="size-4 mr-1.5" /> Export All Data
           </Button>
@@ -1070,10 +1070,10 @@ function APITab() {
       {/* API Documentation */}
       <motion.div
         {...fadeSlideUp(0)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-4">API Documentation</h3>
-        <p className="text-[14px] text-[#94a3b8] mb-4">
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-4">API Documentation</h3>
+        <p className="text-[14px] text-slate-400 mb-4">
           Use the ClientVault API to programmatically manage clients, prospects, earnings, and more.
         </p>
         <div className="flex items-center gap-3">
@@ -1085,7 +1085,7 @@ function APITab() {
           </a>
         </div>
         <div className="mt-4 rounded-[10px] bg-[#ffffff] p-3">
-          <p className="text-[11px] text-[#64748b] uppercase tracking-[0.06em]">Base URL</p>
+          <p className="text-[11px] text-slate-500 uppercase tracking-[0.06em]">Base URL</p>
           <code className="mt-1 block text-[13px] text-[#6f4bd8]">https://api.clientvault.io/v1</code>
         </div>
       </motion.div>
@@ -1093,20 +1093,20 @@ function APITab() {
       {/* API Key */}
       <motion.div
         {...fadeSlideUp(0.1)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">API Keys</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">API Keys</h3>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3 rounded-[10px] bg-[#ffffff] p-4">
             <div className="flex-1 min-w-0">
-              <p className="text-[11px] text-[#64748b] uppercase tracking-[0.06em]">Live API Key</p>
+              <p className="text-[11px] text-slate-500 uppercase tracking-[0.06em]">Live API Key</p>
               <div className="mt-1 flex items-center gap-2">
-                <code className="text-[14px] text-[#202124] font-mono">
+                <code className="text-[14px] text-slate-900 font-mono">
                   {showKey ? apiKey : apiKey.replace(/./g, '•')}
                 </code>
                 <button
                   onClick={() => setShowKey(!showKey)}
-                  className="text-[#64748b] hover:text-[#202124] transition-colors"
+                  className="text-slate-500 hover:text-slate-900 transition-colors"
                 >
                   {showKey ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </button>
@@ -1117,7 +1117,7 @@ function APITab() {
                 size="sm"
                 variant="ghost"
                 onClick={copyKey}
-                className="text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+                className="text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
               >
                 <Copy className="size-4" />
               </Button>
@@ -1137,17 +1137,17 @@ function APITab() {
       {/* Webhooks */}
       <motion.div
         {...fadeSlideUp(0.15)}
-        className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-8"
+        className="rounded-xl border border-slate-200 bg-[#ffffff] p-8"
       >
-        <h3 className="text-[22px] font-semibold text-[#202124] mb-6">Webhooks</h3>
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-6">Webhooks</h3>
         <div className="flex flex-col gap-4">
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Webhook URL</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Webhook URL</label>
             <div className="flex gap-2">
               <Input
                 value={webhookUrl}
                 onChange={(e) => setWebhookUrl(e.target.value)}
-                className="flex-1 border-[#e4e6eb] bg-[#ffffff] text-[#202124] focus-visible:border-[#6f4bd8]"
+                className="flex-1 border-[#e4e6eb] bg-[#ffffff] text-slate-900 focus-visible:border-[#6f4bd8]"
               />
               <Button className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
                 Save
@@ -1156,7 +1156,7 @@ function APITab() {
           </div>
 
           <div>
-            <label className="mb-2 block text-[12px] font-medium text-[#94a3b8]">Event Types</label>
+            <label className="mb-2 block text-[12px] font-medium text-slate-400">Event Types</label>
             <div className="flex flex-wrap gap-2">
               {[
                 'client.created',
@@ -1179,7 +1179,7 @@ function APITab() {
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
             >
               Test Webhook
             </Button>
@@ -1187,7 +1187,7 @@ function APITab() {
 
           {/* Recent deliveries */}
           <div className="mt-2">
-            <p className="mb-2 text-[12px] font-medium text-[#94a3b8]">Recent Deliveries</p>
+            <p className="mb-2 text-[12px] font-medium text-slate-400">Recent Deliveries</p>
             <div className="flex flex-col gap-2">
               {[
                 { event: 'client.created', status: '200 OK', time: '2 hours ago' },
@@ -1203,7 +1203,7 @@ function APITab() {
                     >
                       {d.status}
                     </span>
-                    <span className="text-[11px] text-[#475569]">{d.time}</span>
+                    <span className="text-[11px] text-slate-600">{d.time}</span>
                   </div>
                 </div>
               ))}
@@ -1234,15 +1234,15 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-full bg-[#ffffff] p-6">
+    <div className="min-h-full p-6">
       {/* Page Header */}
       <motion.div
         initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: easeOutExpo }}
       >
-        <h1 className="text-[36px] font-semibold tracking-[-0.02em] text-[#202124]">Settings</h1>
-        <p className="mt-1 text-[15px] text-[#64748b]">
+        <h1 className="text-[36px] font-bold tracking-tight text-slate-900">Settings</h1>
+        <p className="mt-1 text-[15px] text-slate-500">
           Manage your account, team, and platform preferences
         </p>
       </motion.div>
@@ -1264,11 +1264,11 @@ export default function Settings() {
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-4 py-2.5 text-[13px] font-medium transition-all whitespace-nowrap',
                     isActive
-                      ? 'border-l-2 border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-[#202124]'
-                      : 'border-l-2 border-transparent text-[#64748b] hover:text-[#cbd5e1]'
+                      ? 'border-l-2 border-[#6f4bd8] bg-[rgba(111,75,216,0.08)] text-slate-900'
+                      : 'border-l-2 border-transparent text-slate-500 hover:text-[#cbd5e1]'
                   )}
                 >
-                  <tab.icon className={cn('size-4', isActive ? 'text-[#6f4bd8]' : 'text-[#64748b]')} />
+                  <tab.icon className={cn('size-4', isActive ? 'text-[#6f4bd8]' : 'text-slate-500')} />
                   {tab.label}
                 </button>
               );

@@ -96,8 +96,8 @@
     --workspace-danger: #c2413d;
     color: var(--workspace-text);
     background:
-      radial-gradient(circle at 54% 0%, rgba(111, 75, 216, 0.08), transparent 34rem),
-      linear-gradient(180deg, #fafbfe 0%, var(--workspace-bg) 18rem, #f7f8fb 100%);
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(111, 75, 216, 0.10), transparent 60%),
+      linear-gradient(180deg, #fafbfe 0%, #f7f8fb 100%);
   }
 
   .app-workspace h1,

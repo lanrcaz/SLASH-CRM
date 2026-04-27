@@ -67,8 +67,8 @@ function QuickReportCard({ report, index, onGenerate }: {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.1 + index * 0.08 }}
       whileHover={{ y: -2, borderColor: `${NEON_GREEN}26` }}
-      className="rounded-[16px] p-6 cursor-pointer transition-all duration-200"
-      style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+      className="rounded-xl p-6 cursor-pointer transition-all duration-200"
+      style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
     >
       <div className="flex items-center gap-3 mb-3">
         <div
@@ -86,7 +86,7 @@ function QuickReportCard({ report, index, onGenerate }: {
           </span>
         )}
       </div>
-      <h3 className="text-[18px] font-semibold text-[#202124]">{report.title}</h3>
+      <h3 className="text-[18px] font-semibold text-slate-900">{report.title}</h3>
       <p className="text-[13px] mt-1" style={{ color: GRAY_500 }}>{report.description}</p>
       <div className="flex items-center justify-between mt-4">
         <button
@@ -170,13 +170,13 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        className="w-full max-w-[800px] rounded-[16px] p-6 max-h-[90vh] overflow-y-auto"
-        style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
+        className="w-full max-w-[800px] rounded-xl p-6 max-h-[90vh] overflow-y-auto"
+        style={{ background: NAVY_900, border: "1px solid #e4e6eb", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-[20px] font-semibold text-[#202124]">Create Custom Report</h3>
+            <h3 className="text-[20px] font-semibold text-slate-900">Create Custom Report</h3>
             <p className="text-[13px] mt-1" style={{ color: GRAY_500 }}>
               Step {step} of {totalSteps}: {stepLabels[step]}
             </p>
@@ -222,7 +222,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                       <ReportIcon name={source.icon} size={20} color={selectedSources.includes(source.id) ? NEON_GREEN : GRAY_500} />
                     </div>
                     <div>
-                      <p className="text-[14px] font-medium text-[#202124]">{source.label}</p>
+                      <p className="text-[14px] font-medium text-slate-900">{source.label}</p>
                     </div>
                     {selectedSources.includes(source.id) && <Check size={16} style={{ color: NEON_GREEN }} className="ml-auto" />}
                   </button>
@@ -289,7 +289,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                     type="date"
                     value={dateRange.start}
                     onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}`, colorScheme: "dark" }}
                   />
                 </div>
@@ -299,7 +299,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                     type="date"
                     value={dateRange.end}
                     onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}`, colorScheme: "dark" }}
                   />
                 </div>
@@ -350,7 +350,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                   type="text"
                   value={reportName}
                   onChange={(e) => setReportName(e.target.value)}
-                  className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
+                  className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                   style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                   placeholder="My Custom Report"
                 />
@@ -381,7 +381,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                   className="w-4 h-4 rounded accent-[#6f4bd8]"
                   defaultChecked
                 />
-                <label htmlFor="includeCharts" className="text-[13px] text-[#202124]">Include charts and visualizations</label>
+                <label htmlFor="includeCharts" className="text-[13px] text-slate-900">Include charts and visualizations</label>
               </div>
             </motion.div>
           )}
@@ -409,7 +409,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                     transition={{ duration: 0.2 }}
                   />
                 </div>
-                <span className="text-[14px] font-medium text-[#202124]">Schedule this report</span>
+                <span className="text-[14px] font-medium text-slate-900">Schedule this report</span>
               </div>
 
               <AnimatePresence>
@@ -445,7 +445,7 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
                         <label className="block text-[12px] font-medium uppercase tracking-wider mb-1.5" style={{ color: GRAY_500 }}>Delivery Email</label>
                         <input
                           type="email"
-                          className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
+                          className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                           style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                           placeholder="team@company.com"
                         />
@@ -457,23 +457,23 @@ function ReportBuilderModal({ onClose }: { onClose: () => void }) {
 
               {/* Preview */}
               <div className="mt-6 p-4 rounded-[10px]" style={{ background: NAVY_800 }}>
-                <h4 className="text-[14px] font-medium text-[#202124] mb-2">Report Preview</h4>
+                <h4 className="text-[14px] font-medium text-slate-900 mb-2">Report Preview</h4>
                 <div className="space-y-2">
                   <div className="flex justify-between text-[13px]">
                     <span style={{ color: GRAY_500 }}>Sources:</span>
-                    <span className="text-[#202124]">{selectedSources.map(s => reportDataSourceOptions.find(o => o.id === s)?.label).join(", ") || "None selected"}</span>
+                    <span className="text-slate-900">{selectedSources.map(s => reportDataSourceOptions.find(o => o.id === s)?.label).join(", ") || "None selected"}</span>
                   </div>
                   <div className="flex justify-between text-[13px]">
                     <span style={{ color: GRAY_500 }}>Period:</span>
-                    <span className="text-[#202124]">{dateRange.start || "—"} to {dateRange.end || "—"}</span>
+                    <span className="text-slate-900">{dateRange.start || "—"} to {dateRange.end || "—"}</span>
                   </div>
                   <div className="flex justify-between text-[13px]">
                     <span style={{ color: GRAY_500 }}>Format:</span>
-                    <span className="text-[#202124]">{format}</span>
+                    <span className="text-slate-900">{format}</span>
                   </div>
                   <div className="flex justify-between text-[13px]">
                     <span style={{ color: GRAY_500 }}>Metrics:</span>
-                    <span className="text-[#202124]">{selectedMetrics.length} selected</span>
+                    <span className="text-slate-900">{selectedMetrics.length} selected</span>
                   </div>
                   {scheduleEnabled && (
                     <div className="flex justify-between text-[13px]">
@@ -549,7 +549,7 @@ export default function Reports() {
   };
 
   return (
-    <div className="min-h-[100dvh]" style={{ background: NAVY_950 }}>
+    <div className="min-h-[100dvh]">
       {/* Toast */}
       <AnimatePresence>
         {showToast && (
@@ -562,7 +562,7 @@ export default function Reports() {
             style={{ background: NAVY_800, border: `1px solid ${NEON_GREEN}40`, boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}
           >
             <Check size={16} style={{ color: NEON_GREEN }} />
-            <span className="text-[13px] font-medium text-[#202124]">{toastMsg}</span>
+            <span className="text-[13px] font-medium text-slate-900">{toastMsg}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -576,7 +576,7 @@ export default function Reports() {
           className="flex flex-col md:flex-row md:items-center justify-between mb-6"
         >
           <div>
-            <h1 className="text-[36px] font-semibold tracking-tight text-[#202124]" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h1 className="text-[36px] font-bold tracking-tight text-slate-900" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               Reports
             </h1>
             <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>
@@ -612,11 +612,11 @@ export default function Reports() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.3 }}
-          className="rounded-[16px] p-6 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-6 mb-6"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[18px] font-semibold text-[#202124]">Scheduled Reports</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900">Scheduled Reports</h3>
             <button className="text-[13px] font-medium flex items-center gap-1 transition-colors hover:opacity-80" style={{ color: NEON_GREEN }}>
               View All <ChevronRight size={14} />
             </button>
@@ -634,7 +634,7 @@ export default function Reports() {
                 <div className="flex items-center gap-3 mb-3 sm:mb-0">
                   <StatusDot active={report.status === "Active"} />
                   <div>
-                    <p className="text-[14px] font-medium text-[#202124]">{report.name}</p>
+                    <p className="text-[14px] font-medium text-slate-900">{report.name}</p>
                     <p className="text-[12px]" style={{ color: GRAY_500 }}>
                       {report.frequency} · Next: {report.nextRun} · {report.recipient}
                     </p>
@@ -669,10 +669,10 @@ export default function Reports() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.4 }}
-          className="rounded-[16px] p-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-6"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <h3 className="text-[18px] font-semibold text-[#202124] mb-4">Recent Downloads</h3>
+          <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Recent Downloads</h3>
           <div className="space-y-2">
             {recentReports.map((report, i) => (
               <motion.div
@@ -696,7 +696,7 @@ export default function Reports() {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[14px] font-medium text-[#202124] truncate">{report.name}</p>
+                    <p className="text-[14px] font-medium text-slate-900 truncate">{report.name}</p>
                     <p className="text-[12px]" style={{ color: GRAY_500 }}>
                       {report.generated} · {report.size}
                     </p>
