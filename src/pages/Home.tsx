@@ -8,36 +8,44 @@ import {
 } from 'lucide-react'
 import CountUp from 'react-countup'
 
-/* ── NavBar ─────────────────────────────────────────────────────── */
+const ACCENT = '#6f4bd8'
+const ACCENT_HOVER = '#5b39c4'
+const ACCENT_SOFT = '#f2efff'
+const ACCENT_BORDER = '#d8cffa'
+
 function NavBar() {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => setScrolled(window.scrollY > 24)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-navy-950/90 backdrop-blur-md border-b border-navy-700' : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-neon-green flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-navy-950" />
+    <nav
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-200 ${
+        scrolled ? 'border-b border-slate-200 bg-white/85 backdrop-blur-md' : 'border-b border-transparent bg-transparent'
+      }`}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="flex size-8 items-center justify-center rounded-md" style={{ backgroundColor: ACCENT }}>
+            <Sparkles className="size-4 text-white" strokeWidth={2.2} />
           </div>
-          <span className="font-heading font-bold text-lg">
-            <span className="text-white">Client</span>
-            <span className="text-neon-green">Vault</span>
-          </span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-gray-400 hover:text-white text-sm transition-colors">Features</a>
-          <a href="#pricing" className="text-gray-400 hover:text-white text-sm transition-colors">Pricing</a>
-          <a href="#stats" className="text-gray-400 hover:text-white text-sm transition-colors">Stats</a>
+          <span className="text-[15px] font-semibold tracking-tight text-slate-900">SLASH CRM</span>
+        </Link>
+        <div className="hidden items-center gap-8 md:flex">
+          <a href="#features" className="text-sm font-normal text-slate-600 transition-colors hover:text-slate-900">Features</a>
+          <a href="#pricing" className="text-sm font-normal text-slate-600 transition-colors hover:text-slate-900">Pricing</a>
+          <a href="#stats" className="text-sm font-normal text-slate-600 transition-colors hover:text-slate-900">Stats</a>
         </div>
         <Link to="/app">
-          <button className="bg-neon-green text-navy-950 px-5 py-2 rounded-lg text-sm font-semibold hover:bg-neon-green-hover transition-all hover:shadow-glow-green">
+          <button
+            className="rounded-md px-4 py-2 text-sm font-medium text-white transition-colors"
+            style={{ backgroundColor: ACCENT }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = ACCENT_HOVER)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = ACCENT)}
+          >
             Get Started
           </button>
         </Link>
@@ -46,127 +54,157 @@ function NavBar() {
   )
 }
 
-/* ── Section wrapper ──────────────────────────────────────────────── */
 function Section({ children, className = '', id }: { children: React.ReactNode; className?: string; id?: string }) {
   return (
-    <section id={id} className={`py-20 md:py-28 px-6 ${className}`}>
-      <div className="max-w-7xl mx-auto">{children}</div>
+    <section id={id} className={`px-6 py-20 md:py-24 ${className}`}>
+      <div className="mx-auto max-w-7xl">{children}</div>
     </section>
   )
 }
 
-/* ── Feature card ───────────────────────────────────────────────── */
 function FeatureCard({ icon: Icon, title, description }: { icon: LucideIcon; title: string; description: string }) {
   return (
-    <div className="bg-navy-900 border border-white/[0.06] rounded-2xl p-8 hover:border-neon-green/20 hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-neon-green opacity-60" />
-      <div className="w-12 h-12 rounded-xl bg-neon-green/10 flex items-center justify-center mb-5 group-hover:bg-neon-green/20 transition-colors">
-        <Icon className="w-6 h-6 text-neon-green" />
+    <div className="group rounded-xl border border-slate-200 bg-white p-7 transition-all duration-200 hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]">
+      <div
+        className="mb-5 flex size-11 items-center justify-center rounded-lg"
+        style={{ backgroundColor: ACCENT_SOFT }}
+      >
+        <Icon className="size-5" style={{ color: ACCENT }} strokeWidth={1.8} />
       </div>
-      <h3 className="font-heading font-semibold text-xl text-white mb-3">{title}</h3>
-      <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+      <h3 className="mb-2 text-base font-semibold tracking-tight text-slate-900">{title}</h3>
+      <p className="text-sm leading-relaxed text-slate-600">{description}</p>
     </div>
   )
 }
 
-/* ── Pricing toggle ────────────────────────────────────────────── */
-function PricingCard({ name, price, period, features, featured = false }: {
+function PricingCard({
+  name, price, period, features, featured = false,
+}: {
   name: string; price: string; period: string; features: string[]; featured?: boolean
 }) {
   return (
-    <div className={`rounded-2xl p-8 ${featured ? 'bg-navy-900 border-2 border-neon-green relative' : 'bg-navy-900 border border-white/[0.06]'}`}>
+    <div
+      className={`relative rounded-xl bg-white p-8 transition-shadow ${
+        featured
+          ? 'shadow-[0_12px_32px_rgba(111,75,216,0.18)]'
+          : 'border border-slate-200 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]'
+      }`}
+      style={featured ? { border: `2px solid ${ACCENT}` } : undefined}
+    >
       {featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-neon-green text-navy-950 text-xs font-bold px-3 py-1 rounded-full">
+        <div
+          className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white"
+          style={{ backgroundColor: ACCENT }}
+        >
           Most Popular
         </div>
       )}
-      <h3 className="font-heading font-semibold text-lg text-white mb-2">{name}</h3>
-      <div className="flex items-baseline gap-1 mb-6">
-        <span className="font-heading font-bold text-4xl text-white">{price}</span>
-        <span className="text-gray-500 text-sm">/{period}</span>
+      <h3 className="mb-2 text-base font-semibold text-slate-900">{name}</h3>
+      <div className="mb-6 flex items-baseline gap-1">
+        <span className="text-4xl font-bold tracking-tight text-slate-900">{price}</span>
+        <span className="text-sm text-slate-500">/{period}</span>
       </div>
-      <ul className="space-y-3 mb-8">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
-            <Check className="w-4 h-4 text-neon-green flex-shrink-0" />
-            {f}
+      <ul className="mb-8 space-y-3">
+        {features.map((f) => (
+          <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+            <Check className="mt-0.5 size-4 flex-shrink-0" style={{ color: ACCENT }} strokeWidth={2.2} />
+            <span>{f}</span>
           </li>
         ))}
       </ul>
-      <button className={`w-full py-3 rounded-lg font-semibold text-sm transition-all ${
-        featured
-          ? 'bg-neon-green text-navy-950 hover:bg-neon-green-hover hover:shadow-glow-green'
-          : 'bg-white/[0.06] text-white hover:bg-white/[0.1] border border-white/[0.1]'
-      }`}>
+      <button
+        className={`w-full rounded-md py-2.5 text-sm font-medium transition-colors ${
+          featured ? 'text-white' : 'border border-slate-200 bg-white text-slate-900 hover:bg-slate-50'
+        }`}
+        style={featured ? { backgroundColor: ACCENT } : undefined}
+        onMouseEnter={featured ? (e) => (e.currentTarget.style.backgroundColor = ACCENT_HOVER) : undefined}
+        onMouseLeave={featured ? (e) => (e.currentTarget.style.backgroundColor = ACCENT) : undefined}
+      >
         Get Started
       </button>
     </div>
   )
 }
 
-/* ── Main Page ──────────────────────────────────────────────────── */
 export default function Home() {
   const [annual, setAnnual] = useState(false)
 
   return (
-    <div className="bg-navy-950 text-white overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
       <NavBar />
 
-      {/* ── HERO ────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(139,92,246,0.12)_0%,_transparent_50%),radial-gradient(ellipse_at_top_left,_rgba(126,234,87,0.06)_0%,_transparent_40%)]" />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 bg-neon-green/10 border border-neon-green/20 rounded-full px-4 py-1.5 mb-6">
-              <Zap className="w-4 h-4 text-neon-green" />
-              <span className="text-neon-green text-xs font-semibold tracking-wide">Now with AI Assistant</span>
+      {/* Hero */}
+      <section className="relative overflow-hidden px-6 pb-20 pt-32">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(111,75,216,0.10), transparent 60%)',
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <div
+              className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+              style={{ backgroundColor: ACCENT_SOFT, border: `1px solid ${ACCENT_BORDER}` }}
+            >
+              <Zap className="size-3.5" style={{ color: ACCENT }} strokeWidth={2.2} />
+              <span className="text-xs font-medium tracking-wide" style={{ color: ACCENT }}>Now with AI Assistant</span>
             </div>
-            <h1 className="font-heading font-bold text-display-md md:text-display-lg text-white mb-6">
+            <h1 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight text-slate-900 md:text-6xl">
               AI-Powered Client<br />Lifecycle Management
             </h1>
-            <p className="text-gray-400 text-body-lg max-w-2xl mx-auto mb-8">
+            <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
               Onboard, track earnings, and manage every client relationship — from first contact to final handshake.
-              See your client's journey from <span className="text-neon-green font-semibold">$0 to 100x</span>.
+              See your client&apos;s journey from <span className="font-semibold" style={{ color: ACCENT }}>$0 to 100x</span>.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link to="/app">
-                <button className="bg-neon-green text-navy-950 px-8 py-3.5 rounded-lg font-semibold text-sm hover:bg-neon-green-hover transition-all hover:shadow-glow-green hover:scale-[1.02] flex items-center gap-2">
-                  Start Free Trial <ArrowRight className="w-4 h-4" />
+                <button
+                  className="flex items-center gap-2 rounded-md px-6 py-3 text-sm font-medium text-white transition-colors"
+                  style={{ backgroundColor: ACCENT }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = ACCENT_HOVER)}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = ACCENT)}
+                >
+                  Start Free Trial <ArrowRight className="size-4" strokeWidth={2} />
                 </button>
               </Link>
-              <button className="border border-white/20 text-white px-8 py-3.5 rounded-lg font-semibold text-sm hover:bg-white/5 transition-all flex items-center gap-2">
-                <Play className="w-4 h-4" /> Watch Demo
+              <button className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50">
+                <Play className="size-4" strokeWidth={2} /> Watch Demo
               </button>
             </div>
           </div>
-          <div className="relative max-w-5xl mx-auto">
+          <div className="relative mx-auto max-w-5xl">
             <img
               src="/hero-dashboard.jpg"
-              alt="ClientVault Dashboard"
-              className="w-full rounded-2xl shadow-dark-lg border border-white/[0.06]"
+              alt="SLASH CRM Dashboard"
+              className="w-full rounded-xl border border-slate-200 shadow-[0_24px_60px_rgba(15,23,42,0.10)]"
             />
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-neon-green/20 blur-2xl rounded-full" />
           </div>
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF ──────────────────────────────────────────── */}
-      <div className="py-12 border-y border-navy-700/50">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-gray-500 text-sm mb-6">Trusted by 1,200+ client service teams</p>
-          <img src="/integration-logos.jpg" alt="Partner integrations" className="mx-auto h-8 opacity-40 grayscale hover:opacity-80 hover:grayscale-0 transition-all" />
+      {/* Social proof */}
+      <div className="border-y border-slate-200 bg-slate-50/60 py-12">
+        <div className="mx-auto max-w-7xl px-6 text-center">
+          <p className="mb-6 text-sm text-slate-500">Trusted by 1,200+ client service teams</p>
+          <img
+            src="/integration-logos.jpg"
+            alt="Partner integrations"
+            className="mx-auto h-8 opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+          />
         </div>
       </div>
 
-      {/* ── FEATURES ────────────────────────────────────────────── */}
+      {/* Features */}
       <Section id="features">
-        <div className="text-center mb-16">
-          <span className="text-label text-neon-green uppercase tracking-wider">Platform</span>
-          <h2 className="font-heading font-bold text-heading-lg text-white mt-3">
+        <div className="mb-14 text-center">
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCENT }}>Platform</span>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
             Everything you need to manage client relationships
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid gap-5 md:grid-cols-2">
           <FeatureCard
             icon={UserPlus}
             title="Smart Onboarding"
@@ -190,76 +228,79 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── STATS ───────────────────────────────────────────────── */}
-      <Section id="stats" className="bg-navy-900/30 border-y border-navy-700/30">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Stats */}
+      <Section id="stats" className="border-y border-slate-200 bg-slate-50/60">
+        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
           {[
             { num: 10, suffix: 'x', label: 'Faster Onboarding' },
             { num: 2.4, suffix: 'M', prefix: '$', label: 'Client Earnings Tracked' },
             { num: 94, suffix: '%', label: 'Client Retention' },
             { num: 1200, suffix: '+', label: 'Active Teams' },
-          ].map((s, i) => (
-            <div key={i} className="text-center">
-              <div className="font-heading font-bold text-display-md text-neon-green mb-2">
+          ].map((s) => (
+            <div key={s.label} className="text-center">
+              <div className="mb-2 text-4xl font-bold tracking-tight md:text-5xl" style={{ color: ACCENT }}>
                 {s.prefix || ''}
                 <CountUp end={s.num} duration={2} decimals={s.num < 10 ? 1 : 0} />
                 {s.suffix}
               </div>
-              <p className="text-gray-400 text-sm">{s.label}</p>
+              <p className="text-sm text-slate-600">{s.label}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* ── DEEP DIVE: ONBOARDING ───────────────────────────────── */}
+      {/* Onboarding deep dive */}
       <Section>
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <span className="text-label text-electric-blue uppercase tracking-wider">Onboarding</span>
-            <h2 className="font-heading font-bold text-heading-lg text-white mt-3 mb-4">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCENT }}>Onboarding</span>
+            <h2 className="mb-4 mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
               From Prospect to Partner in 4 Phases
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="mb-6 text-slate-600">
               Our structured onboarding process ensures every client is set up for success.
               Track progress visually and hit revenue milestones faster.
             </p>
             <ul className="space-y-3">
               {['Setup & Configuration', 'Integration & Data Import', 'Training & Onboarding', 'Go-Live & Revenue'].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-gray-300">
-                  <div className="w-7 h-7 rounded-full bg-electric-blue/20 flex items-center justify-center text-electric-blue text-xs font-bold">
+                <li key={item} className="flex items-center gap-3 text-sm text-slate-700">
+                  <div
+                    className="flex size-6 items-center justify-center rounded-full text-xs font-semibold"
+                    style={{ backgroundColor: ACCENT_SOFT, color: ACCENT }}
+                  >
                     {i + 1}
                   </div>
-                  {item}
+                  <span>{item}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div className="relative">
-            <img src="/onboarding-flow.jpg" alt="Onboarding flow" className="rounded-2xl shadow-dark-lg w-full" />
+            <img src="/onboarding-flow.jpg" alt="Onboarding flow" className="w-full rounded-xl border border-slate-200 shadow-[0_12px_32px_rgba(15,23,42,0.06)]" />
           </div>
         </div>
       </Section>
 
-      {/* ── DEEP DIVE: EARNINGS ─────────────────────────────────── */}
-      <Section className="bg-navy-900/30">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="order-2 lg:order-1 relative">
-            <img src="/earnings-chart.jpg" alt="Earnings chart" className="rounded-2xl shadow-dark-lg w-full" />
+      {/* Earnings deep dive */}
+      <Section className="bg-slate-50/60">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div className="relative order-2 lg:order-1">
+            <img src="/earnings-chart.jpg" alt="Earnings chart" className="w-full rounded-xl border border-slate-200 shadow-[0_12px_32px_rgba(15,23,42,0.06)]" />
           </div>
           <div className="order-1 lg:order-2">
-            <span className="text-label text-neon-green uppercase tracking-wider">Earnings</span>
-            <h2 className="font-heading font-bold text-heading-lg text-white mt-3 mb-4">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCENT }}>Earnings</span>
+            <h2 className="mb-4 mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
               Track Every Dollar From $0 to 100x
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="mb-6 text-slate-600">
               Multi-stream revenue tracking with real-time dashboards. Watch your clients grow
               and celebrate every milestone from first dollar to six figures.
             </p>
             <ul className="space-y-3">
-              {['Revenue source breakdown', 'Milestone celebrations', 'AI-powered projections', 'Payout management'].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-gray-300">
-                  <div className="w-5 h-5 rounded-full bg-neon-green/20 flex items-center justify-center">
-                    <Check className="w-3 h-3 text-neon-green" />
+              {['Revenue source breakdown', 'Milestone celebrations', 'AI-powered projections', 'Payout management'].map((item) => (
+                <li key={item} className="flex items-center gap-3 text-sm text-slate-700">
+                  <div className="flex size-5 items-center justify-center rounded-full" style={{ backgroundColor: ACCENT_SOFT }}>
+                    <Check className="size-3" style={{ color: ACCENT }} strokeWidth={2.5} />
                   </div>
                   {item}
                 </li>
@@ -269,50 +310,54 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── DEEP DIVE: AI ───────────────────────────────────────── */}
+      {/* AI deep dive */}
       <Section>
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <span className="text-label text-purple-vibrant uppercase tracking-wider">AI Assistant</span>
-            <h2 className="font-heading font-bold text-heading-lg text-white mt-3 mb-4">
+            <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCENT }}>AI Assistant</span>
+            <h2 className="mb-4 mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
               Ask Questions. Get Answers. Take Action.
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="mb-6 text-slate-600">
               Natural language CRM queries that deliver instant insights. No more digging through reports —
               just ask and get visual dashboards in seconds.
             </p>
             <div className="space-y-2">
               {['Show me at-risk clients', "What's our Q3 revenue?", 'Onboard Acme Corp', 'Export TechStart data'].map((cmd) => (
-                <div key={cmd} className="flex items-center gap-2 bg-navy-900 border border-white/[0.06] rounded-lg px-4 py-2.5 text-sm text-gray-300">
-                  <MessageSquare className="w-4 h-4 text-purple-vibrant" />
+                <div key={cmd} className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700">
+                  <MessageSquare className="size-4" style={{ color: ACCENT }} strokeWidth={1.8} />
                   {cmd}
                 </div>
               ))}
             </div>
           </div>
           <div className="relative">
-            <img src="/ai-chat-demo.jpg" alt="AI chat demo" className="rounded-2xl shadow-dark-lg w-full" />
+            <img src="/ai-chat-demo.jpg" alt="AI chat demo" className="w-full rounded-xl border border-slate-200 shadow-[0_12px_32px_rgba(15,23,42,0.06)]" />
           </div>
         </div>
       </Section>
 
-      {/* ── PRICING ─────────────────────────────────────────────── */}
-      <Section id="pricing" className="bg-navy-900/30">
-        <div className="text-center mb-12">
-          <span className="text-label text-neon-green uppercase tracking-wider">Pricing</span>
-          <h2 className="font-heading font-bold text-heading-lg text-white mt-3">Simple, transparent pricing</h2>
+      {/* Pricing */}
+      <Section id="pricing" className="bg-slate-50/60">
+        <div className="mb-12 text-center">
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: ACCENT }}>Pricing</span>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">Simple, transparent pricing</h2>
         </div>
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <span className={`text-sm ${!annual ? 'text-white' : 'text-gray-500'}`}>Monthly</span>
+        <div className="mb-10 flex items-center justify-center gap-3">
+          <span className={`text-sm ${!annual ? 'font-semibold text-slate-900' : 'text-slate-500'}`}>Monthly</span>
           <button
             onClick={() => setAnnual(!annual)}
-            className={`w-12 h-6 rounded-full transition-colors relative ${annual ? 'bg-neon-green' : 'bg-gray-700'}`}
+            aria-label="Toggle annual pricing"
+            className="relative h-6 w-11 rounded-full transition-colors"
+            style={{ backgroundColor: annual ? ACCENT : '#cbd5e1' }}
           >
-            <div className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-all ${annual ? 'left-6' : 'left-0.5'}`} />
+            <div className={`absolute top-0.5 size-5 rounded-full bg-white shadow-sm transition-all ${annual ? 'left-[22px]' : 'left-0.5'}`} />
           </button>
-          <span className={`text-sm ${annual ? 'text-white' : 'text-gray-500'}`}>Annual <span className="text-neon-green">(Save 20%)</span></span>
+          <span className={`text-sm ${annual ? 'font-semibold text-slate-900' : 'text-slate-500'}`}>
+            Annual <span style={{ color: ACCENT }}>(Save 20%)</span>
+          </span>
         </div>
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3">
           <PricingCard
             name="Starter"
             price={annual ? '$23' : '$29'}
@@ -335,71 +380,78 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* ── CTA ─────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/gradient-mesh-bg.png" alt="" className="w-full h-full object-cover opacity-30" />
-        </div>
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h2 className="font-heading font-bold text-heading-lg md:text-display-md text-white mb-4">
+      {/* CTA */}
+      <section className="relative overflow-hidden px-6 py-24">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(111,75,216,0.10), transparent 60%)',
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-3xl text-center">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">
             Ready to transform your client relationships?
           </h2>
-          <p className="text-gray-400 text-body-lg mb-8">
-            Join 1,200+ teams using ClientVault to onboard faster, track earnings smarter, and retain clients longer.
+          <p className="mb-8 text-base text-slate-600 md:text-lg">
+            Join 1,200+ teams using SLASH CRM to onboard faster, track earnings smarter, and retain clients longer.
           </p>
           <Link to="/app">
-            <button className="bg-neon-green text-navy-950 px-10 py-4 rounded-xl font-bold text-base hover:bg-neon-green-hover transition-all hover:shadow-glow-green hover:scale-[1.02]">
+            <button
+              className="rounded-md px-8 py-3.5 text-sm font-semibold text-white transition-colors"
+              style={{ backgroundColor: ACCENT }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = ACCENT_HOVER)}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = ACCENT)}
+            >
               Start Free Trial — No Credit Card
             </button>
           </Link>
         </div>
       </section>
 
-      {/* ── FOOTER ──────────────────────────────────────────────── */}
-      <footer className="border-t border-navy-700/50 py-16 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white px-6 py-14">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-10 md:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-md bg-neon-green flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-navy-950" />
+            <div className="mb-4 flex items-center gap-2">
+              <div className="flex size-7 items-center justify-center rounded-md" style={{ backgroundColor: ACCENT }}>
+                <Sparkles className="size-3.5 text-white" strokeWidth={2.2} />
               </div>
-              <span className="font-heading font-bold">
-                <span className="text-white">Client</span><span className="text-neon-green">Vault</span>
-              </span>
+              <span className="text-sm font-semibold text-slate-900">SLASH CRM</span>
             </div>
-            <p className="text-gray-500 text-sm">AI-powered client lifecycle management for modern teams.</p>
+            <p className="text-sm text-slate-500">AI-powered client lifecycle management for modern teams.</p>
           </div>
           <div>
-            <h4 className="font-semibold text-white text-sm mb-4">Product</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-              <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
-              <li><Link to="/app" className="hover:text-white transition-colors">Dashboard</Link></li>
+            <h4 className="mb-4 text-sm font-semibold text-slate-900">Product</h4>
+            <ul className="space-y-2 text-sm text-slate-500">
+              <li><a href="#features" className="hover:text-slate-900">Features</a></li>
+              <li><a href="#pricing" className="hover:text-slate-900">Pricing</a></li>
+              <li><Link to="/app" className="hover:text-slate-900">Dashboard</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-white text-sm mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a className="hover:text-white transition-colors">Documentation</a></li>
-              <li><a className="hover:text-white transition-colors">API Reference</a></li>
-              <li><a className="hover:text-white transition-colors">Blog</a></li>
+            <h4 className="mb-4 text-sm font-semibold text-slate-900">Resources</h4>
+            <ul className="space-y-2 text-sm text-slate-500">
+              <li><a className="hover:text-slate-900">Documentation</a></li>
+              <li><a className="hover:text-slate-900">API Reference</a></li>
+              <li><a className="hover:text-slate-900">Blog</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-white text-sm mb-4">Company</h4>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a className="hover:text-white transition-colors">About</a></li>
-              <li><a className="hover:text-white transition-colors">Contact</a></li>
-              <li><a className="hover:text-white transition-colors">Careers</a></li>
+            <h4 className="mb-4 text-sm font-semibold text-slate-900">Company</h4>
+            <ul className="space-y-2 text-sm text-slate-500">
+              <li><a className="hover:text-slate-900">About</a></li>
+              <li><a className="hover:text-slate-900">Contact</a></li>
+              <li><a className="hover:text-slate-900">Careers</a></li>
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-navy-700/50 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-600 text-sm">© 2025 ClientVault. All rights reserved.</p>
-          <div className="flex gap-4 text-gray-500">
-            <BarChart3 className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
-            <Shield className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
-            <Zap className="w-5 h-5 hover:text-white cursor-pointer transition-colors" />
+        <div className="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 md:flex-row">
+          <p className="text-sm text-slate-500">© 2026 SLASH CRM. All rights reserved.</p>
+          <div className="flex gap-4 text-slate-400">
+            <BarChart3 className="size-5 cursor-pointer transition-colors hover:text-slate-900" />
+            <Shield className="size-5 cursor-pointer transition-colors hover:text-slate-900" />
+            <Zap className="size-5 cursor-pointer transition-colors hover:text-slate-900" />
           </div>
         </div>
       </footer>

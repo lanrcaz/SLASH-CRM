@@ -49,20 +49,20 @@ export default function Navbar() {
         key={`${item.path}-${item.label}`}
         onClick={() => navigate(item.path)}
         className={cn(
-          'group flex w-full items-center gap-3 rounded-md border border-transparent px-3 py-2.5 text-left text-[15px] font-semibold transition-colors',
+          'group flex w-full items-center gap-3 rounded-md border border-transparent px-3 py-2 text-left text-[14px] transition-colors',
           isActive
-            ? 'bg-[#ececef] text-[#26282d]'
-            : 'text-[#343741] hover:bg-[#f1f2f5] hover:text-[#202124]',
+            ? 'bg-[#f2efff] font-semibold text-[#4b3bb4]'
+            : 'font-normal text-[#3c4043] hover:bg-[#f1f2f5] hover:font-medium hover:text-[#202124]',
           collapsed ? 'justify-center px-2' : 'justify-center px-2 lg:justify-start lg:px-3'
         )}
         title={collapsed ? item.label : undefined}
       >
         <Icon
           className={cn(
-            'size-[19px] shrink-0 transition-colors',
+            'size-[18px] shrink-0 transition-colors',
             isActive ? 'text-[#6f4bd8]' : 'text-[#5f6368] group-hover:text-[#3c4043]'
           )}
-          strokeWidth={1.8}
+          strokeWidth={isActive ? 2 : 1.75}
         />
         {!collapsed && <span className="hidden truncate lg:inline">{item.label}</span>}
       </button>

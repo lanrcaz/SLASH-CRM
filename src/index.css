@@ -71,8 +71,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Aptos", "Segoe UI Variable", "SF Pro Text", "Helvetica Neue", sans-serif;
-    text-rendering: geometricPrecision;
+    font-family: "Inter", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv11", "ss01", "ss03";
   }
 }
 
