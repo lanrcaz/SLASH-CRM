@@ -283,7 +283,7 @@ export default function Earnings() {
           className="flex flex-col md:flex-row md:items-center justify-between mb-6"
         >
           <div>
-            <h1 className="text-[36px] font-semibold tracking-tight text-white" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h1 className="text-[36px] font-semibold tracking-tight text-[#202124]" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               Earnings
             </h1>
             <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>
@@ -321,7 +321,7 @@ export default function Earnings() {
           style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-            <h2 className="text-[22px] font-semibold text-white" style={{ letterSpacing: "-0.01em" }}>Earnings Trajectory</h2>
+            <h2 className="text-[22px] font-semibold text-[#202124]" style={{ letterSpacing: "-0.01em" }}>Earnings Trajectory</h2>
             <PeriodTabs value={period} onChange={setPeriod} />
           </div>
 
@@ -380,7 +380,7 @@ export default function Earnings() {
             className="rounded-[16px] p-6"
             style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <h3 className="text-[18px] font-semibold text-white mb-4">Revenue Sources</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124] mb-4">Revenue Sources</h3>
             <div className="flex items-center justify-center">
               <div className="relative">
                 <PieChart width={220} height={220}>
@@ -398,7 +398,7 @@ export default function Earnings() {
                   </Pie>
                 </PieChart>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[20px] font-medium text-white">$1.25M</span>
+                  <span className="text-[20px] font-medium text-[#202124]">$1.25M</span>
                   <span className="text-[11px]" style={{ color: GRAY_500 }}>Total</span>
                 </div>
               </div>
@@ -410,10 +410,10 @@ export default function Earnings() {
                   <div key={s.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} />
-                      <span className="text-[13px] text-white">{s.name}</span>
+                      <span className="text-[13px] text-[#202124]">{s.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-[13px] font-medium text-white">${(s.value / 1000).toFixed(0)}K</span>
+                      <span className="text-[13px] font-medium text-[#202124]">${(s.value / 1000).toFixed(0)}K</span>
                       <span className="text-[12px]" style={{ color: GRAY_500 }}>{pct}%</span>
                     </div>
                   </div>
@@ -429,7 +429,7 @@ export default function Earnings() {
             className="rounded-[16px] p-6"
             style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
           >
-            <h3 className="text-[18px] font-semibold text-white mb-4">Source Performance</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124] mb-4">Source Performance</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -447,10 +447,10 @@ export default function Earnings() {
                       <td className="py-3 pr-4">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full" style={{ background: row.color }} />
-                          <span className="text-[13px] text-white">{row.source}</span>
+                          <span className="text-[13px] text-[#202124]">{row.source}</span>
                         </div>
                       </td>
-                      <td className="text-right text-[13px] font-medium text-white py-3 px-2">${row.thisMonth.toLocaleString()}</td>
+                      <td className="text-right text-[13px] font-medium text-[#202124] py-3 px-2">${row.thisMonth.toLocaleString()}</td>
                       <td className="text-right text-[13px] py-3 px-2" style={{ color: GRAY_500 }}>${row.lastMonth.toLocaleString()}</td>
                       <td className="text-right py-3 px-2">
                         <span className="text-[13px] font-medium" style={{ color: row.change >= 0 ? SUCCESS : ERROR }}>
@@ -476,7 +476,7 @@ export default function Earnings() {
           className="rounded-[16px] p-8 mb-6"
           style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <h3 className="text-[22px] font-semibold text-white" style={{ letterSpacing: "-0.01em" }}>Earnings Milestones</h3>
+          <h3 className="text-[22px] font-semibold text-[#202124]" style={{ letterSpacing: "-0.01em" }}>Earnings Milestones</h3>
           <p className="text-[15px] mt-1 mb-8" style={{ color: GRAY_500 }}>
             Celebrate every breakthrough on the journey from $0 to 100x
           </p>
@@ -508,7 +508,7 @@ export default function Earnings() {
           style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[18px] font-semibold text-white">Top Earning Clients</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124]">Top Earning Clients</h3>
             <button className="text-[13px] font-medium flex items-center gap-1 transition-colors hover:opacity-80" style={{ color: NEON_GREEN }}>
               View All <ChevronRight size={14} />
             </button>
@@ -548,13 +548,13 @@ export default function Earnings() {
                         <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold" style={{ background: `${ELECTRIC_BLUE}20`, color: ELECTRIC_BLUE }}>
                           {c.client.slice(0, 2).toUpperCase()}
                         </div>
-                        <span className="text-[14px] font-medium text-white">{c.client}</span>
+                        <span className="text-[14px] font-medium text-[#202124]">{c.client}</span>
                       </div>
                     </td>
-                    <td className="text-right text-[14px] font-semibold text-white py-3 px-2">
+                    <td className="text-right text-[14px] font-semibold text-[#202124] py-3 px-2">
                       ${c.total.toLocaleString()}
                     </td>
-                    <td className="text-right text-[13px] text-white py-3 px-2">
+                    <td className="text-right text-[13px] text-[#202124] py-3 px-2">
                       ${c.thisMonth.toLocaleString()}
                     </td>
                     <td className="py-3 pl-4">
@@ -580,7 +580,7 @@ export default function Earnings() {
           style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[18px] font-semibold text-white">Payouts</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124]">Payouts</h3>
             <button className="flex items-center gap-2 px-4 py-2 rounded-[10px] text-[13px] font-semibold transition-all hover:scale-[1.02]" style={{ background: NEON_GREEN, color: NAVY_950 }}>
               <DollarSign size={14} /> Request Payout
             </button>
@@ -600,7 +600,7 @@ export default function Earnings() {
             </div>
             <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
               <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Total Paid</p>
-              <p className="text-[20px] font-medium mt-1 text-white">${payoutStats.totalPaid.toLocaleString()}</p>
+              <p className="text-[20px] font-medium mt-1 text-[#202124]">${payoutStats.totalPaid.toLocaleString()}</p>
             </div>
           </div>
           <div className="space-y-2">
@@ -613,7 +613,7 @@ export default function Earnings() {
                 className="flex items-center justify-between py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}
               >
                 <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.date}</span>
-                <span className="text-[14px] font-medium text-white">${p.amount.toLocaleString()}</span>
+                <span className="text-[14px] font-medium text-[#202124]">${p.amount.toLocaleString()}</span>
                 <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.method}</span>
                 <span
                   className="text-[11px] font-medium uppercase tracking-wider px-3 py-1 rounded-full"
@@ -642,7 +642,7 @@ export default function Earnings() {
         >
           <div className="flex items-center gap-2 mb-4">
             <Sparkles size={18} style={{ color: PURPLE }} />
-            <h3 className="text-[18px] font-semibold text-white">AI Revenue Forecast</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124]">AI Revenue Forecast</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {aiProjections.map((proj, i) => (
@@ -688,7 +688,7 @@ export default function Earnings() {
           className="rounded-[16px] p-6 mb-6"
           style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <h3 className="text-[18px] font-semibold text-white mb-4">Recent Earnings Activity</h3>
+          <h3 className="text-[18px] font-semibold text-[#202124] mb-4">Recent Earnings Activity</h3>
           <div className="space-y-0 max-h-[400px] overflow-y-auto pr-2">
             {earningsFeed.map((item, i) => (
               <motion.div
@@ -708,12 +708,12 @@ export default function Earnings() {
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[14px] font-medium text-white truncate">{item.client}</p>
+                    <p className="text-[14px] font-medium text-[#202124] truncate">{item.client}</p>
                     <p className="text-[12px]" style={{ color: GRAY_500 }}>{item.source}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
-                  <span className="text-[14px] font-medium text-white">${item.amount.toLocaleString()}</span>
+                  <span className="text-[14px] font-medium text-[#202124]">${item.amount.toLocaleString()}</span>
                   <StatusBadge status={item.status} />
                   <span className="text-[12px] hidden sm:block" style={{ color: GRAY_500 }}>{item.date}</span>
                 </div>

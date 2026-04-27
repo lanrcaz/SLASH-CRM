@@ -43,12 +43,14 @@ import { Switch } from '@/components/ui/switch';
 /* ------------------------------------------------------------------ */
 /*  Status config                                                      */
 /* ------------------------------------------------------------------ */
+// Monochrome violet ramp for client lifecycle states. Churned uses a neutral
+// grey to communicate "out" without introducing red into the palette.
 const statusConfig: Record<ClientStatus, { bg: string; text: string; border: string; dot: string }> = {
-  Active:       { bg: '#ecfdf5', text: '#047857', border: '1px solid #a7f3d0', dot: '#10b981' },
-  Onboarding:   { bg: '#eff6ff', text: '#1d4ed8', border: '1px solid #bfdbfe', dot: '#3b82f6' },
-  Offboarding:  { bg: '#fffbeb', text: '#b45309', border: '1px solid #fde68a', dot: '#f59e0b' },
-  Churned:      { bg: '#fef2f2', text: '#b91c1c', border: '1px solid #fecaca', dot: '#ef4444' },
-  Prospect:     { bg: '#f2efff', text: '#4b3bb4', border: '1px solid #d8cffa', dot: '#6f4bd8' },
+  Active:       { bg: '#f2efff', text: '#4b3bb4', border: '1px solid #d8cffa', dot: '#6f4bd8' },
+  Onboarding:   { bg: '#f6f4fd', text: '#6b62a3', border: '1px solid #e3dff5', dot: '#a89aea' },
+  Offboarding:  { bg: '#f3f4f7', text: '#4a4d55', border: '1px solid #dfe2e8', dot: '#9aa0a6' },
+  Churned:      { bg: '#f3f4f7', text: '#777b84', border: '1px solid #dfe2e8', dot: '#c2c6cd' },
+  Prospect:     { bg: '#fbfaff', text: '#7a6dc2', border: '1px solid #ebe6f9', dot: '#cdc4f1' },
 };
 
 const statusOptions: ClientStatus[] = ['Active', 'Onboarding', 'Offboarding', 'Churned', 'Prospect'];
@@ -90,15 +92,15 @@ function MiniSparkline({ data, color = '#6f4bd8' }: { data: number[]; color?: st
 /*  Avatar                                                             */
 /* ------------------------------------------------------------------ */
 function ClientAvatar({ initials, size = 40 }: { initials: string; size?: number }) {
-  const hue = initials.charCodeAt(0) * 137.5 % 360;
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-white shrink-0"
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8] shrink-0"
       style={{
         width: size,
         height: size,
-        background: `linear-gradient(135deg, hsl(${hue}, 60%, 45%), hsl(${hue + 40}, 60%, 35%))`,
-        fontSize: size * 0.4,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+        fontSize: size * 0.38,
       }}
     >
       {initials}
@@ -163,10 +165,10 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
       >
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <DialogTitle className="text-xl font-semibold text-[#202124]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
               {success ? '' : 'Add New Client'}
             </DialogTitle>
-            <button onClick={handleClose} className="text-[#94a3b8] hover:text-white transition-colors">
+            <button onClick={handleClose} className="text-[#94a3b8] hover:text-[#202124] transition-colors">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -188,7 +190,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
               >
                 <CheckCircle2 className="h-12 w-12 text-[#6f4bd8] mb-4" />
               </motion.div>
-              <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <h3 className="text-lg font-semibold text-[#202124] mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                 Client added successfully!
               </h3>
               <p className="text-sm text-[#94a3b8] text-center">
@@ -211,13 +213,13 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                         className={cn(
                           'h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all',
                           i < step && 'bg-[#6f4bd8] text-[#ffffff]',
-                          i === step && 'bg-[#3b82f6] text-white',
+                          i === step && 'bg-[#3b82f6] text-[#202124]',
                           i > step && 'bg-[#e4e6eb] text-[#64748b]'
                         )}
                       >
                         {i < step ? <Check className="h-4 w-4" /> : i + 1}
                       </div>
-                      <span className={cn('text-xs', i === step ? 'text-white font-medium' : 'text-[#64748b]')}>
+                      <span className={cn('text-xs', i === step ? 'text-[#202124] font-medium' : 'text-[#64748b]')}>
                         {s}
                       </span>
                     </div>
@@ -246,7 +248,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.name}
                           onChange={e => setForm({ ...form, name: e.target.value })}
                           placeholder="John Doe"
-                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -255,7 +257,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.email}
                           onChange={e => setForm({ ...form, email: e.target.value })}
                           placeholder="john@company.com"
-                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -264,7 +266,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.company}
                           onChange={e => setForm({ ...form, company: e.target.value })}
                           placeholder="Acme Corp"
-                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -273,7 +275,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           value={form.phone}
                           onChange={e => setForm({ ...form, phone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
@@ -283,7 +285,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           onChange={e => setForm({ ...form, notes: e.target.value })}
                           placeholder="Additional notes..."
                           rows={3}
-                          className="w-full rounded-md bg-[#ffffff] border border-[#e4e6eb] text-white placeholder:text-[#64748b] p-3 text-sm outline-none focus-visible:border-[#6f4bd8] focus-visible:ring-1 focus-visible:ring-[#6f4bd8]/30 resize-none"
+                          className="w-full rounded-md bg-[#ffffff] border border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] p-3 text-sm outline-none focus-visible:border-[#6f4bd8] focus-visible:ring-1 focus-visible:ring-[#6f4bd8]/30 resize-none"
                         />
                       </div>
                     </div>
@@ -307,7 +309,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                           >
                             <div className="flex items-center gap-2">
                               <Icon className={cn('h-4 w-4', selected ? 'text-[#6f4bd8]' : 'text-[#64748b]')} />
-                              <span className={cn('text-sm font-medium', selected ? 'text-[#6f4bd8]' : 'text-white')}>
+                              <span className={cn('text-sm font-medium', selected ? 'text-[#6f4bd8]' : 'text-[#202124]')}>
                                 {svc.name}
                               </span>
                             </div>
@@ -322,7 +324,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                     <div className="space-y-6">
                       <div className="flex items-center justify-between p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
                         <div>
-                          <p className="text-sm font-medium text-white">Send onboarding invitation email</p>
+                          <p className="text-sm font-medium text-[#202124]">Send onboarding invitation email</p>
                           <p className="text-xs text-[#64748b] mt-0.5">Client will receive a welcome email with login instructions</p>
                         </div>
                         <Switch checked={sendInvite} onCheckedChange={setSendInvite} />
@@ -331,7 +333,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                         <div className="p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
                           <p className="text-xs text-[#64748b] mb-2">Email Preview:</p>
                           <div className="space-y-2">
-                            <p className="text-sm text-white font-medium">Welcome to ClientVault!</p>
+                            <p className="text-sm text-[#202124] font-medium">Welcome to ClientVault!</p>
                             <p className="text-xs text-[#94a3b8]">
                               Hi {form.name || 'there'},<br /><br />
                               You have been invited to join {form.company || 'our platform'} on ClientVault.
@@ -350,7 +352,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 {step > 0 && (
                   <button
                     onClick={() => setStep(step - 1)}
-                    className="px-4 py-2 rounded-lg text-sm text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
+                    className="px-4 py-2 rounded-lg text-sm text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] transition-all"
                   >
                     Back
                   </button>
@@ -460,7 +462,7 @@ export default function Clients() {
       >
         <div>
           <h1
-            className="text-4xl font-semibold text-white tracking-tight"
+            className="text-4xl font-semibold text-[#202124] tracking-tight"
             style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}
           >
             Clients
@@ -493,7 +495,7 @@ export default function Clients() {
             <Plus className="h-4 w-4" />
             Add Client
           </button>
-          <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+          <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
             <Upload className="h-4 w-4" />
             Import CSV
           </button>
@@ -516,7 +518,7 @@ export default function Clients() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, email, company..."
-              className="pl-9 bg-[#ffffff] border-[#e4e6eb] text-white placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
+              className="pl-9 bg-[#ffffff] border-[#e4e6eb] text-[#202124] placeholder:text-[#64748b] focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
             />
           </div>
 
@@ -525,7 +527,7 @@ export default function Clients() {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value as ClientStatus | 'All')}
-              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-[#202124] text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               <option value="All">All Statuses</option>
               {statusOptions.map(s => (
@@ -540,7 +542,7 @@ export default function Clients() {
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
-              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-[#202124] text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               {sortOptions.map(s => (
                 <option key={s} value={s}>{s}</option>
@@ -569,7 +571,7 @@ export default function Clients() {
           onClick={() => setViewMode('grid')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'grid' ? 'bg-[#ffffff] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'grid' ? 'bg-[#ffffff] text-[#202124]' : 'text-[#64748b] hover:text-[#202124]'
           )}
         >
           <LayoutGrid className="h-[18px] w-[18px]" />
@@ -578,7 +580,7 @@ export default function Clients() {
           onClick={() => setViewMode('list')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'list' ? 'bg-[#ffffff] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'list' ? 'bg-[#ffffff] text-[#202124]' : 'text-[#64748b] hover:text-[#202124]'
           )}
         >
           <List className="h-[18px] w-[18px]" />
@@ -638,7 +640,7 @@ export default function Clients() {
                     <div className="flex items-center gap-3">
                       <ClientAvatar initials={client.avatar} size={40} />
                       <div>
-                        <p className="text-[15px] font-medium text-white">{client.name}</p>
+                        <p className="text-[15px] font-medium text-[#202124]">{client.name}</p>
                         <p className="text-[13px] text-[#64748b]">{client.email}</p>
                       </div>
                     </div>
@@ -650,7 +652,7 @@ export default function Clients() {
 
                     {/* Revenue */}
                     <div className="flex items-center gap-3">
-                      <span className="text-[15px] text-white">
+                      <span className="text-[15px] text-[#202124]">
                         ${client.mrr.toLocaleString()}
                       </span>
                       {client.mrr > 0 && <MiniSparkline data={sparkData} />}
@@ -679,24 +681,24 @@ export default function Clients() {
                     <div onClick={e => e.stopPropagation()}>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all">
+                          <button className="p-2 rounded-lg text-[#64748b] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] transition-all">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="min-w-[160px] bg-[#ffffff] border-[#e4e6eb] text-white"
+                          className="min-w-[160px] bg-[#ffffff] border-[#e4e6eb] text-[#202124]"
                         >
-                          <DropdownMenuItem onClick={() => handleRowClick(client.id)} className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem onClick={() => handleRowClick(client.id)} className="text-[#202124] focus:bg-[rgba(255,255,255,0.05)] focus:text-[#202124]">
                             View
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-[#202124] focus:bg-[rgba(255,255,255,0.05)] focus:text-[#202124]">
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-[#202124] focus:bg-[rgba(255,255,255,0.05)] focus:text-[#202124]">
                             Start Offboarding
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-[#202124] focus:bg-[rgba(255,255,255,0.05)] focus:text-[#202124]">
                             Export Data
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-[#ef4444] focus:bg-[rgba(239,68,68,0.1)] focus:text-[#ef4444]">
@@ -747,7 +749,7 @@ export default function Clients() {
                 </div>
 
                 <ClientAvatar initials={client.avatar} size={56} />
-                <h3 className="mt-3 text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h3 className="mt-3 text-lg font-semibold text-[#202124]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                   {client.name}
                 </h3>
                 <p className="text-[13px] text-[#64748b]">{client.company}</p>
@@ -793,7 +795,7 @@ export default function Clients() {
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-lg text-[#64748b] hover:text-[#202124] disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -806,8 +808,8 @@ export default function Clients() {
                   className={cn(
                     'h-9 w-9 rounded-full text-sm font-medium transition-all',
                     currentPage === pageNum
-                      ? 'bg-[#ffffff] text-white'
-                      : 'text-[#64748b] hover:text-white'
+                      ? 'bg-[#ffffff] text-[#202124]'
+                      : 'text-[#64748b] hover:text-[#202124]'
                   )}
                 >
                   {pageNum}
@@ -817,7 +819,7 @@ export default function Clients() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-lg text-[#64748b] hover:text-[#202124] disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

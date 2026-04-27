@@ -144,14 +144,13 @@
     background-color: #f3f4f7 !important;
   }
 
-  /* text-white only flips to dark when the element is on a now-light surface.
-     Landing-page buttons explicitly use bg accent, where white text is correct. */
-  .app-workspace .text-white,
-  [data-radix-popper-content-wrapper] .text-white,
-  [role="dialog"] .text-white,
-  [role="menu"] .text-white {
-    color: #2f3137 !important;
-  }
+  /*
+   * Note: do NOT remap .text-white globally. Many legitimate cases pair
+   * text-white with an explicit accent background (sidebar brand mark,
+   * accent buttons, status pills). Where pages used text-white assuming
+   * a navy surface that is now white, we replace text-white with explicit
+   * dark text per element instead of via a global override.
+   */
 
   body .text-\[\#cbd5e1\],
   body .text-\[\#94a3b8\] {

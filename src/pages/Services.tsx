@@ -110,7 +110,7 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
             <ServiceIcon name={service.icon} size={22} color={service.color} />
           </div>
           <div>
-            <h3 className="text-[18px] font-semibold text-white">{service.name}</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124]">{service.name}</h3>
             <ServiceStatusBadge status={isActive ? "Active" : "Paused"} />
           </div>
         </div>
@@ -136,15 +136,15 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
       {/* Metrics */}
       <div className="flex items-center gap-6 mt-5">
         <div>
-          <p className="text-[14px] font-semibold text-white">{service.clients}</p>
+          <p className="text-[14px] font-semibold text-[#202124]">{service.clients}</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>clients</p>
         </div>
         <div>
-          <p className="text-[14px] font-semibold text-white">${(service.revenue / 1000).toFixed(1)}K</p>
+          <p className="text-[14px] font-semibold text-[#202124]">${(service.revenue / 1000).toFixed(1)}K</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>total</p>
         </div>
         <div>
-          <p className="text-[14px] font-semibold text-white">{service.rating}</p>
+          <p className="text-[14px] font-semibold text-[#202124]">{service.rating}</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>rating</p>
         </div>
       </div>
@@ -167,10 +167,10 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
       {/* Bottom Actions */}
       <div className="flex items-center justify-between mt-5 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-2">
-          <button className="text-[12px] font-medium transition-colors hover:text-white" style={{ color: GRAY_500 }}>
+          <button className="text-[12px] font-medium transition-colors hover:text-[#202124]" style={{ color: GRAY_500 }}>
             View Clients
           </button>
-          <button className="text-[12px] font-medium transition-colors hover:text-white" style={{ color: GRAY_500 }}>
+          <button className="text-[12px] font-medium transition-colors hover:text-[#202124]" style={{ color: GRAY_500 }}>
             Edit Pricing
           </button>
         </div>
@@ -239,7 +239,7 @@ function ServiceModal({ service, onClose, onSave }: {
         style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-[20px] font-semibold text-white">
+          <h3 className="text-[20px] font-semibold text-[#202124]">
             {isEdit ? "Edit Service" : "Add Service"}
           </h3>
           <button onClick={onClose} className="p-1.5 rounded-[6px] hover:bg-white/10 transition-colors" style={{ color: GRAY_500 }}>
@@ -254,7 +254,7 @@ function ServiceModal({ service, onClose, onSave }: {
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all focus:ring-1"
+              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none transition-all focus:ring-1"
               style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
               placeholder="e.g., SEO Optimization"
             />
@@ -265,7 +265,7 @@ function ServiceModal({ service, onClose, onSave }: {
             <textarea
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all resize-none"
+              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none transition-all resize-none"
               style={{ background: NAVY_800, border: `1px solid ${NAVY_700}`, minHeight: 80 }}
               placeholder="Describe what this service includes..."
             />
@@ -278,7 +278,7 @@ function ServiceModal({ service, onClose, onSave }: {
                 type="number"
                 value={form.price || ""}
                 onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all"
+                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none transition-all"
                 style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                 placeholder="2500"
               />
@@ -288,7 +288,7 @@ function ServiceModal({ service, onClose, onSave }: {
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all"
+                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none transition-all"
                 style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
               >
                 {["Marketing", "Development", "Design", "Consulting", "Advertising", "Analytics"].map((c) => (
@@ -411,7 +411,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <ServiceIcon name={service.icon} size={24} color={service.color} />
             </div>
             <div>
-              <h3 className="text-[22px] font-semibold text-white">{service.name}</h3>
+              <h3 className="text-[22px] font-semibold text-[#202124]">{service.name}</h3>
               <div className="flex items-center gap-2 mt-1">
                 <ServiceStatusBadge status={service.status} />
                 <span className="text-[14px] font-medium" style={{ color: NEON_GREEN }}>
@@ -455,7 +455,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Clients</p>
-                  <p className="text-[24px] font-medium text-white mt-1">{service.clients}</p>
+                  <p className="text-[24px] font-medium text-[#202124] mt-1">{service.clients}</p>
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Total Revenue</p>
@@ -463,11 +463,11 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Rating</p>
-                  <p className="text-[24px] font-medium text-white mt-1">{service.rating}</p>
+                  <p className="text-[24px] font-medium text-[#202124] mt-1">{service.rating}</p>
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Avg Tenure</p>
-                  <p className="text-[24px] font-medium text-white mt-1">8.2<span className="text-[12px]" style={{ color: GRAY_500 }}>mo</span></p>
+                  <p className="text-[24px] font-medium text-[#202124] mt-1">8.2<span className="text-[12px]" style={{ color: GRAY_500 }}>mo</span></p>
                 </div>
               </div>
               <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
@@ -507,7 +507,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <div className="space-y-2">
                 {service.sparkline.map((d, i) => (
                   <div key={i} className="flex items-center justify-between py-2 border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-                    <span className="text-[13px] text-white">{d.month} 2025</span>
+                    <span className="text-[13px] text-[#202124]">{d.month} 2025</span>
                     <span className="text-[13px] font-medium" style={{ color: NEON_GREEN }}>${d.value.toLocaleString()}</span>
                   </div>
                 ))}
@@ -529,7 +529,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                   <input
                     type="text"
                     defaultValue={service.name}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                   />
                 </div>
@@ -538,7 +538,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                   <input
                     type="number"
                     defaultValue={service.price}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-[#202124] outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                   />
                 </div>
@@ -614,7 +614,7 @@ export default function Services() {
           className="flex flex-col md:flex-row md:items-center justify-between mb-6"
         >
           <div>
-            <h1 className="text-[36px] font-semibold tracking-tight text-white" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h1 className="text-[36px] font-semibold tracking-tight text-[#202124]" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               Services
             </h1>
             <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>

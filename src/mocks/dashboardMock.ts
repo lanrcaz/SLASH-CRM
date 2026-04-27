@@ -166,13 +166,13 @@ export const invoices = [
   { id: 'INV-006', date: 'Jan 15, 2025', amount: 49, status: 'Paid' as const, plan: 'Growth' },
 ];
 
-// Pipeline stage config
+// Pipeline stage config — monochrome violet ramp + neutral grey for new leads
 export const pipelineStages: { stage: ProspectStage; color: string; bgColor: string }[] = [
-  { stage: 'Lead', color: '#64748b', bgColor: 'rgba(100, 116, 139, 0.15)' },
-  { stage: 'Qualified', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.15)' },
-  { stage: 'Proposal', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.15)' },
-  { stage: 'Negotiation', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.15)' },
-  { stage: 'Closed', color: '#7eea57', bgColor: 'rgba(126, 234, 87, 0.15)' },
+  { stage: 'Lead', color: '#9aa0a6', bgColor: 'rgba(154, 160, 166, 0.12)' },
+  { stage: 'Qualified', color: '#cdc4f1', bgColor: 'rgba(205, 196, 241, 0.20)' },
+  { stage: 'Proposal', color: '#a89aea', bgColor: 'rgba(168, 154, 234, 0.20)' },
+  { stage: 'Negotiation', color: '#8466e0', bgColor: 'rgba(132, 102, 224, 0.18)' },
+  { stage: 'Closed', color: '#6f4bd8', bgColor: 'rgba(111, 75, 216, 0.16)' },
 ];
 
 // Integration data

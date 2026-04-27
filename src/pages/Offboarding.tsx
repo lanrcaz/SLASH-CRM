@@ -69,15 +69,16 @@ const tableRowEntrance = {
 // ─── Helpers ───────────────────────────────────────────────────────────
 
 function Avatar({ initials, size = 44 }: { initials: string; size?: number }) {
-  const bgColors: Record<string, string> = {
-    NS: 'bg-[#f59e0b]', VL: 'bg-[#3b82f6]', AC: 'bg-[#ef4444]',
-    HM: 'bg-[#8b5cf6]', SS: 'bg-[#06b6d4]', PD: 'bg-[#22c55e]',
-    VS: 'bg-[#ec4899]', CC: 'bg-[#f97316]', IW: 'bg-[#14b8a6]',
-  };
   return (
     <div
-      className={`flex items-center justify-center rounded-full text-white font-semibold text-sm ${bgColors[initials] || 'bg-[#64748b]'}`}
-      style={{ width: size, height: size, fontSize: size * 0.4 }}
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8]"
+      style={{
+        width: size,
+        height: size,
+        fontSize: size * 0.38,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+      }}
     >
       {initials}
     </div>
@@ -122,7 +123,7 @@ function KPICard({
     >
       <div className="flex items-start justify-between mb-3">
         <div>
-          <p className="text-[32px] font-medium text-white tracking-tight leading-none">
+          <p className="text-[32px] font-medium text-[#202124] tracking-tight leading-none">
             <CountUp end={value} duration={1.2} suffix={suffix || ''} />
           </p>
           <p className="text-[13px] mt-2 text-[#64748b]">{sub}</p>
@@ -144,7 +145,7 @@ function OffboardingStepTracker({ steps, currentStep }: { steps: OffboardingStep
       <div className="absolute top-[16px] left-[4%] right-[4%] h-[2px] bg-[#e4e6eb] rounded-full" />
       {/* Active connector */}
       <div
-        className="absolute top-[16px] left-[4%] h-[2px] bg-[#6f4bd8] rounded-full transition-all duration-500"
+        className="absolute top-[16px] left-[4%] h-[2px] rounded-full bg-[#6f4bd8] transition-all duration-500"
         style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 92}%` }}
       />
 
@@ -163,27 +164,21 @@ function OffboardingStepTracker({ steps, currentStep }: { steps: OffboardingStep
                   isCompleted
                     ? 'bg-[#6f4bd8] border-[#6f4bd8]'
                     : isCurrent
-                      ? 'bg-[#f59e0b] border-[#f59e0b]'
-                      : 'bg-[#e4e6eb] border-[#e4e6eb]'
+                      ? 'bg-[#ffffff] border-[#6f4bd8]'
+                      : 'bg-[#ffffff] border-[#e4e6eb]'
                 }`}
               >
                 {isCompleted ? (
                   <Check size={14} className="text-[#ffffff]" />
                 ) : isCurrent ? (
-                  <motion.div
-                    animate={{ boxShadow: ['0 0 0 0 rgba(245,158,11,0.4)', '0 0 0 8px rgba(245,158,11,0)', '0 0 0 0 rgba(245,158,11,0.4)'] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                  >
-                    <StepIcon step={step} size={14} className="text-[#ffffff]" />
-                  </motion.div>
+                  <StepIcon step={step} size={14} className="text-[#6f4bd8]" />
                 ) : (
-                  <StepIcon step={step} size={14} className="text-[#64748b]" />
+                  <StepIcon step={step} size={14} className="text-[#9aa0a6]" />
                 )}
               </motion.div>
               <span
                 className={`mt-2 text-[10px] font-medium max-w-[60px] text-center leading-tight ${
-                  isCompleted ? 'text-[#6f4bd8]' : isCurrent ? 'text-[#f59e0b]' : 'text-[#64748b]'
+                  isCompleted ? 'text-[#6f4bd8]' : isCurrent ? 'text-[#6f4bd8]' : 'text-[#6f747d]'
                 }`}
               >
                 {step.name}
@@ -209,7 +204,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
         <div className="bg-[#ffffff] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-[14px] font-semibold text-white">Export Summary</p>
+              <p className="text-[14px] font-semibold text-[#202124]">Export Summary</p>
               <p className="text-[12px] text-[#64748b]">450MB across 156 files</p>
             </div>
             <span className="text-[11px] px-2.5 py-1 rounded-full bg-[rgba(59,130,246,0.15)] text-[#3b82f6]">
@@ -233,7 +228,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
               >
                 <div className="flex items-center gap-2">
                   <FileArchive size={14} className="text-[#64748b]" />
-                  <span className="text-[13px] text-white">{row.category}</span>
+                  <span className="text-[13px] text-[#202124]">{row.category}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-[12px] text-[#64748b]">{row.size}</span>
@@ -256,7 +251,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
         <div className="bg-[#ffffff] rounded-xl p-4 space-y-4">
           <div>
             <label className="text-[12px] text-[#94a3b8] mb-2 block">Exit Reason</label>
-            <select className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-white focus:border-[#f59e0b] focus:outline-none transition-colors">
+            <select className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-[#202124] focus:border-[#f59e0b] focus:outline-none transition-colors">
               <option>Select reason</option>
               <option>Moving in-house</option>
               <option>Budget cuts</option>
@@ -289,7 +284,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
             <textarea
               rows={2}
               placeholder="Share what worked well..."
-              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
+              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-[#202124] placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
             />
           </div>
 
@@ -298,7 +293,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
             <textarea
               rows={2}
               placeholder="Share areas for improvement..."
-              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
+              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-[#202124] placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
             />
           </div>
 
@@ -312,7 +307,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[12px] transition-all ${
                     recommendValue === val
                       ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                      : 'border-[#e4e6eb] text-[#64748b] hover:text-white'
+                      : 'border-[#e4e6eb] text-[#64748b] hover:text-[#202124]'
                   }`}
                 >
                   {val === 'yes' && <ThumbsUp size={12} />}
@@ -333,7 +328,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
       {/* Access Revocation Panel */}
       {client.currentStep === 4 && (
         <div className="bg-[#ffffff] rounded-xl p-4">
-          <p className="text-[14px] font-semibold text-white mb-3">Access Checklist</p>
+          <p className="text-[14px] font-semibold text-[#202124] mb-3">Access Checklist</p>
           <div className="space-y-2">
             {[
               { resource: 'Dashboard Access', status: 'Revoked', action: 'View log' },
@@ -353,7 +348,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                   transition={{ delay: i * 0.05 }}
                   className="flex items-center justify-between py-2 border-b border-[#e4e6eb] last:border-0"
                 >
-                  <span className="text-[13px] text-white">{item.resource}</span>
+                  <span className="text-[13px] text-[#202124]">{item.resource}</span>
                   <div className="flex items-center gap-3">
                     <span className={`text-[11px] px-2 py-0.5 rounded-full ${
                       isRevoked
@@ -378,7 +373,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
         <div className="bg-[#ffffff] rounded-xl p-4 space-y-4">
           <div className="flex items-center gap-2">
             <ShieldCheck size={20} className="text-[#22c55e]" />
-            <span className="text-[14px] font-semibold text-white">Compliance Verification</span>
+            <span className="text-[14px] font-semibold text-[#202124]">Compliance Verification</span>
           </div>
 
           <div className="space-y-2">
@@ -403,7 +398,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
             </div>
           </div>
 
-          <button className="w-full py-2.5 rounded-xl bg-[#22c55e] text-white font-semibold text-[13px] hover:bg-[#16a34a] transition-colors">
+          <button className="w-full py-2.5 rounded-xl bg-[#22c55e] text-[#202124] font-semibold text-[13px] hover:bg-[#16a34a] transition-colors">
             Confirm Final Review
           </button>
         </div>
@@ -437,7 +432,7 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
         <div className="flex items-center gap-4">
           <Avatar initials={client.avatar} />
           <div>
-            <h3 className="text-[18px] font-semibold text-white">{client.clientName}</h3>
+            <h3 className="text-[18px] font-semibold text-[#202124]">{client.clientName}</h3>
             <p className="text-[13px] text-[#64748b]">
               Offboarding started {format(parseISO(client.startDate), 'MMM d')} · Est. complete: {format(parseISO(client.expectedCompletion), 'MMM d')}
             </p>
@@ -476,7 +471,7 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
       <div className="mt-4">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-2 text-[13px] text-[#94a3b8] hover:text-white transition-colors"
+          className="flex items-center gap-2 text-[13px] text-[#94a3b8] hover:text-[#202124] transition-colors"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           {expanded ? 'Hide' : 'Show'} step details
@@ -511,7 +506,7 @@ function CompletedTable() {
       className="bg-[#ffffff] rounded-2xl border border-[rgba(255,255,255,0.06)] overflow-hidden"
     >
       <div className="p-6 border-b border-[#e4e6eb]">
-        <h3 className="text-[18px] font-semibold text-white">Completed Exits</h3>
+        <h3 className="text-[18px] font-semibold text-[#202124]">Completed Exits</h3>
         <p className="text-[13px] text-[#64748b] mt-0.5">Recently offboarded clients</p>
       </div>
 
@@ -540,7 +535,7 @@ function CompletedTable() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-3">
                     <Avatar initials={row.clientName.substring(0, 2).toUpperCase()} size={32} />
-                    <span className="text-[14px] text-white font-medium">{row.clientName}</span>
+                    <span className="text-[14px] text-[#202124] font-medium">{row.clientName}</span>
                   </div>
                 </td>
                 <td className="px-6 py-3.5 text-[13px] text-[#cbd5e1]">{row.duration}</td>
@@ -548,7 +543,7 @@ function CompletedTable() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-1">
                     <Star size={12} className="text-[#f59e0b] fill-[#f59e0b]" />
-                    <span className="text-[13px] text-white">{row.satisfaction}</span>
+                    <span className="text-[13px] text-[#202124]">{row.satisfaction}</span>
                   </div>
                 </td>
                 <td className="px-6 py-3.5 text-[13px] text-[#cbd5e1]">{row.dataExported}</td>
@@ -577,7 +572,7 @@ function ChurnAnalysis() {
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-[18px] font-semibold text-white">Churn Analysis</h3>
+          <h3 className="text-[18px] font-semibold text-[#202124]">Churn Analysis</h3>
           <p className="text-[13px] text-[#64748b] mt-0.5">Exit reasons breakdown</p>
         </div>
         <div className="text-right">
@@ -629,7 +624,7 @@ function ChurnAnalysis() {
             <div key={reason.reason} className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: reason.color }} />
               <span className="text-[12px] text-[#cbd5e1] flex-1">{reason.reason}</span>
-              <span className="text-[12px] text-white font-medium">{reason.count}</span>
+              <span className="text-[12px] text-[#202124] font-medium">{reason.count}</span>
               <span className="text-[11px] text-[#64748b] w-10 text-right">
                 {Math.round((reason.count / total) * 100)}%
               </span>
@@ -669,7 +664,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
         >
           <CheckCircle2 size={56} className="text-[#f59e0b] mx-auto mb-4" />
         </motion.div>
-        <h3 className="text-[22px] font-semibold text-white mb-2">Offboarding started</h3>
+        <h3 className="text-[22px] font-semibold text-[#202124] mb-2">Offboarding started</h3>
         <p className="text-[15px] text-[#94a3b8] mb-2">
           The exit workflow has been initiated for the selected client.
         </p>
@@ -690,7 +685,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
     <div className="bg-[#ffffff] rounded-2xl max-w-[560px] w-full overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-[#e4e6eb] flex items-center justify-between">
-        <h3 className="text-[18px] font-semibold text-white">Start Offboarding</h3>
+        <h3 className="text-[18px] font-semibold text-[#202124]">Start Offboarding</h3>
         <button onClick={onClose} className="p-1.5 rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors">
           <X size={18} className="text-[#64748b]" />
         </button>
@@ -734,7 +729,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
             {/* Step 1: Select Client */}
             {step === 1 && (
               <div>
-                <h4 className="text-[15px] font-semibold text-white mb-1">Select Client</h4>
+                <h4 className="text-[15px] font-semibold text-[#202124] mb-1">Select Client</h4>
                 <p className="text-[13px] text-[#64748b] mb-4">Choose an active client to offboard</p>
 
                 <div className="relative mb-4">
@@ -742,7 +737,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                   <input
                     type="text"
                     placeholder="Search active clients..."
-                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 pl-10 pr-4 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors"
+                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 pl-10 pr-4 text-[14px] text-[#202124] placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -758,7 +753,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                       }`}
                     >
                       <Avatar initials={name.substring(0, 2).toUpperCase()} size={36} />
-                      <span className="text-[14px] text-white font-medium">{name}</span>
+                      <span className="text-[14px] text-[#202124] font-medium">{name}</span>
                       {selectedClient === name && <Check size={16} className="text-[#f59e0b] ml-auto" />}
                     </button>
                   ))}
@@ -774,7 +769,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                   <select
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-white focus:border-[#f59e0b] focus:outline-none transition-colors"
+                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-[#202124] focus:border-[#f59e0b] focus:outline-none transition-colors"
                   >
                     <option value="">Select reason</option>
                     <option value="contract">Contract ended</option>
@@ -814,7 +809,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                         className={`py-2 rounded-lg border text-[12px] transition-all ${
                           exportFormat === fmt
                             ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                            : 'border-[#e4e6eb] text-[#64748b] hover:text-white'
+                            : 'border-[#e4e6eb] text-[#64748b] hover:text-[#202124]'
                         }`}
                       >
                         {fmt}
@@ -833,7 +828,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                         className={`px-4 py-2 rounded-lg border text-[12px] transition-all ${
                           retention === period
                             ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                            : 'border-[#e4e6eb] text-[#64748b] hover:text-white'
+                            : 'border-[#e4e6eb] text-[#64748b] hover:text-[#202124]'
                         }`}
                       >
                         {period}
@@ -847,29 +842,29 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
             {/* Step 3: Confirm */}
             {step === 3 && (
               <div className="space-y-4">
-                <h4 className="text-[15px] font-semibold text-white mb-1">Confirm Offboarding</h4>
+                <h4 className="text-[15px] font-semibold text-[#202124] mb-1">Confirm Offboarding</h4>
                 <p className="text-[13px] text-[#64748b] mb-4">Review all settings before proceeding</p>
 
                 <div className="bg-[#ffffff] rounded-xl p-4 space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-[12px] text-[#64748b]">Client</span>
-                    <span className="text-[14px] text-white">{selectedClient || 'Not selected'}</span>
+                    <span className="text-[14px] text-[#202124]">{selectedClient || 'Not selected'}</span>
                   </div>
                   <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
                     <span className="text-[12px] text-[#64748b]">Reason</span>
-                    <span className="text-[14px] text-white">{reason || 'Not specified'}</span>
+                    <span className="text-[14px] text-[#202124]">{reason || 'Not specified'}</span>
                   </div>
                   <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
                     <span className="text-[12px] text-[#64748b]">Export Format</span>
-                    <span className="text-[14px] text-white">{exportFormat}</span>
+                    <span className="text-[14px] text-[#202124]">{exportFormat}</span>
                   </div>
                   <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
                     <span className="text-[12px] text-[#64748b]">Retention</span>
-                    <span className="text-[14px] text-white">{retention}</span>
+                    <span className="text-[14px] text-[#202124]">{retention}</span>
                   </div>
                   <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
                     <span className="text-[12px] text-[#64748b]">Exit Survey</span>
-                    <span className="text-[14px] text-white">{feedbackEnabled ? 'Yes' : 'No'}</span>
+                    <span className="text-[14px] text-[#202124]">{feedbackEnabled ? 'Yes' : 'No'}</span>
                   </div>
                 </div>
 
@@ -906,7 +901,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
           <button
             onClick={() => setStep((s) => Math.max(1, s - 1))}
             disabled={step === 1}
-            className="text-[13px] text-[#94a3b8] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="text-[13px] text-[#94a3b8] hover:text-[#202124] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Back
           </button>
@@ -951,7 +946,7 @@ export default function Offboarding() {
         className="px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-[36px] font-semibold text-white tracking-tight leading-tight">Offboarding</h1>
+          <h1 className="text-[36px] font-semibold text-[#202124] tracking-tight leading-tight">Offboarding</h1>
           <p className="text-[15px] text-[#64748b] mt-1">
             {activeOffboardings.length} active offboardings · 2 completed this month · Avg. 5 days
           </p>
@@ -987,7 +982,7 @@ export default function Offboarding() {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-3 text-[14px] font-medium transition-colors relative ${
-                activeTab === tab ? 'text-white' : 'text-[#64748b] hover:text-[#94a3b8]'
+                activeTab === tab ? 'text-[#202124]' : 'text-[#64748b] hover:text-[#94a3b8]'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -1048,7 +1043,7 @@ export default function Offboarding() {
               transition={{ duration: 0.2 }}
               className="bg-[#ffffff] rounded-2xl p-8 border border-[rgba(255,255,255,0.06)]"
             >
-              <h3 className="text-[18px] font-semibold text-white mb-2">Offboarding Settings</h3>
+              <h3 className="text-[18px] font-semibold text-[#202124] mb-2">Offboarding Settings</h3>
               <p className="text-[13px] text-[#64748b] mb-6">Configure default offboarding behavior</p>
 
               <div className="space-y-6 max-w-[480px]">

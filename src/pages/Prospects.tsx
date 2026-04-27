@@ -32,9 +32,9 @@ const fadeSlideUp = (delay = 0) => ({
 const stageOrder: ProspectStage[] = ['Lead', 'Qualified', 'Proposal', 'Negotiation', 'Closed'];
 
 function getScoreColor(score: number) {
-  if (score >= 80) return '#22c55e';
-  if (score >= 50) return '#f59e0b';
-  return '#ef4444';
+  if (score >= 80) return '#6f4bd8';
+  if (score >= 50) return '#a89aea';
+  return '#cdc4f1';
 }
 
 function getScoreLabel(score: number) {
@@ -109,7 +109,7 @@ function ProspectCard({
     >
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-white truncate">{prospect.company}</p>
+          <p className="text-[15px] font-semibold text-[#202124] truncate">{prospect.company}</p>
           <p className="text-[12px] text-[#64748b] truncate">{prospect.name}</p>
         </div>
         <AIScoreRing score={prospect.aiScore} size={28} />
@@ -134,21 +134,24 @@ function ProspectCard({
       <div className="mt-3 flex flex-wrap gap-1">
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: 'rgba(139,92,246,0.15)', color: '#8b5cf6' }}
+          style={{ backgroundColor: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
         >
           {prospect.source}
         </span>
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: `${scoreColor}15`, color: scoreColor }}
+          style={{ backgroundColor: `${scoreColor}1f`, color: scoreColor }}
         >
           {getScoreLabel(prospect.aiScore)}
         </span>
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-[rgba(255,255,255,0.04)] pt-2.5">
-        <span className="text-[11px] text-[#475569]">{prospect.lastContact}</span>
-        <div className="flex size-6 items-center justify-center rounded-full bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] text-[9px] font-medium text-white">
+      <div className="mt-3 flex items-center justify-between border-t border-[#eceef2] pt-2.5">
+        <span className="text-[11px] text-[#6f747d]">{prospect.lastContact}</span>
+        <div
+          className="flex size-6 items-center justify-center rounded-full text-[9px] font-semibold"
+          style={{ background: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
+        >
           {prospect.assigneeAvatar}
         </div>
       </div>
@@ -181,10 +184,10 @@ function ProspectDetailPanel({
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-[#e4e6eb] bg-[#ffffff] px-6 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-[22px] font-semibold text-white truncate">{prospect.company}</h2>
+          <h2 className="text-[22px] font-semibold text-[#202124] truncate">{prospect.company}</h2>
           <button
             onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-[#94a3b8] transition-colors hover:bg-[rgba(255,255,255,0.08)] hover:text-white"
+            className="flex size-8 items-center justify-center rounded-full text-[#94a3b8] transition-colors hover:bg-[rgba(255,255,255,0.08)] hover:text-[#202124]"
           >
             <X className="size-5" />
           </button>
@@ -200,7 +203,7 @@ function ProspectDetailPanel({
                 'rounded-full px-3 py-1 text-[11px] font-medium transition-all',
                 prospect.stage === s
                   ? 'text-[#ffffff]'
-                  : 'border border-[#e4e6eb] text-[#94a3b8] hover:text-white hover:border-[#64748b]'
+                  : 'border border-[#e4e6eb] text-[#94a3b8] hover:text-[#202124] hover:border-[#64748b]'
               )}
               style={
                 prospect.stage === s
@@ -217,12 +220,12 @@ function ProspectDetailPanel({
       <div className="px-6 py-5 flex flex-col gap-6">
         {/* AI Score */}
         <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">AI Score</h3>
+          <h3 className="text-[14px] font-semibold text-[#202124] mb-4">AI Score</h3>
           <div className="flex items-center gap-5">
             <AIScoreRing score={prospect.aiScore} size={64} />
             <div className="flex-1">
               <div className="flex items-baseline gap-2">
-                <span className="text-[28px] font-medium text-white">{prospect.aiScore}</span>
+                <span className="text-[28px] font-medium text-[#202124]">{prospect.aiScore}</span>
                 <span className="text-[13px] text-[#64748b]">/ 100</span>
               </div>
               <span
@@ -247,7 +250,7 @@ function ProspectDetailPanel({
                     style={{ width: `${item.score}%`, backgroundColor: scoreColor }}
                   />
                 </div>
-                <span className="w-[28px] text-right text-[12px] text-white">{item.score}</span>
+                <span className="w-[28px] text-right text-[12px] text-[#202124]">{item.score}</span>
               </div>
             ))}
           </div>
@@ -264,7 +267,7 @@ function ProspectDetailPanel({
 
         {/* Contact Details */}
         <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Contact Details</h3>
+          <h3 className="text-[14px] font-semibold text-[#202124] mb-4">Contact Details</h3>
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <UserIcon className="size-4 text-[#64748b]" />
@@ -287,7 +290,7 @@ function ProspectDetailPanel({
 
         {/* Value */}
         <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Deal Value</h3>
+          <h3 className="text-[14px] font-semibold text-[#202124] mb-4">Deal Value</h3>
           <div className="flex items-baseline gap-1">
             <span className="text-[28px] font-medium text-[#6f4bd8]">
               ${(prospect.value / 1000).toFixed(0)}K
@@ -296,7 +299,7 @@ function ProspectDetailPanel({
           <div className="mt-3">
             <div className="flex items-center justify-between">
               <span className="text-[12px] text-[#94a3b8]">Probability</span>
-              <span className="text-[13px] font-medium text-white">{prospect.probability}%</span>
+              <span className="text-[13px] font-medium text-[#202124]">{prospect.probability}%</span>
             </div>
             <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
               <div
@@ -307,7 +310,7 @@ function ProspectDetailPanel({
           </div>
           <p className="mt-3 text-[12px] text-[#64748b]">
             Expected value:{' '}
-            <span className="text-white font-medium">
+            <span className="text-[#202124] font-medium">
               ${Math.round(prospect.value * (prospect.probability / 100)).toLocaleString()}
             </span>
           </p>
@@ -315,7 +318,7 @@ function ProspectDetailPanel({
 
         {/* Activity Timeline */}
         <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Activity</h3>
+          <h3 className="text-[14px] font-semibold text-[#202124] mb-4">Activity</h3>
           <div className="flex flex-col gap-4">
             {[
               { action: 'Initial contact', date: '3 weeks ago', icon: Mail },
@@ -338,7 +341,7 @@ function ProspectDetailPanel({
 
         {/* Notes */}
         <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-3">Notes</h3>
+          <h3 className="text-[14px] font-semibold text-[#202124] mb-3">Notes</h3>
           <p className="text-[13px] text-[#94a3b8] leading-relaxed">{prospect.notes}</p>
         </div>
 
@@ -349,7 +352,7 @@ function ProspectDetailPanel({
           </Button>
           <Button
             variant="outline"
-            className="w-full border-[#e4e6eb] text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="w-full border-[#e4e6eb] text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
           >
             <PhoneCall className="size-4 mr-2" /> Schedule Call
           </Button>
@@ -388,7 +391,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[520px] border-[#e4e6eb] bg-[#ffffff] text-white">
+      <DialogContent className="max-w-[520px] border-[#e4e6eb] bg-[#ffffff] text-[#202124]">
         <DialogHeader>
           <DialogTitle className="text-[20px] font-semibold">Add Prospect</DialogTitle>
         </DialogHeader>
@@ -400,7 +403,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
                 value={form.company}
                 onChange={(e) => update('company', e.target.value)}
                 placeholder="Company name"
-                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
@@ -409,7 +412,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
                 value={form.name}
                 onChange={(e) => update('name', e.target.value)}
                 placeholder="Full name"
-                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
             </div>
           </div>
@@ -420,7 +423,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
                 placeholder="contact@company.com"
-                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
@@ -429,7 +432,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
                 value={form.phone}
                 onChange={(e) => update('phone', e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
             </div>
           </div>
@@ -440,7 +443,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
                 value={form.value}
                 onChange={(e) => update('value', e.target.value)}
                 placeholder="25000"
-                className="border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
@@ -448,7 +451,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
               <select
                 value={form.source}
                 onChange={(e) => update('source', e.target.value)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
               >
                 {['Website', 'Referral', 'Cold outreach', 'Ad', 'Event', 'Partner', 'Other'].map((s) => (
                   <option key={s} value={s}>{s}</option>
@@ -462,7 +465,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
               <select
                 value={form.stage}
                 onChange={(e) => update('stage', e.target.value as ProspectStage)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
               >
                 {stageOrder.map((s) => (
                   <option key={s} value={s}>{s}</option>
@@ -474,7 +477,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
               <select
                 value={form.assignee}
                 onChange={(e) => update('assignee', e.target.value)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
               >
                 {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
                   <option key={m} value={m}>{m}</option>
@@ -489,7 +492,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
               onChange={(e) => update('notes', e.target.value)}
               placeholder="Additional notes..."
               rows={3}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white placeholder:text-[#475569] outline-none focus:border-[#6f4bd8] resize-none"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] placeholder:text-[#475569] outline-none focus:border-[#6f4bd8] resize-none"
             />
           </div>
         </div>
@@ -497,7 +500,7 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
           <Button
             variant="ghost"
             onClick={onClose}
-            className="text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
           >
             Cancel
           </Button>
@@ -539,13 +542,13 @@ function FilterBar({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search prospects..."
-          className="pl-9 border-[#e4e6eb] bg-[#ffffff] text-white placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
+          className="pl-9 border-[#e4e6eb] bg-[#ffffff] text-[#202124] placeholder:text-[#475569] focus-visible:border-[#6f4bd8]"
         />
       </div>
       <select
         value={stageFilter}
         onChange={(e) => onStageFilterChange(e.target.value)}
-        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
+        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
       >
         <option value="">All Stages</option>
         {stageOrder.map((s) => (
@@ -555,7 +558,7 @@ function FilterBar({
       <select
         value={assigneeFilter}
         onChange={(e) => onAssigneeFilterChange(e.target.value)}
-        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-white outline-none focus:border-[#6f4bd8]"
+        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-[#202124] outline-none focus:border-[#6f4bd8]"
       >
         <option value="">All Assignees</option>
         {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
@@ -656,7 +659,7 @@ export default function Prospects() {
       >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-[36px] font-semibold tracking-[-0.02em] text-white">Prospects</h1>
+            <h1 className="text-[36px] font-semibold tracking-[-0.02em] text-[#202124]">Prospects</h1>
             <p className="mt-1 text-[15px] text-[#64748b]">
               {prospectList.length} prospects · ${(pipelineValue / 1000).toFixed(0)}K pipeline value · {winRate}% win rate
             </p>
@@ -670,7 +673,7 @@ export default function Prospects() {
             </Button>
             <Button
               variant="outline"
-              className="border-[#e4e6eb] text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.08)]"
             >
               <Upload className="size-4 mr-1.5" /> Import
             </Button>
@@ -704,7 +707,7 @@ export default function Prospects() {
               style={{ borderTop: `2px solid ${ps.color}` }}
             >
               <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">{ps.stage}</p>
-              <p className="mt-1 text-[20px] font-medium text-white">{count}</p>
+              <p className="mt-1 text-[20px] font-medium text-[#202124]">{count}</p>
               <p className="text-[12px] text-[#64748b]">${(value / 1000).toFixed(0)}K</p>
             </motion.div>
           );
@@ -757,12 +760,12 @@ export default function Prospects() {
               <div className="mb-3 flex items-center justify-between px-2">
                 <div className="flex items-center gap-2">
                   <div className="size-2 rounded-full" style={{ backgroundColor: ps.color }} />
-                  <span className="text-[15px] font-semibold text-white">{ps.stage}</span>
+                  <span className="text-[15px] font-semibold text-[#202124]">{ps.stage}</span>
                   <span className="rounded-full bg-[#ffffff] px-2 py-0.5 text-[11px] text-[#94a3b8]">
                     {stageProspects.length}
                   </span>
                 </div>
-                <button className="flex size-6 items-center justify-center rounded-full text-[#64748b] hover:bg-[rgba(255,255,255,0.08)] hover:text-white transition-colors">
+                <button className="flex size-6 items-center justify-center rounded-full text-[#64748b] hover:bg-[rgba(255,255,255,0.08)] hover:text-[#202124] transition-colors">
                   <Plus className="size-3.5" />
                 </button>
               </div>

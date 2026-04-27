@@ -83,15 +83,15 @@ function StatusBadge({ status }: { status: ClientStatus }) {
 /*  Avatar                                                             */
 /* ------------------------------------------------------------------ */
 function ClientAvatar({ initials, size = 40 }: { initials: string; size?: number }) {
-  const hue = initials.charCodeAt(0) * 137.5 % 360;
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-white shrink-0"
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8] shrink-0"
       style={{
         width: size,
         height: size,
-        background: `linear-gradient(135deg, hsl(${hue}, 60%, 45%), hsl(${hue + 40}, 60%, 35%))`,
-        fontSize: size * 0.4,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+        fontSize: size * 0.38,
       }}
     >
       {initials}
@@ -127,7 +127,7 @@ function HealthScoreRing({ value, size = 48 }: { value: number; size?: number })
           transition={{ duration: 1, ease: easeOutExpo }}
         />
       </svg>
-      <span className="absolute text-[13px] font-semibold text-white">{value}</span>
+      <span className="absolute text-[13px] font-semibold text-[#202124]">{value}</span>
     </div>
   );
 }
@@ -173,7 +173,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Overview</h3>
+            <h3 className="text-lg font-semibold text-[#202124]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Overview</h3>
             <span className="text-[13px] text-[#6f4bd8] cursor-pointer hover:underline">View Full &rarr;</span>
           </div>
           <div className="flex items-center justify-between">
@@ -210,7 +210,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           className="rounded-2xl p-6"
           style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Active Services</h3>
+          <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Active Services</h3>
           <div className="space-y-4">
             {clientServices.map(svc => (
               <div key={svc.id} className="flex items-center gap-3">
@@ -218,7 +218,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
                   <Target className="h-4 w-4 text-[#6f4bd8]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[15px] font-medium text-white">{svc.name}</p>
+                  <p className="text-[15px] font-medium text-[#202124]">{svc.name}</p>
                 </div>
                 <StatusBadge status="Active" />
                 <span className="text-[13px] text-[#6f4bd8] font-medium">${svc.price?.toLocaleString()}/mo</span>
@@ -239,7 +239,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           className="rounded-2xl p-6"
           style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: 'Send Message', icon: Mail },
@@ -253,7 +253,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
                   'flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium transition-all border',
                   action.warn
                     ? 'text-[#f59e0b] border-[rgba(245,158,11,0.3)] hover:bg-[rgba(245,158,11,0.05)]'
-                    : 'text-[#94a3b8] border-[rgba(255,255,255,0.1)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
+                    : 'text-[#94a3b8] border-[rgba(255,255,255,0.1)] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)]'
                 )}
               >
                 <action.icon className="h-4 w-4" />
@@ -274,7 +274,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
       >
         <div className="flex items-center gap-2 mb-5">
           <Activity className="h-4 w-4 text-[#6f4bd8]" />
-          <h3 className="text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>AI Insights</h3>
+          <h3 className="text-lg font-semibold text-[#202124]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>AI Insights</h3>
         </div>
         <div className="space-y-0">
           {[
@@ -288,7 +288,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
             >
               <div className="flex items-center gap-2 mb-1.5">
                 <insight.icon className="h-4 w-4" style={{ color: insight.color }} />
-                <span className="text-[13px] font-semibold text-white">{insight.title}</span>
+                <span className="text-[13px] font-semibold text-[#202124]">{insight.title}</span>
               </div>
               <p className="text-[13px] text-[#94a3b8] leading-relaxed">{insight.body}</p>
             </div>
@@ -369,7 +369,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
         className="rounded-2xl p-6"
         style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
       >
-        <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings History</h3>
+        <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings History</h3>
         <div className="h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={monthlyData}>
@@ -403,7 +403,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
           className="rounded-2xl p-6"
           style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Revenue Sources</h3>
+          <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Revenue Sources</h3>
           <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -423,7 +423,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
                   <span className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[i] }} />
                   <span className="text-[#94a3b8]">{s.name}</span>
                 </div>
-                <span className="text-white font-medium">${s.value.toLocaleString()}</span>
+                <span className="text-[#202124] font-medium">${s.value.toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -438,7 +438,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
           style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
         >
           <div className="p-6 pb-0">
-            <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Recent Transactions</h3>
+            <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Recent Transactions</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -460,9 +460,9 @@ function EarningsTab({ clientId }: { clientId: string }) {
                     transition={{ duration: 0.4, ease: easeOutExpo, delay: i * 0.04 }}
                     className="border-t border-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
                   >
-                    <td className="px-6 py-3 text-white">{format(new Date(e.date), 'MMM d, yyyy')}</td>
+                    <td className="px-6 py-3 text-[#202124]">{format(new Date(e.date), 'MMM d, yyyy')}</td>
                     <td className="px-6 py-3 text-[#94a3b8]">{e.source}</td>
-                    <td className="px-6 py-3 text-white font-medium">${e.amount.toLocaleString()}</td>
+                    <td className="px-6 py-3 text-[#202124] font-medium">${e.amount.toLocaleString()}</td>
                     <td className="px-6 py-3">
                       <span
                         className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
@@ -494,7 +494,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
         className="rounded-2xl p-6"
         style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
       >
-        <h3 className="text-lg font-semibold text-white mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Milestones</h3>
+        <h3 className="text-lg font-semibold text-[#202124] mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Milestones</h3>
         <div className="relative flex items-center justify-between px-4">
           {/* Connector line */}
           <div className="absolute top-4 left-8 right-8 h-0.5 bg-[#e4e6eb]" />
@@ -519,7 +519,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
               >
                 {m.achieved ? <Check className="h-4 w-4 text-[#ffffff]" /> : <span className="text-[11px] text-[#64748b]">$</span>}
               </div>
-              <span className="text-[13px] font-medium text-white">{m.label}</span>
+              <span className="text-[13px] font-medium text-[#202124]">{m.label}</span>
               <span className="text-[11px] text-[#64748b]">{m.date}</span>
             </motion.div>
           ))}
@@ -564,15 +564,15 @@ function OnboardingTab({ clientId }: { clientId: string }) {
           </div>
           <div>
             <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Duration</span>
-            <p className="text-[15px] text-white mt-1">23 days <span className="text-[#64748b]">(AI predicted: 25 days)</span></p>
+            <p className="text-[15px] text-[#202124] mt-1">23 days <span className="text-[#64748b]">(AI predicted: 25 days)</span></p>
           </div>
           <div>
             <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Timeline</span>
-            <p className="text-[15px] text-white mt-1">Jan 15, 2024 &rarr; Feb 7, 2024</p>
+            <p className="text-[15px] text-[#202124] mt-1">Jan 15, 2024 &rarr; Feb 7, 2024</p>
           </div>
           <div>
             <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Tasks</span>
-            <p className="text-[15px] text-white mt-1">{totalCompleted}/{totalSteps} completed</p>
+            <p className="text-[15px] text-[#202124] mt-1">{totalCompleted}/{totalSteps} completed</p>
           </div>
         </div>
 
@@ -621,7 +621,7 @@ function OnboardingTab({ clientId }: { clientId: string }) {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <span className="text-[15px] font-semibold text-white">{phaseNames[i]}</span>
+                    <span className="text-[15px] font-semibold text-[#202124]">{phaseNames[i]}</span>
                     {progress === 100 && <StatusBadge status="Active" />}
                   </div>
                 </div>
@@ -653,7 +653,7 @@ function OnboardingTab({ clientId }: { clientId: string }) {
                           >
                             {step.completed && <Check className="h-3 w-3 text-[#ffffff]" />}
                           </div>
-                          <span className={cn('text-[13px] flex-1', step.completed ? 'text-[#94a3b8] line-through' : 'text-white')}>{step.title}</span>
+                          <span className={cn('text-[13px] flex-1', step.completed ? 'text-[#94a3b8] line-through' : 'text-[#202124]')}>{step.title}</span>
                           {step.completedDate && (
                             <span className="text-[11px] text-[#475569]">{format(new Date(step.completedDate), 'MMM d')}</span>
                           )}
@@ -694,7 +694,7 @@ function ServicesTab({ clientId }: { clientId: string }) {
           <div className="h-10 w-10 rounded-full bg-[rgba(111,75,216,0.15)] flex items-center justify-center mb-4">
             <Target className="h-5 w-5 text-[#6f4bd8]" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{svc.name}</h3>
+          <h3 className="text-lg font-semibold text-[#202124] mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{svc.name}</h3>
           <p className="text-[13px] text-[#94a3b8] mb-4 line-clamp-2">{svc.description}</p>
           <p className="text-[15px] font-semibold text-[#6f4bd8] mb-3" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
             ${svc.price?.toLocaleString()}/mo
@@ -766,7 +766,7 @@ function ActivityTab({ clientId }: { clientId: string }) {
               </div>
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <p className="text-[15px] text-white font-medium">{act.description}</p>
+                <p className="text-[15px] text-[#202124] font-medium">{act.description}</p>
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-[11px] text-[#475569]">{formatDistanceToNow(new Date(act.timestamp), { addSuffix: true })}</span>
                   <span className="text-[11px] text-[#475569]">by {act.user}</span>
@@ -807,7 +807,7 @@ function DocumentsTab({ clientId }: { clientId: string }) {
         style={{ background: '#ffffff', borderColor: '#e4e6eb' }}
       >
         <Upload className="h-8 w-8 text-[#64748b] mx-auto mb-3" />
-        <p className="text-[15px] text-white font-medium mb-1">Drop files here or click to upload</p>
+        <p className="text-[15px] text-[#202124] font-medium mb-1">Drop files here or click to upload</p>
         <p className="text-[13px] text-[#64748b]">PDF, DOC, XLS, ZIP up to 50MB</p>
       </motion.div>
 
@@ -820,7 +820,7 @@ function DocumentsTab({ clientId }: { clientId: string }) {
         style={{ background: '#ffffff', border: '1px solid rgba(255,255,255,0.06)' }}
       >
         <div className="p-6 pb-0">
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Files</h3>
+          <h3 className="text-lg font-semibold text-[#202124] mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Files</h3>
         </div>
         <div className="divide-y divide-[rgba(255,255,255,0.04)]">
           {docs.map((doc, i) => {
@@ -840,14 +840,14 @@ function DocumentsTab({ clientId }: { clientId: string }) {
                   {t.ext}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[15px] text-white font-medium truncate">{doc.name}</p>
+                  <p className="text-[15px] text-[#202124] font-medium truncate">{doc.name}</p>
                   <div className="flex items-center gap-3 mt-0.5">
                     <span className="text-[11px] text-[#64748b]">{doc.size}</span>
                     <span className="text-[11px] text-[#64748b]">{format(new Date(doc.date), 'MMM d, yyyy')}</span>
                   </div>
                 </div>
                 <span className="text-[11px] text-[#475569]">{doc.uploadedBy}</span>
-                <Download className="h-4 w-4 text-[#64748b] hover:text-white transition-colors" />
+                <Download className="h-4 w-4 text-[#64748b] hover:text-[#202124] transition-colors" />
               </motion.div>
             );
           })}
@@ -893,7 +893,7 @@ export default function ClientDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#ffffff' }}>
         <div className="text-center">
-          <p className="text-white text-lg mb-4">Client not found</p>
+          <p className="text-[#202124] text-lg mb-4">Client not found</p>
           <button
             onClick={() => navigate('/app/clients')}
             className="text-[#6f4bd8] hover:underline"
@@ -927,7 +927,7 @@ export default function ClientDetail() {
           <div className="flex items-center gap-5">
             <button
               onClick={() => navigate('/app/clients')}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all lg:hidden"
+              className="p-2 rounded-lg text-[#64748b] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] transition-all lg:hidden"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -935,14 +935,14 @@ export default function ClientDetail() {
             <div>
               <div className="flex items-center gap-3">
                 <h1
-                  className="text-4xl font-semibold text-white"
+                  className="text-4xl font-semibold text-[#202124]"
                   style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}
                 >
                   {client.company}
                 </h1>
                 <button
                   onClick={() => navigate('/app/clients')}
-                  className="hidden lg:block p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
+                  className="hidden lg:block p-2 rounded-lg text-[#64748b] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] transition-all"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
@@ -970,13 +970,13 @@ export default function ClientDetail() {
               <HealthScoreRing value={client.healthScore} size={48} />
               <span className="text-[10px] text-[#64748b]">Health</span>
             </div>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
               <Pencil className="h-4 w-4" />
             </button>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
               <MessageSquare className="h-4 w-4" />
             </button>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-[#202124] hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
               <Download className="h-4 w-4" />
             </button>
           </div>
@@ -1013,7 +1013,7 @@ export default function ClientDetail() {
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   'relative flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap transition-all rounded-t-lg',
-                  isActive ? 'text-white' : 'text-[#64748b] hover:text-[#cbd5e1]'
+                  isActive ? 'text-[#202124]' : 'text-[#64748b] hover:text-[#cbd5e1]'
                 )}
               >
                 <Icon className="h-4 w-4" />
