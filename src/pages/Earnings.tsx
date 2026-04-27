@@ -16,20 +16,20 @@ import {
   type Milestone,
 } from "@/mocks/earningsMock";
 
-/* ─── design tokens ─── */
+/* ─── design tokens (workspace-aligned light theme) ─── */
 const NAVY_900 = "#ffffff";
-const NAVY_800 = "#ffffff";
+const NAVY_800 = "#f7f8fb";
 const NAVY_700 = "#e4e6eb";
 const NAVY_950 = "#ffffff";
 const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
 const PURPLE = "#8b5cf6";
-const GRAY_500 = "#64748b";
-const GRAY_600 = "#475569";
+const GRAY_500 = "#6f747d";
+const GRAY_600 = "#4a4d55";
 const WARNING = "#f59e0b";
-const SUCCESS = "#22c55e";
+const SUCCESS = "#10b981";
 const ERROR = "#ef4444";
-const WHITE = "#ffffff";
+const WHITE = "#202124";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 

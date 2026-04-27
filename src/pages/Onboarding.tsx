@@ -800,7 +800,7 @@ export default function Onboarding() {
       >
         <KPICard icon={Rocket} iconColor="#3b82f6" value={8} sub="3 starting this week" subColor="text-[#64748b]" index={0} />
         <KPICard icon={CheckCircle2} iconColor="#6f4bd8" value={94} suffix="%" sub="On-time delivery" subColor="text-[#64748b]" index={1} />
-        <KPICard icon={Clock} iconColor="#ffffff" value={18} suffix=" days" sub="AI predicted: 16 days" subColor="text-[#3b82f6]" index={2} />
+        <KPICard icon={Clock} iconColor="#5f6368" value={18} suffix=" days" sub="AI predicted: 16 days" subColor="text-[#3b82f6]" index={2} />
         <KPICard icon={AlertTriangle} iconColor="#f59e0b" value={1} sub="QuantumLabs — Phase 2 blocked" subColor="text-[#f59e0b]" index={3} />
       </motion.section>
 

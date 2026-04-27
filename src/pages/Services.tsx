@@ -14,15 +14,15 @@ import {
   type Service,
 } from "@/mocks/earningsMock";
 
-/* ─── design tokens ─── */
+/* ─── design tokens (workspace-aligned light theme) ─── */
 const NAVY_950 = "#ffffff";
 const NAVY_900 = "#ffffff";
-const NAVY_800 = "#ffffff";
+const NAVY_800 = "#f7f8fb";
 const NAVY_700 = "#e4e6eb";
 const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
-const GRAY_500 = "#64748b";
-const WHITE = "#ffffff";
+const GRAY_500 = "#6f747d";
+const WHITE = "#202124";
 const ERROR = "#ef4444";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];

@@ -106,79 +106,91 @@
     letter-spacing: -0.01em;
   }
 
-  .app-workspace .bg-\[\#0a0e27\],
-  .app-workspace .bg-navy-950 {
-    background-color: var(--workspace-bg) !important;
+  /*
+   * Legacy navy/neon-theme remap. These classes are sprinkled across pages,
+   * dialogs, dropdowns, and other portaled content. We need them remapped
+   * everywhere — not just inside .app-workspace — because Radix portals
+   * render at <body> level and would otherwise still display the old palette.
+   */
+  body .bg-\[\#0a0e27\],
+  body .bg-navy-950 {
+    background-color: #f7f8fb !important;
   }
 
-  .app-workspace .bg-\[\#0f1535\],
-  .app-workspace .bg-navy-900,
-  .app-workspace .bg-navy-800 {
-    background-color: var(--workspace-surface) !important;
+  body .bg-\[\#0f1535\],
+  body .bg-navy-900,
+  body .bg-navy-800 {
+    background-color: #ffffff !important;
   }
 
-  .app-workspace .bg-\[\#162044\],
-  .app-workspace .bg-\[\#1c2960\],
-  .app-workspace .bg-navy-700,
-  .app-workspace .bg-\[\#334155\] {
-    background-color: var(--workspace-surface-subtle) !important;
+  body .bg-\[\#162044\],
+  body .bg-\[\#1c2960\],
+  body .bg-navy-700,
+  body .bg-\[\#334155\] {
+    background-color: #f3f4f7 !important;
   }
 
-  .app-workspace .border-\[\#1c2960\],
-  .app-workspace .border-navy-700 {
-    border-color: var(--workspace-line) !important;
+  body .border-\[\#1c2960\],
+  body .border-navy-700 {
+    border-color: #e4e6eb !important;
   }
 
-  .app-workspace [class*="border-[rgba(255,255,255"],
-  .app-workspace [class*="border-[rgba(126,234,87"] {
-    border-color: var(--workspace-line) !important;
+  body [class*="border-[rgba(255,255,255"],
+  body [class*="border-[rgba(126,234,87"] {
+    border-color: #e4e6eb !important;
   }
 
-  .app-workspace [class*="bg-[rgba(255,255,255"] {
-    background-color: var(--workspace-surface-subtle) !important;
+  body [class*="bg-[rgba(255,255,255"] {
+    background-color: #f3f4f7 !important;
   }
 
-  .app-workspace .text-white {
-    color: var(--workspace-text) !important;
+  /* text-white only flips to dark when the element is on a now-light surface.
+     Landing-page buttons explicitly use bg accent, where white text is correct. */
+  .app-workspace .text-white,
+  [data-radix-popper-content-wrapper] .text-white,
+  [role="dialog"] .text-white,
+  [role="menu"] .text-white {
+    color: #2f3137 !important;
   }
 
-  .app-workspace .text-\[\#cbd5e1\],
-  .app-workspace .text-\[\#94a3b8\] {
-    color: var(--workspace-muted) !important;
+  body .text-\[\#cbd5e1\],
+  body .text-\[\#94a3b8\] {
+    color: #6f747d !important;
   }
 
-  .app-workspace .text-\[\#64748b\],
-  .app-workspace .text-\[\#475569\],
-  .app-workspace .text-gray-400,
-  .app-workspace .text-gray-500 {
-    color: var(--workspace-faint) !important;
+  body .text-\[\#64748b\],
+  body .text-\[\#475569\] {
+    color: #6f747d !important;
   }
 
-  .app-workspace .text-\[\#7eea57\],
-  .app-workspace .text-neon-green,
-  .app-workspace .text-purple-vibrant {
-    color: var(--workspace-accent) !important;
+  body .text-\[\#7eea57\],
+  body .text-neon-green,
+  body .text-purple-vibrant {
+    color: #6f4bd8 !important;
   }
 
-  .app-workspace .bg-\[\#7eea57\],
-  .app-workspace .bg-neon-green,
-  .app-workspace .bg-purple-vibrant {
-    background-color: var(--workspace-accent) !important;
+  body .bg-\[\#7eea57\],
+  body .bg-neon-green,
+  body .bg-purple-vibrant {
+    background-color: #6f4bd8 !important;
   }
 
-  .app-workspace .border-\[\#7eea57\],
-  .app-workspace .border-neon-green {
-    border-color: var(--workspace-accent) !important;
+  body .border-\[\#7eea57\],
+  body .border-neon-green {
+    border-color: #6f4bd8 !important;
   }
 
-  .app-workspace .text-\[\#0a0e27\],
-  .app-workspace .text-navy-950 {
+  body .text-\[\#0a0e27\],
+  body .text-navy-950 {
     color: #ffffff !important;
   }
 
   .app-workspace input,
   .app-workspace select,
-  .app-workspace textarea {
+  .app-workspace textarea,
+  [role="dialog"] input,
+  [role="dialog"] select,
+  [role="dialog"] textarea {
     color-scheme: light;
   }
 

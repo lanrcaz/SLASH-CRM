@@ -10,19 +10,19 @@ import {
   reportDataSourceOptions, reportMetricsBySource,
 } from "@/mocks/earningsMock";
 
-/* ─── design tokens ─── */
+/* ─── design tokens (workspace-aligned light theme) ─── */
 const NAVY_950 = "#ffffff";
 const NAVY_900 = "#ffffff";
-const NAVY_800 = "#ffffff";
+const NAVY_800 = "#f7f8fb";
 const NAVY_700 = "#e4e6eb";
 const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
-const GRAY_500 = "#64748b";
-const GRAY_400 = "#94a3b8";
-const WHITE = "#ffffff";
+const GRAY_500 = "#6f747d";
+const GRAY_400 = "#8b9099";
+const WHITE = "#202124";
 const WARNING = "#f59e0b";
 const ERROR = "#ef4444";
-const SUCCESS = "#22c55e";
+const SUCCESS = "#10b981";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const easeSmooth = [0.4, 0, 0.2, 1] as [number, number, number, number];

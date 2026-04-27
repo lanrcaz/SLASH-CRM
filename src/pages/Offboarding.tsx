@@ -975,7 +975,7 @@ export default function Offboarding() {
       >
         <KPICard icon={LogOut} iconColor="#f59e0b" value={3} sub="In progress" index={0} />
         <KPICard icon={CheckCircle2} iconColor="#6f4bd8" value={2} sub="All compliant" index={1} />
-        <KPICard icon={Clock} iconColor="#ffffff" value={5} suffix=" days" sub="From start to complete" index={2} />
+        <KPICard icon={Clock} iconColor="#5f6368" value={5} suffix=" days" sub="From start to complete" index={2} />
         <KPICard icon={Database} iconColor="#3b82f6" value={1.2} suffix="GB" sub="Total client data exported" index={3} />
       </motion.section>
 

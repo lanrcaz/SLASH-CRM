@@ -613,7 +613,7 @@ function OnboardingTab({ clientId }: { clientId: string }) {
                   className="h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold shrink-0"
                   style={{
                     background: progress === 100 ? '#6f4bd8' : '#ffffff',
-                    color: progress === 100 ? '#ffffff' : '#fff',
+                    color: progress === 100 ? '#ffffff' : '#202124',
                     border: progress === 100 ? 'none' : '1px solid #e4e6eb',
                   }}
                 >
@@ -987,7 +987,7 @@ export default function ClientDetail() {
           {[
             { label: 'Total Earnings', value: `$${client.totalEarnings.toLocaleString()}`, color: '#6f4bd8' },
             { label: 'Services Active', value: String(client.servicesActive), color: '#3b82f6' },
-            { label: 'Days with Us', value: String(client.daysWithUs), color: '#ffffff' },
+            { label: 'Days with Us', value: String(client.daysWithUs), color: '#202124' },
             { label: 'Last Activity', value: client.lastActive ? formatDistanceToNow(new Date(client.lastActive), { addSuffix: false }) : 'Never', color: '#94a3b8' },
           ].map(stat => (
             <div key={stat.label}>
