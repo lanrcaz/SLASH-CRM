@@ -57,7 +57,7 @@ const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 /*  Status config                                                      */
 /* ------------------------------------------------------------------ */
 const statusConfig: Record<ClientStatus, { bg: string; text: string; border: string }> = {
-  Active:       { bg: 'rgba(126,234,87,0.15)',  text: '#7eea57', border: '1px solid rgba(126,234,87,0.3)' },
+  Active:       { bg: 'rgba(111,75,216,0.15)',  text: '#6f4bd8', border: '1px solid rgba(111,75,216,0.3)' },
   Onboarding:   { bg: 'rgba(59,130,246,0.15)',  text: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)' },
   Offboarding:  { bg: 'rgba(245,158,11,0.15)',  text: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)' },
   Churned:      { bg: 'rgba(239,68,68,0.15)',   text: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' },
@@ -83,15 +83,15 @@ function StatusBadge({ status }: { status: ClientStatus }) {
 /*  Avatar                                                             */
 /* ------------------------------------------------------------------ */
 function ClientAvatar({ initials, size = 40 }: { initials: string; size?: number }) {
-  const hue = initials.charCodeAt(0) * 137.5 % 360;
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-white shrink-0"
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8] shrink-0"
       style={{
         width: size,
         height: size,
-        background: `linear-gradient(135deg, hsl(${hue}, 60%, 45%), hsl(${hue + 40}, 60%, 35%))`,
-        fontSize: size * 0.4,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+        fontSize: size * 0.38,
       }}
     >
       {initials}
@@ -107,12 +107,12 @@ function HealthScoreRing({ value, size = 48 }: { value: number; size?: number })
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (value / 100) * circumference;
-  const color = value >= 80 ? '#7eea57' : value >= 50 ? '#f59e0b' : '#ef4444';
+  const color = value >= 80 ? '#6f4bd8' : value >= 50 ? '#f59e0b' : '#ef4444';
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#1c2960" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#e4e6eb" strokeWidth={stroke} />
         <motion.circle
           cx={size / 2}
           cy={size / 2}
@@ -127,7 +127,7 @@ function HealthScoreRing({ value, size = 48 }: { value: number; size?: number })
           transition={{ duration: 1, ease: easeOutExpo }}
         />
       </svg>
-      <span className="absolute text-[13px] font-semibold text-white">{value}</span>
+      <span className="absolute text-[13px] font-semibold text-slate-900">{value}</span>
     </div>
   );
 }
@@ -169,20 +169,20 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo }}
-          className="rounded-2xl p-6"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl p-6"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Overview</h3>
-            <span className="text-[13px] text-[#7eea57] cursor-pointer hover:underline">View Full &rarr;</span>
+            <h3 className="text-lg font-semibold text-slate-900" >Earnings Overview</h3>
+            <span className="text-[13px] text-[#6f4bd8] cursor-pointer hover:underline">View Full &rarr;</span>
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-[#64748b] mb-1">Total Earned</p>
-              <p className="text-3xl font-medium text-[#7eea57]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+              <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500 mb-1">Total Earned</p>
+              <p className="text-3xl font-medium text-[#6f4bd8]" >
                 ${totalEarned.toLocaleString()}
               </p>
-              <p className="flex items-center gap-1 mt-1 text-[13px] text-[#7eea57]">
+              <p className="flex items-center gap-1 mt-1 text-[13px] text-[#6f4bd8]">
                 <TrendingUp className="h-3.5 w-3.5" />+$8,400 this month
               </p>
             </div>
@@ -191,11 +191,11 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="ovGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#7eea57" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#7eea57" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#6f4bd8" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#6f4bd8" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Area type="monotone" dataKey="value" stroke="#7eea57" strokeWidth={2} fill="url(#ovGrad)" />
+                  <Area type="monotone" dataKey="value" stroke="#6f4bd8" strokeWidth={2} fill="url(#ovGrad)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -207,26 +207,26 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.1 }}
-          className="rounded-2xl p-6"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl p-6"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Active Services</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4" >Active Services</h3>
           <div className="space-y-4">
             {clientServices.map(svc => (
               <div key={svc.id} className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-[#162044] flex items-center justify-center">
-                  <Target className="h-4 w-4 text-[#7eea57]" />
+                <div className="h-10 w-10 rounded-full bg-[#ffffff] flex items-center justify-center">
+                  <Target className="h-4 w-4 text-[#6f4bd8]" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-[15px] font-medium text-white">{svc.name}</p>
+                  <p className="text-[15px] font-medium text-slate-900">{svc.name}</p>
                 </div>
                 <StatusBadge status="Active" />
-                <span className="text-[13px] text-[#7eea57] font-medium">${svc.price?.toLocaleString()}/mo</span>
-                <span className="text-[13px] text-[#64748b]">Since {svc.startedDate ? format(new Date(svc.startedDate), 'MMM yyyy') : 'N/A'}</span>
+                <span className="text-[13px] text-[#6f4bd8] font-medium">${svc.price?.toLocaleString()}/mo</span>
+                <span className="text-[13px] text-slate-500">Since {svc.startedDate ? format(new Date(svc.startedDate), 'MMM yyyy') : 'N/A'}</span>
               </div>
             ))}
             {clientServices.length === 0 && (
-              <p className="text-[13px] text-[#64748b]">No active services</p>
+              <p className="text-[13px] text-slate-500">No active services</p>
             )}
           </div>
         </motion.div>
@@ -236,10 +236,10 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.2 }}
-          className="rounded-2xl p-6"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl p-6"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Quick Actions</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4" >Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
             {[
               { label: 'Send Message', icon: Mail },
@@ -253,7 +253,7 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
                   'flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-medium transition-all border',
                   action.warn
                     ? 'text-[#f59e0b] border-[rgba(245,158,11,0.3)] hover:bg-[rgba(245,158,11,0.05)]'
-                    : 'text-[#94a3b8] border-[rgba(255,255,255,0.1)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'
+                    : 'text-slate-400 border-slate-200 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)]'
                 )}
               >
                 <action.icon className="h-4 w-4" />
@@ -269,28 +269,28 @@ function OverviewTab({ client }: { client: NonNullable<ReturnType<typeof getClie
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.15 }}
-        className="rounded-2xl p-6 h-fit"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl p-6 h-fit"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
         <div className="flex items-center gap-2 mb-5">
-          <Activity className="h-4 w-4 text-[#7eea57]" />
-          <h3 className="text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>AI Insights</h3>
+          <Activity className="h-4 w-4 text-[#6f4bd8]" />
+          <h3 className="text-lg font-semibold text-slate-900" >AI Insights</h3>
         </div>
         <div className="space-y-0">
           {[
-            { icon: TrendingUp, color: '#7eea57', title: 'Earnings Trending Up', body: `Client revenue has grown 23% over the last 3 months. On track to hit $${Math.round(totalEarned * 1.25 / 1000)}K by Q3.` },
+            { icon: TrendingUp, color: '#6f4bd8', title: 'Earnings Trending Up', body: `Client revenue has grown 23% over the last 3 months. On track to hit $${Math.round(totalEarned * 1.25 / 1000)}K by Q3.` },
             { icon: Lightbulb, color: '#3b82f6', title: 'Service Opportunity', body: 'Consider offering Social Media Management. Similar clients see 15% revenue uplift.' },
             { icon: Activity, color: '#22c55e', title: `Engagement Score: ${client.healthScore >= 80 ? 'High' : 'Medium'}`, body: `This client is ${client.healthScore >= 80 ? 'highly' : 'moderately'} engaged with a ${client.healthScore}% task completion rate.` },
           ].map((insight, i, arr) => (
             <div
               key={insight.title}
-              className={cn('py-4', i < arr.length - 1 && 'border-b', 'border-[rgba(255,255,255,0.04)]')}
+              className={cn('py-4', i < arr.length - 1 && 'border-b', 'border-slate-100')}
             >
               <div className="flex items-center gap-2 mb-1.5">
                 <insight.icon className="h-4 w-4" style={{ color: insight.color }} />
-                <span className="text-[13px] font-semibold text-white">{insight.title}</span>
+                <span className="text-[13px] font-semibold text-slate-900">{insight.title}</span>
               </div>
-              <p className="text-[13px] text-[#94a3b8] leading-relaxed">{insight.body}</p>
+              <p className="text-[13px] text-slate-400 leading-relaxed">{insight.body}</p>
             </div>
           ))}
         </div>
@@ -324,7 +324,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
     { name: 'Other', value: clientEarnings.filter(e => !['Service Fee', 'Ad Revenue', 'Referral'].includes(e.source)).reduce((s, e) => s + e.amount, 0) },
   ].filter(d => d.value > 0);
 
-  const COLORS = ['#7eea57', '#3b82f6', '#8b5cf6', '#f59e0b'];
+  const COLORS = ['#6f4bd8', '#3b82f6', '#8b5cf6', '#f59e0b'];
 
   const milestones = [
     { label: '$1K', date: 'Feb 2024', achieved: true },
@@ -345,18 +345,18 @@ function EarningsTab({ clientId }: { clientId: string }) {
         className="grid grid-cols-1 sm:grid-cols-3 gap-4"
       >
         {[
-          { label: 'Total Earnings', value: `$${totalEarnings.toLocaleString()}`, sub: '+$8,400 this month', color: '#7eea57' },
-          { label: 'Total Payouts', value: `$${Math.round(totalPayouts).toLocaleString()}`, sub: '87% paid out', color: '#7eea57' },
+          { label: 'Total Earnings', value: `$${totalEarnings.toLocaleString()}`, sub: '+$8,400 this month', color: '#6f4bd8' },
+          { label: 'Total Payouts', value: `$${Math.round(totalPayouts).toLocaleString()}`, sub: '87% paid out', color: '#6f4bd8' },
           { label: 'Pending', value: `$${pending.toLocaleString()}`, sub: `${clientEarnings.filter(e => e.status === 'Pending').length} pending invoices`, color: '#f59e0b' },
         ].map(stat => (
           <div
             key={stat.label}
-            className="rounded-2xl p-6"
-            style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+            className="rounded-xl p-6"
+            style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
           >
-            <p className="text-[11px] font-medium uppercase tracking-wider text-[#64748b] mb-2">{stat.label}</p>
+            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-500 mb-2">{stat.label}</p>
             <p className="text-3xl font-medium mb-1" style={{ color: stat.color, fontFamily: 'JetBrains Mono, monospace' }}>{stat.value}</p>
-            <p className="text-[13px] text-[#64748b]">{stat.sub}</p>
+            <p className="text-[13px] text-slate-500">{stat.sub}</p>
           </div>
         ))}
       </motion.div>
@@ -366,10 +366,10 @@ function EarningsTab({ clientId }: { clientId: string }) {
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.1 }}
-        className="rounded-2xl p-6"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl p-6"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
-        <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings History</h3>
+        <h3 className="text-lg font-semibold text-slate-900 mb-4" >Earnings History</h3>
         <div className="h-[320px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={monthlyData}>
@@ -383,7 +383,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
               <XAxis dataKey="month" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={v => `$${v / 1000}K`} />
               <Tooltip
-                contentStyle={{ background: '#162044', border: '1px solid #1c2960', borderRadius: 12, color: '#fff' }}
+                contentStyle={{ background: '#ffffff', border: '1px solid #e4e6eb', borderRadius: 12, color: '#fff' }}
                 formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
               />
               <Area type="monotone" dataKey="paid" stroke="#22c55e" strokeWidth={2} fill="url(#paidGrad)" name="Paid" />
@@ -400,10 +400,10 @@ function EarningsTab({ clientId }: { clientId: string }) {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.2 }}
-          className="rounded-2xl p-6"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl p-6"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Revenue Sources</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4" >Revenue Sources</h3>
           <div className="h-[200px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -412,7 +412,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#162044', border: '1px solid #1c2960', borderRadius: 12, color: '#fff' }} formatter={(v: number) => `$${v.toLocaleString()}`} />
+                <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e4e6eb', borderRadius: 12, color: '#fff' }} formatter={(v: number) => `$${v.toLocaleString()}`} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -421,9 +421,9 @@ function EarningsTab({ clientId }: { clientId: string }) {
               <div key={s.name} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[i] }} />
-                  <span className="text-[#94a3b8]">{s.name}</span>
+                  <span className="text-slate-400">{s.name}</span>
                 </div>
-                <span className="text-white font-medium">${s.value.toLocaleString()}</span>
+                <span className="text-slate-900 font-medium">${s.value.toLocaleString()}</span>
               </div>
             ))}
           </div>
@@ -434,16 +434,16 @@ function EarningsTab({ clientId }: { clientId: string }) {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.25 }}
-          className="rounded-2xl overflow-hidden"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl overflow-hidden"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
           <div className="p-6 pb-0">
-            <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Recent Transactions</h3>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4" >Recent Transactions</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">
+                <tr className="text-[11px] font-medium uppercase tracking-wider text-slate-500">
                   <th className="text-left px-6 py-3">Date</th>
                   <th className="text-left px-6 py-3">Source</th>
                   <th className="text-left px-6 py-3">Amount</th>
@@ -458,11 +458,11 @@ function EarningsTab({ clientId }: { clientId: string }) {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: easeOutExpo, delay: i * 0.04 }}
-                    className="border-t border-[rgba(255,255,255,0.04)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+                    className="border-t border-slate-100 hover:bg-[rgba(255,255,255,0.02)] transition-colors"
                   >
-                    <td className="px-6 py-3 text-white">{format(new Date(e.date), 'MMM d, yyyy')}</td>
-                    <td className="px-6 py-3 text-[#94a3b8]">{e.source}</td>
-                    <td className="px-6 py-3 text-white font-medium">${e.amount.toLocaleString()}</td>
+                    <td className="px-6 py-3 text-slate-900">{format(new Date(e.date), 'MMM d, yyyy')}</td>
+                    <td className="px-6 py-3 text-slate-400">{e.source}</td>
+                    <td className="px-6 py-3 text-slate-900 font-medium">${e.amount.toLocaleString()}</td>
                     <td className="px-6 py-3">
                       <span
                         className="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium"
@@ -477,7 +477,7 @@ function EarningsTab({ clientId }: { clientId: string }) {
                         {e.status}
                       </span>
                     </td>
-                    <td className="px-6 py-3 text-[#94a3b8]">{e.campaign}</td>
+                    <td className="px-6 py-3 text-slate-400">{e.campaign}</td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -491,15 +491,15 @@ function EarningsTab({ clientId }: { clientId: string }) {
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.3 }}
-        className="rounded-2xl p-6"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl p-6"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
-        <h3 className="text-lg font-semibold text-white mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Earnings Milestones</h3>
+        <h3 className="text-lg font-semibold text-slate-900 mb-6" >Earnings Milestones</h3>
         <div className="relative flex items-center justify-between px-4">
           {/* Connector line */}
-          <div className="absolute top-4 left-8 right-8 h-0.5 bg-[#1c2960]" />
+          <div className="absolute top-4 left-8 right-8 h-0.5 bg-[#e4e6eb]" />
           <div
-            className="absolute top-4 left-8 h-0.5 bg-[#7eea57]"
+            className="absolute top-4 left-8 h-0.5 bg-[#6f4bd8]"
             style={{ width: `${(milestones.filter(m => m.achieved).length / (milestones.length - 1)) * 100}%` }}
           />
           {milestones.map((m, i) => (
@@ -513,14 +513,14 @@ function EarningsTab({ clientId }: { clientId: string }) {
               <div
                 className="h-8 w-8 rounded-full flex items-center justify-center"
                 style={{
-                  background: m.achieved ? '#7eea57' : '#1c2960',
+                  background: m.achieved ? '#6f4bd8' : '#e4e6eb',
                   border: m.achieved ? 'none' : '2px solid #64748b',
                 }}
               >
-                {m.achieved ? <Check className="h-4 w-4 text-[#0a0e27]" /> : <span className="text-[11px] text-[#64748b]">$</span>}
+                {m.achieved ? <Check className="h-4 w-4 text-[#ffffff]" /> : <span className="text-[11px] text-slate-500">$</span>}
               </div>
-              <span className="text-[13px] font-medium text-white">{m.label}</span>
-              <span className="text-[11px] text-[#64748b]">{m.date}</span>
+              <span className="text-[13px] font-medium text-slate-900">{m.label}</span>
+              <span className="text-[11px] text-slate-500">{m.date}</span>
             </motion.div>
           ))}
         </div>
@@ -554,36 +554,36 @@ function OnboardingTab({ clientId }: { clientId: string }) {
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo }}
-        className="rounded-2xl p-6"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl p-6"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
         <div className="flex flex-wrap items-center gap-6">
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Status</span>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Status</span>
             <div className="mt-1"><StatusBadge status="Active" /></div>
           </div>
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Duration</span>
-            <p className="text-[15px] text-white mt-1">23 days <span className="text-[#64748b]">(AI predicted: 25 days)</span></p>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Duration</span>
+            <p className="text-[15px] text-slate-900 mt-1">23 days <span className="text-slate-500">(AI predicted: 25 days)</span></p>
           </div>
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Timeline</span>
-            <p className="text-[15px] text-white mt-1">Jan 15, 2024 &rarr; Feb 7, 2024</p>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Timeline</span>
+            <p className="text-[15px] text-slate-900 mt-1">Jan 15, 2024 &rarr; Feb 7, 2024</p>
           </div>
           <div>
-            <span className="text-[11px] font-medium uppercase tracking-wider text-[#64748b]">Tasks</span>
-            <p className="text-[15px] text-white mt-1">{totalCompleted}/{totalSteps} completed</p>
+            <span className="text-[11px] font-medium uppercase tracking-wider text-slate-500">Tasks</span>
+            <p className="text-[15px] text-slate-900 mt-1">{totalCompleted}/{totalSteps} completed</p>
           </div>
         </div>
 
         {/* Overall progress */}
         <div className="mt-5">
-          <div className="h-2 w-full rounded-full bg-[#1c2960] overflow-hidden">
+          <div className="h-2 w-full rounded-full bg-[#e4e6eb] overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${totalSteps > 0 ? (totalCompleted / totalSteps) * 100 : 0}%` }}
               transition={{ duration: 0.8, ease: easeOutExpo, delay: 0.3 }}
-              className="h-full rounded-full bg-[#7eea57]"
+              className="h-full rounded-full bg-[#6f4bd8]"
             />
           </div>
         </div>
@@ -602,8 +602,8 @@ function OnboardingTab({ clientId }: { clientId: string }) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, ease: easeOutExpo, delay: i * 0.1 }}
-              className="rounded-2xl overflow-hidden"
-              style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+              className="rounded-xl overflow-hidden"
+              style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
             >
               <button
                 onClick={() => setExpandedPhase(isExpanded ? null : phase)}
@@ -612,21 +612,21 @@ function OnboardingTab({ clientId }: { clientId: string }) {
                 <div
                   className="h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold shrink-0"
                   style={{
-                    background: progress === 100 ? '#7eea57' : '#162044',
-                    color: progress === 100 ? '#0a0e27' : '#fff',
-                    border: progress === 100 ? 'none' : '1px solid #1c2960',
+                    background: progress === 100 ? '#6f4bd8' : '#ffffff',
+                    color: progress === 100 ? '#ffffff' : '#202124',
+                    border: progress === 100 ? 'none' : '1px solid #e4e6eb',
                   }}
                 >
                   {progress === 100 ? <Check className="h-4 w-4" /> : phase}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3">
-                    <span className="text-[15px] font-semibold text-white">{phaseNames[i]}</span>
+                    <span className="text-[15px] font-semibold text-slate-900">{phaseNames[i]}</span>
                     {progress === 100 && <StatusBadge status="Active" />}
                   </div>
                 </div>
-                <span className="text-[13px] text-[#64748b]">{progress}%</span>
-                <ChevronDown className={cn('h-4 w-4 text-[#64748b] transition-transform', isExpanded && 'rotate-180')} />
+                <span className="text-[13px] text-slate-500">{progress}%</span>
+                <ChevronDown className={cn('h-4 w-4 text-slate-500 transition-transform', isExpanded && 'rotate-180')} />
               </button>
 
               <AnimatePresence>
@@ -648,19 +648,19 @@ function OnboardingTab({ clientId }: { clientId: string }) {
                           <div
                             className={cn(
                               'h-5 w-5 rounded-full flex items-center justify-center shrink-0',
-                              step.completed ? 'bg-[#7eea57]' : 'bg-[#1c2960] border border-[#64748b]'
+                              step.completed ? 'bg-[#6f4bd8]' : 'bg-[#e4e6eb] border border-[#64748b]'
                             )}
                           >
-                            {step.completed && <Check className="h-3 w-3 text-[#0a0e27]" />}
+                            {step.completed && <Check className="h-3 w-3 text-[#ffffff]" />}
                           </div>
-                          <span className={cn('text-[13px] flex-1', step.completed ? 'text-[#94a3b8] line-through' : 'text-white')}>{step.title}</span>
+                          <span className={cn('text-[13px] flex-1', step.completed ? 'text-slate-400 line-through' : 'text-slate-900')}>{step.title}</span>
                           {step.completedDate && (
-                            <span className="text-[11px] text-[#475569]">{format(new Date(step.completedDate), 'MMM d')}</span>
+                            <span className="text-[11px] text-slate-600">{format(new Date(step.completedDate), 'MMM d')}</span>
                           )}
                         </div>
                       ))}
                       {phaseStepsList.length === 0 && (
-                        <p className="text-[13px] text-[#64748b] py-2">No tasks in this phase</p>
+                        <p className="text-[13px] text-slate-500 py-2">No tasks in this phase</p>
                       )}
                     </div>
                   </motion.div>
@@ -688,29 +688,29 @@ function ServicesTab({ clientId }: { clientId: string }) {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: i * 0.1 }}
-          className="rounded-2xl p-6"
-          style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+          className="rounded-xl p-6"
+          style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         >
-          <div className="h-10 w-10 rounded-full bg-[rgba(126,234,87,0.15)] flex items-center justify-center mb-4">
-            <Target className="h-5 w-5 text-[#7eea57]" />
+          <div className="h-10 w-10 rounded-full bg-[rgba(111,75,216,0.15)] flex items-center justify-center mb-4">
+            <Target className="h-5 w-5 text-[#6f4bd8]" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{svc.name}</h3>
-          <p className="text-[13px] text-[#94a3b8] mb-4 line-clamp-2">{svc.description}</p>
-          <p className="text-[15px] font-semibold text-[#7eea57] mb-3" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+          <h3 className="text-lg font-semibold text-slate-900 mb-1" >{svc.name}</h3>
+          <p className="text-[13px] text-slate-400 mb-4 line-clamp-2">{svc.description}</p>
+          <p className="text-[15px] font-semibold text-[#6f4bd8] mb-3" >
             ${svc.price?.toLocaleString()}/mo
           </p>
           <div className="flex items-center justify-between">
             <StatusBadge status="Active" />
             <span className="text-[13px] text-[#3b82f6] cursor-pointer hover:underline">Manage</span>
           </div>
-          <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.04)] space-y-1">
-            <p className="text-[12px] text-[#64748b]">Started {svc.startedDate ? format(new Date(svc.startedDate), 'MMM yyyy') : 'N/A'}</p>
-            <p className="text-[12px] text-[#64748b]">${svc.totalRevenue?.toLocaleString()} total revenue</p>
+          <div className="mt-4 pt-4 border-t border-slate-100 space-y-1">
+            <p className="text-[12px] text-slate-500">Started {svc.startedDate ? format(new Date(svc.startedDate), 'MMM yyyy') : 'N/A'}</p>
+            <p className="text-[12px] text-slate-500">${svc.totalRevenue?.toLocaleString()} total revenue</p>
           </div>
         </motion.div>
       ))}
       {clientServices.length === 0 && (
-        <div className="col-span-full text-center py-12 text-[#64748b]">No active services for this client</div>
+        <div className="col-span-full text-center py-12 text-slate-500">No active services for this client</div>
       )}
     </div>
   );
@@ -726,9 +726,9 @@ function ActivityTab({ clientId }: { clientId: string }) {
     email: { icon: Mail, color: '#3b82f6' },
     call: { icon: Phone, color: '#8b5cf6' },
     task: { icon: CheckCircle2, color: '#22c55e' },
-    earning: { icon: DollarSign, color: '#7eea57' },
+    earning: { icon: DollarSign, color: '#6f4bd8' },
     service: { icon: Layers, color: '#f59e0b' },
-    milestone: { icon: TrophyIcon, color: '#7eea57' },
+    milestone: { icon: TrophyIcon, color: '#6f4bd8' },
     onboarding: { icon: Rocket, color: '#3b82f6' },
     review: { icon: Activity, color: '#8b5cf6' },
   };
@@ -738,8 +738,8 @@ function ActivityTab({ clientId }: { clientId: string }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="rounded-2xl p-6"
-      style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+      className="rounded-xl p-6"
+      style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
     >
       <div className="space-y-0">
         {activities.map((act, i) => {
@@ -755,28 +755,28 @@ function ActivityTab({ clientId }: { clientId: string }) {
             >
               {/* Timeline line */}
               {i < activities.length - 1 && (
-                <div className="absolute left-[18px] top-10 bottom-0 w-0.5 bg-[#1c2960]" />
+                <div className="absolute left-[18px] top-10 bottom-0 w-0.5 bg-[#e4e6eb]" />
               )}
               {/* Dot */}
               <div
                 className="h-4 w-4 rounded-full shrink-0 mt-1 z-10 flex items-center justify-center"
                 style={{ background: cfg.color }}
               >
-                <Icon className="h-2.5 w-2.5 text-[#0a0e27]" />
+                <Icon className="h-2.5 w-2.5 text-[#ffffff]" />
               </div>
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <p className="text-[15px] text-white font-medium">{act.description}</p>
+                <p className="text-[15px] text-slate-900 font-medium">{act.description}</p>
                 <div className="flex items-center gap-3 mt-1">
-                  <span className="text-[11px] text-[#475569]">{formatDistanceToNow(new Date(act.timestamp), { addSuffix: true })}</span>
-                  <span className="text-[11px] text-[#475569]">by {act.user}</span>
+                  <span className="text-[11px] text-slate-600">{formatDistanceToNow(new Date(act.timestamp), { addSuffix: true })}</span>
+                  <span className="text-[11px] text-slate-600">by {act.user}</span>
                 </div>
               </div>
             </motion.div>
           );
         })}
         {activities.length === 0 && (
-          <p className="text-center py-8 text-[#64748b]">No activity recorded yet</p>
+          <p className="text-center py-8 text-slate-500">No activity recorded yet</p>
         )}
       </div>
     </motion.div>
@@ -803,12 +803,12 @@ function DocumentsTab({ clientId }: { clientId: string }) {
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo }}
-        className="rounded-2xl p-8 text-center border-2 border-dashed cursor-pointer hover:border-[#7eea57] hover:bg-[rgba(126,234,87,0.02)] transition-all"
-        style={{ background: '#0f1535', borderColor: '#1c2960' }}
+        className="rounded-xl p-8 text-center border-2 border-dashed cursor-pointer hover:border-[#6f4bd8] hover:bg-[rgba(111,75,216,0.02)] transition-all"
+        style={{ background: '#ffffff', borderColor: '#e4e6eb' }}
       >
-        <Upload className="h-8 w-8 text-[#64748b] mx-auto mb-3" />
-        <p className="text-[15px] text-white font-medium mb-1">Drop files here or click to upload</p>
-        <p className="text-[13px] text-[#64748b]">PDF, DOC, XLS, ZIP up to 50MB</p>
+        <Upload className="h-8 w-8 text-slate-500 mx-auto mb-3" />
+        <p className="text-[15px] text-slate-900 font-medium mb-1">Drop files here or click to upload</p>
+        <p className="text-[13px] text-slate-500">PDF, DOC, XLS, ZIP up to 50MB</p>
       </motion.div>
 
       {/* File list */}
@@ -816,11 +816,11 @@ function DocumentsTab({ clientId }: { clientId: string }) {
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.1 }}
-        className="rounded-2xl overflow-hidden"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl overflow-hidden"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
         <div className="p-6 pb-0">
-          <h3 className="text-lg font-semibold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Files</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4" >Files</h3>
         </div>
         <div className="divide-y divide-[rgba(255,255,255,0.04)]">
           {docs.map((doc, i) => {
@@ -840,20 +840,20 @@ function DocumentsTab({ clientId }: { clientId: string }) {
                   {t.ext}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[15px] text-white font-medium truncate">{doc.name}</p>
+                  <p className="text-[15px] text-slate-900 font-medium truncate">{doc.name}</p>
                   <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-[11px] text-[#64748b]">{doc.size}</span>
-                    <span className="text-[11px] text-[#64748b]">{format(new Date(doc.date), 'MMM d, yyyy')}</span>
+                    <span className="text-[11px] text-slate-500">{doc.size}</span>
+                    <span className="text-[11px] text-slate-500">{format(new Date(doc.date), 'MMM d, yyyy')}</span>
                   </div>
                 </div>
-                <span className="text-[11px] text-[#475569]">{doc.uploadedBy}</span>
-                <Download className="h-4 w-4 text-[#64748b] hover:text-white transition-colors" />
+                <span className="text-[11px] text-slate-600">{doc.uploadedBy}</span>
+                <Download className="h-4 w-4 text-slate-500 hover:text-slate-900 transition-colors" />
               </motion.div>
             );
           })}
         </div>
         {docs.length === 0 && (
-          <p className="text-center py-8 text-[#64748b]">No documents uploaded yet</p>
+          <p className="text-center py-8 text-slate-500">No documents uploaded yet</p>
         )}
       </motion.div>
     </div>
@@ -891,12 +891,12 @@ export default function ClientDetail() {
 
   if (!client) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0e27' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#ffffff' }}>
         <div className="text-center">
-          <p className="text-white text-lg mb-4">Client not found</p>
+          <p className="text-slate-900 text-lg mb-4">Client not found</p>
           <button
             onClick={() => navigate('/app/clients')}
-            className="text-[#7eea57] hover:underline"
+            className="text-[#6f4bd8] hover:underline"
           >
             Back to Clients
           </button>
@@ -911,15 +911,15 @@ export default function ClientDetail() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: easeOutExpo }}
       className="min-h-screen"
-      style={{ background: '#0a0e27', fontFamily: 'Inter, sans-serif' }}
+      style={{ background: '#ffffff', fontFamily: 'Inter, sans-serif' }}
     >
       {/* Profile Header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: easeOutExpo }}
-        className="mx-6 lg:mx-8 mt-6 rounded-2xl p-6 lg:p-8"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="mx-6 lg:mx-8 mt-6 rounded-xl p-6 lg:p-8"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
         {/* Top row */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -927,7 +927,7 @@ export default function ClientDetail() {
           <div className="flex items-center gap-5">
             <button
               onClick={() => navigate('/app/clients')}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all lg:hidden"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] transition-all lg:hidden"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -935,23 +935,23 @@ export default function ClientDetail() {
             <div>
               <div className="flex items-center gap-3">
                 <h1
-                  className="text-4xl font-semibold text-white"
+                  className="text-4xl font-semibold text-slate-900"
                   style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}
                 >
                   {client.company}
                 </h1>
                 <button
                   onClick={() => navigate('/app/clients')}
-                  className="hidden lg:block p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
+                  className="hidden lg:block p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] transition-all"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
               </div>
-              <p className="text-[15px] text-[#94a3b8] mt-0.5">{client.email}</p>
+              <p className="text-[15px] text-slate-400 mt-0.5">{client.email}</p>
               <div className="flex flex-wrap items-center gap-2 mt-2">
                 <StatusBadge status={client.status} />
                 {client.joinDate && (
-                  <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-[#162044] text-[#94a3b8]">
+                  <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-[#ffffff] text-slate-400">
                     Since {format(new Date(client.joinDate), 'MMM yyyy')}
                   </span>
                 )}
@@ -968,31 +968,31 @@ export default function ClientDetail() {
           <div className="flex items-center gap-3">
             <div className="flex flex-col items-center gap-1 mr-2">
               <HealthScoreRing value={client.healthScore} size={48} />
-              <span className="text-[10px] text-[#64748b]">Health</span>
+              <span className="text-[10px] text-slate-500">Health</span>
             </div>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] border border-slate-200 transition-all">
               <Pencil className="h-4 w-4" />
             </button>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] border border-slate-200 transition-all">
               <MessageSquare className="h-4 w-4" />
             </button>
-            <button className="p-2.5 rounded-xl text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+            <button className="p-2.5 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] border border-slate-200 transition-all">
               <Download className="h-4 w-4" />
             </button>
           </div>
         </div>
 
         {/* Bottom row: stat pills */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6" style={{ borderTop: '1px solid #f1f3f5' }}>
           {[
-            { label: 'Total Earnings', value: `$${client.totalEarnings.toLocaleString()}`, color: '#7eea57' },
+            { label: 'Total Earnings', value: `$${client.totalEarnings.toLocaleString()}`, color: '#6f4bd8' },
             { label: 'Services Active', value: String(client.servicesActive), color: '#3b82f6' },
-            { label: 'Days with Us', value: String(client.daysWithUs), color: '#ffffff' },
+            { label: 'Days with Us', value: String(client.daysWithUs), color: '#202124' },
             { label: 'Last Activity', value: client.lastActive ? formatDistanceToNow(new Date(client.lastActive), { addSuffix: false }) : 'Never', color: '#94a3b8' },
           ].map(stat => (
             <div key={stat.label}>
               <p className="text-[15px] font-semibold" style={{ color: stat.color }}>{stat.value}</p>
-              <p className="text-[13px] text-[#64748b] mt-0.5">{stat.label}</p>
+              <p className="text-[13px] text-slate-500 mt-0.5">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -1001,7 +1001,7 @@ export default function ClientDetail() {
       {/* Tab Navigation */}
       <div
         className="sticky top-0 z-40 mt-6 mx-0 px-6 lg:px-8"
-        style={{ background: '#0a0e27', borderBottom: '1px solid #1c2960' }}
+        style={{ background: '#ffffff', borderBottom: '1px solid #e4e6eb' }}
       >
         <div className="flex gap-1 overflow-x-auto">
           {tabs.map(tab => {
@@ -1013,7 +1013,7 @@ export default function ClientDetail() {
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
                   'relative flex items-center gap-2 px-5 py-3 text-sm font-medium whitespace-nowrap transition-all rounded-t-lg',
-                  isActive ? 'text-white' : 'text-[#64748b] hover:text-[#cbd5e1]'
+                  isActive ? 'text-slate-900' : 'text-slate-500 hover:text-[#cbd5e1]'
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -1021,7 +1021,7 @@ export default function ClientDetail() {
                 {tab.badge && (
                   <span className={cn(
                     'text-[11px] px-1.5 py-0.5 rounded-full',
-                    isActive ? 'bg-[#162044] text-[#94a3b8]' : 'bg-[#0f1535] text-[#475569]'
+                    isActive ? 'bg-[#ffffff] text-slate-400' : 'bg-[#ffffff] text-slate-600'
                   )}>
                     {tab.badge}
                   </span>
@@ -1029,7 +1029,7 @@ export default function ClientDetail() {
                 {isActive && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#7eea57]"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#6f4bd8]"
                     transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                   />
                 )}

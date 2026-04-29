@@ -43,12 +43,14 @@ import { Switch } from '@/components/ui/switch';
 /* ------------------------------------------------------------------ */
 /*  Status config                                                      */
 /* ------------------------------------------------------------------ */
+// Monochrome violet ramp for client lifecycle states. Churned uses a neutral
+// grey to communicate "out" without introducing red into the palette.
 const statusConfig: Record<ClientStatus, { bg: string; text: string; border: string; dot: string }> = {
-  Active:       { bg: 'rgba(126,234,87,0.15)',  text: '#7eea57', border: '1px solid rgba(126,234,87,0.3)',  dot: '#7eea57' },
-  Onboarding:   { bg: 'rgba(59,130,246,0.15)',  text: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)',  dot: '#3b82f6' },
-  Offboarding:  { bg: 'rgba(245,158,11,0.15)',  text: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)',  dot: '#f59e0b' },
-  Churned:      { bg: 'rgba(239,68,68,0.15)',   text: '#ef4444', border: '1px solid rgba(239,68,68,0.3)',   dot: '#ef4444' },
-  Prospect:     { bg: 'rgba(139,92,246,0.15)',  text: '#8b5cf6', border: '1px solid rgba(139,92,246,0.3)',  dot: '#8b5cf6' },
+  Active:       { bg: '#f2efff', text: '#4b3bb4', border: '1px solid #d8cffa', dot: '#6f4bd8' },
+  Onboarding:   { bg: '#f6f4fd', text: '#6b62a3', border: '1px solid #e3dff5', dot: '#a89aea' },
+  Offboarding:  { bg: '#f3f4f7', text: '#4a4d55', border: '1px solid #dfe2e8', dot: '#9aa0a6' },
+  Churned:      { bg: '#f3f4f7', text: '#777b84', border: '1px solid #dfe2e8', dot: '#c2c6cd' },
+  Prospect:     { bg: '#fbfaff', text: '#7a6dc2', border: '1px solid #ebe6f9', dot: '#cdc4f1' },
 };
 
 const statusOptions: ClientStatus[] = ['Active', 'Onboarding', 'Offboarding', 'Churned', 'Prospect'];
@@ -73,7 +75,7 @@ function StatusBadge({ status }: { status: ClientStatus }) {
 /* ------------------------------------------------------------------ */
 /*  Mini sparkline (SVG)                                               */
 /* ------------------------------------------------------------------ */
-function MiniSparkline({ data, color = '#7eea57' }: { data: number[]; color?: string }) {
+function MiniSparkline({ data, color = '#6f4bd8' }: { data: number[]; color?: string }) {
   const w = 60, h = 24;
   const max = Math.max(...data, 1);
   const min = Math.min(...data, 0);
@@ -90,15 +92,15 @@ function MiniSparkline({ data, color = '#7eea57' }: { data: number[]; color?: st
 /*  Avatar                                                             */
 /* ------------------------------------------------------------------ */
 function ClientAvatar({ initials, size = 40 }: { initials: string; size?: number }) {
-  const hue = initials.charCodeAt(0) * 137.5 % 360;
   return (
     <div
-      className="flex items-center justify-center rounded-full font-semibold text-white shrink-0"
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8] shrink-0"
       style={{
         width: size,
         height: size,
-        background: `linear-gradient(135deg, hsl(${hue}, 60%, 45%), hsl(${hue + 40}, 60%, 35%))`,
-        fontSize: size * 0.4,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+        fontSize: size * 0.38,
       }}
     >
       {initials}
@@ -158,15 +160,15 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
         className="max-w-[560px] p-0 gap-0 overflow-hidden"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
         showCloseButton={false}
       >
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <DialogTitle className="text-xl font-semibold text-slate-900" >
               {success ? '' : 'Add New Client'}
             </DialogTitle>
-            <button onClick={handleClose} className="text-[#94a3b8] hover:text-white transition-colors">
+            <button onClick={handleClose} className="text-slate-400 hover:text-slate-900 transition-colors">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -186,12 +188,12 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 animate={{ scale: [0, 1.2, 1] }}
                 transition={{ duration: 0.5, ease: easeOutExpo }}
               >
-                <CheckCircle2 className="h-12 w-12 text-[#7eea57] mb-4" />
+                <CheckCircle2 className="h-12 w-12 text-[#6f4bd8] mb-4" />
               </motion.div>
-              <h3 className="text-lg font-semibold text-white mb-2" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2" >
                 Client added successfully!
               </h3>
-              <p className="text-sm text-[#94a3b8] text-center">
+              <p className="text-sm text-slate-400 text-center">
                 {form.company || 'New client'} has been added{sendInvite ? ' and an onboarding invitation has been sent.' : '.'}
               </p>
             </motion.div>
@@ -210,19 +212,19 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                       <div
                         className={cn(
                           'h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold transition-all',
-                          i < step && 'bg-[#7eea57] text-[#0a0e27]',
-                          i === step && 'bg-[#3b82f6] text-white',
-                          i > step && 'bg-[#1c2960] text-[#64748b]'
+                          i < step && 'bg-[#6f4bd8] text-[#ffffff]',
+                          i === step && 'bg-[#3b82f6] text-slate-900',
+                          i > step && 'bg-[#e4e6eb] text-slate-500'
                         )}
                       >
                         {i < step ? <Check className="h-4 w-4" /> : i + 1}
                       </div>
-                      <span className={cn('text-xs', i === step ? 'text-white font-medium' : 'text-[#64748b]')}>
+                      <span className={cn('text-xs', i === step ? 'text-slate-900 font-medium' : 'text-slate-500')}>
                         {s}
                       </span>
                     </div>
                     {i < steps.length - 1 && (
-                      <div className={cn('h-0.5 w-12 -mt-5', i < step ? 'bg-[#7eea57]' : 'bg-[#1c2960]')} />
+                      <div className={cn('h-0.5 w-12 -mt-5', i < step ? 'bg-[#6f4bd8]' : 'bg-[#e4e6eb]')} />
                     )}
                   </div>
                 ))}
@@ -241,49 +243,49 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                   {step === 0 && (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-xs font-medium text-[#94a3b8] mb-1.5">Full Name</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">Full Name</label>
                         <Input
                           value={form.name}
                           onChange={e => setForm({ ...form, name: e.target.value })}
                           placeholder="John Doe"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-[#94a3b8] mb-1.5">Email</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">Email</label>
                         <Input
                           value={form.email}
                           onChange={e => setForm({ ...form, email: e.target.value })}
                           placeholder="john@company.com"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-[#94a3b8] mb-1.5">Company</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">Company</label>
                         <Input
                           value={form.company}
                           onChange={e => setForm({ ...form, company: e.target.value })}
                           placeholder="Acme Corp"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-[#94a3b8] mb-1.5">Phone</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">Phone</label>
                         <Input
                           value={form.phone}
                           onChange={e => setForm({ ...form, phone: e.target.value })}
                           placeholder="+1 (555) 000-0000"
-                          className="bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+                          className="bg-[#ffffff] border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-[#94a3b8] mb-1.5">Notes</label>
+                        <label className="block text-xs font-medium text-slate-400 mb-1.5">Notes</label>
                         <textarea
                           value={form.notes}
                           onChange={e => setForm({ ...form, notes: e.target.value })}
                           placeholder="Additional notes..."
                           rows={3}
-                          className="w-full rounded-md bg-[#162044] border border-[#1c2960] text-white placeholder:text-[#64748b] p-3 text-sm outline-none focus-visible:border-[#7eea57] focus-visible:ring-1 focus-visible:ring-[#7eea57]/30 resize-none"
+                          className="w-full rounded-md bg-[#ffffff] border border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 p-3 text-sm outline-none focus-visible:border-[#6f4bd8] focus-visible:ring-1 focus-visible:ring-[#6f4bd8]/30 resize-none"
                         />
                       </div>
                     </div>
@@ -301,17 +303,17 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                             className={cn(
                               'flex flex-col items-start gap-2 p-4 rounded-xl border transition-all text-left',
                               selected
-                                ? 'border-[#7eea57] bg-[rgba(126,234,87,0.05)]'
-                                : 'border-[#1c2960] bg-[#162044] hover:border-[rgba(255,255,255,0.1)]'
+                                ? 'border-[#6f4bd8] bg-[rgba(111,75,216,0.05)]'
+                                : 'border-[#e4e6eb] bg-[#ffffff] hover:border-slate-200'
                             )}
                           >
                             <div className="flex items-center gap-2">
-                              <Icon className={cn('h-4 w-4', selected ? 'text-[#7eea57]' : 'text-[#64748b]')} />
-                              <span className={cn('text-sm font-medium', selected ? 'text-[#7eea57]' : 'text-white')}>
+                              <Icon className={cn('h-4 w-4', selected ? 'text-[#6f4bd8]' : 'text-slate-500')} />
+                              <span className={cn('text-sm font-medium', selected ? 'text-[#6f4bd8]' : 'text-slate-900')}>
                                 {svc.name}
                               </span>
                             </div>
-                            <span className="text-xs text-[#64748b]">{svc.desc}</span>
+                            <span className="text-xs text-slate-500">{svc.desc}</span>
                           </button>
                         );
                       })}
@@ -320,19 +322,19 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
 
                   {step === 2 && (
                     <div className="space-y-6">
-                      <div className="flex items-center justify-between p-4 rounded-xl bg-[#162044] border border-[#1c2960]">
+                      <div className="flex items-center justify-between p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
                         <div>
-                          <p className="text-sm font-medium text-white">Send onboarding invitation email</p>
-                          <p className="text-xs text-[#64748b] mt-0.5">Client will receive a welcome email with login instructions</p>
+                          <p className="text-sm font-medium text-slate-900">Send onboarding invitation email</p>
+                          <p className="text-xs text-slate-500 mt-0.5">Client will receive a welcome email with login instructions</p>
                         </div>
                         <Switch checked={sendInvite} onCheckedChange={setSendInvite} />
                       </div>
                       {sendInvite && (
-                        <div className="p-4 rounded-xl bg-[#0a0e27] border border-[#1c2960]">
-                          <p className="text-xs text-[#64748b] mb-2">Email Preview:</p>
+                        <div className="p-4 rounded-xl bg-[#ffffff] border border-[#e4e6eb]">
+                          <p className="text-xs text-slate-500 mb-2">Email Preview:</p>
                           <div className="space-y-2">
-                            <p className="text-sm text-white font-medium">Welcome to ClientVault!</p>
-                            <p className="text-xs text-[#94a3b8]">
+                            <p className="text-sm text-slate-900 font-medium">Welcome to ClientVault!</p>
+                            <p className="text-xs text-slate-400">
                               Hi {form.name || 'there'},<br /><br />
                               You have been invited to join {form.company || 'our platform'} on ClientVault.
                               Click the link below to set up your account and get started.
@@ -350,7 +352,7 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 {step > 0 && (
                   <button
                     onClick={() => setStep(step - 1)}
-                    className="px-4 py-2 rounded-lg text-sm text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all"
+                    className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] transition-all"
                   >
                     Back
                   </button>
@@ -358,16 +360,16 @@ function AddClientModal({ open, onClose }: { open: boolean; onClose: () => void 
                 {step < 2 ? (
                   <button
                     onClick={() => setStep(step + 1)}
-                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-                    style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+                    style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
                   >
                     Next
                   </button>
                 ) : (
                   <button
                     onClick={handleSubmit}
-                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-                    style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+                    className="px-5 py-2 rounded-lg text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+                    style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
                   >
                     Add Client
                   </button>
@@ -449,7 +451,7 @@ export default function Clients() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: easeOutExpo }}
       className="min-h-screen p-6 lg:p-8"
-      style={{ background: '#0a0e27', fontFamily: 'Inter, sans-serif' }}
+      style={{ background: '#ffffff', fontFamily: 'Inter, sans-serif' }}
     >
       {/* Page Header */}
       <motion.div
@@ -460,18 +462,18 @@ export default function Clients() {
       >
         <div>
           <h1
-            className="text-4xl font-semibold text-white tracking-tight"
+            className="text-4xl font-semibold text-slate-900 tracking-tight"
             style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}
           >
             Clients
           </h1>
-          <div className="flex items-center gap-3 mt-1 text-[15px] text-[#64748b]">
+          <div className="flex items-center gap-3 mt-1 text-[15px] text-slate-500">
             <span className="flex items-center gap-1.5">
               <span className="h-1 w-1 rounded-full bg-[#94a3b8]" />
               {totalClients} total
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1 w-1 rounded-full bg-[#7eea57]" />
+              <span className="h-1 w-1 rounded-full bg-[#6f4bd8]" />
               {activeCount} active
             </span>
             <span className="flex items-center gap-1.5">
@@ -487,13 +489,13 @@ export default function Clients() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:scale-[1.02] transition-all"
-            style={{ boxShadow: '0 0 20px rgba(126,234,87,0.3)' }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:scale-[1.02] transition-all"
+            style={{ boxShadow: '0 0 20px rgba(111,75,216,0.3)' }}
           >
             <Plus className="h-4 w-4" />
             Add Client
           </button>
-          <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] transition-all">
+          <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] border border-slate-200 transition-all">
             <Upload className="h-4 w-4" />
             Import CSV
           </button>
@@ -505,18 +507,18 @@ export default function Clients() {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.05 }}
-        className="rounded-2xl p-5 mb-6"
-        style={{ background: '#0f1535', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="rounded-xl p-5 mb-6"
+        style={{ background: '#ffffff', border: '1px solid #e4e6eb' }}
       >
         <div className="flex flex-wrap items-center gap-4">
           {/* Search */}
           <div className="relative flex-1 min-w-[240px] max-w-[320px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#64748b]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <Input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by name, email, company..."
-              className="pl-9 bg-[#162044] border-[#1c2960] text-white placeholder:text-[#64748b] focus-visible:border-[#7eea57] focus-visible:ring-[#7eea57]/30"
+              className="pl-9 bg-[#ffffff] border-[#e4e6eb] text-slate-900 placeholder:text-slate-500 focus-visible:border-[#6f4bd8] focus-visible:ring-[#6f4bd8]/30"
             />
           </div>
 
@@ -525,14 +527,14 @@ export default function Clients() {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value as ClientStatus | 'All')}
-              className="appearance-none bg-[#162044] border border-[#1c2960] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#7eea57] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-slate-900 text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               <option value="All">All Statuses</option>
               {statusOptions.map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#64748b] pointer-events-none" />
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none" />
           </div>
 
           {/* Sort */}
@@ -540,21 +542,21 @@ export default function Clients() {
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
-              className="appearance-none bg-[#162044] border border-[#1c2960] text-white text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#7eea57] cursor-pointer"
+              className="appearance-none bg-[#ffffff] border border-[#e4e6eb] text-slate-900 text-sm rounded-lg px-3 py-2 pr-8 outline-none focus:border-[#6f4bd8] cursor-pointer"
             >
               {sortOptions.map(s => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#64748b] pointer-events-none" />
+            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none" />
           </div>
 
           {/* Active filter pill */}
           {statusFilter !== 'All' && (
             <button
               onClick={() => setStatusFilter('All')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#7eea57]"
-              style={{ background: 'rgba(126,234,87,0.15)', border: '1px solid rgba(126,234,87,0.3)' }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[#6f4bd8]"
+              style={{ background: 'rgba(111,75,216,0.15)', border: '1px solid rgba(111,75,216,0.3)' }}
             >
               {statusFilter}
               <X className="h-3 w-3" />
@@ -569,7 +571,7 @@ export default function Clients() {
           onClick={() => setViewMode('grid')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'grid' ? 'bg-[#162044] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'grid' ? 'bg-[#ffffff] text-slate-900' : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <LayoutGrid className="h-[18px] w-[18px]" />
@@ -578,7 +580,7 @@ export default function Clients() {
           onClick={() => setViewMode('list')}
           className={cn(
             'p-2 rounded-lg transition-all',
-            viewMode === 'list' ? 'bg-[#162044] text-white' : 'text-[#64748b] hover:text-white'
+            viewMode === 'list' ? 'bg-[#ffffff] text-slate-900' : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <List className="h-[18px] w-[18px]" />
@@ -597,8 +599,8 @@ export default function Clients() {
           >
             {/* Table Header */}
             <div
-              className="hidden lg:grid grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 px-5 py-3 text-xs font-medium uppercase tracking-wider text-[#64748b]"
-              style={{ background: '#0f1535', borderRadius: '16px 16px 0 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+              className="hidden lg:grid grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 px-5 py-3 text-xs font-medium uppercase tracking-wider text-slate-500"
+              style={{ background: '#ffffff', borderRadius: '16px 16px 0 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}
             >
               <span>Client</span>
               <span>Status</span>
@@ -622,10 +624,10 @@ export default function Clients() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: easeOutExpo, delay: i * 0.05 }}
                     onClick={() => handleRowClick(client.id)}
-                    className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 items-center p-5 rounded-2xl cursor-pointer transition-all hover:-translate-y-[1px]"
+                    className="grid grid-cols-1 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_60px] gap-4 items-center p-5 rounded-xl cursor-pointer transition-all hover:-translate-y-[1px]"
                     style={{
-                      background: '#0f1535',
-                      border: '1px solid rgba(255,255,255,0.04)',
+                      background: '#ffffff',
+                      border: '1px solid #f1f3f5',
                     }}
                     onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
                       (e.currentTarget as HTMLElement).style.border = '1px solid rgba(255,255,255,0.1)';
@@ -638,8 +640,8 @@ export default function Clients() {
                     <div className="flex items-center gap-3">
                       <ClientAvatar initials={client.avatar} size={40} />
                       <div>
-                        <p className="text-[15px] font-medium text-white">{client.name}</p>
-                        <p className="text-[13px] text-[#64748b]">{client.email}</p>
+                        <p className="text-[15px] font-medium text-slate-900">{client.name}</p>
+                        <p className="text-[13px] text-slate-500">{client.email}</p>
                       </div>
                     </div>
 
@@ -650,7 +652,7 @@ export default function Clients() {
 
                     {/* Revenue */}
                     <div className="flex items-center gap-3">
-                      <span className="text-[15px] text-white">
+                      <span className="text-[15px] text-slate-900">
                         ${client.mrr.toLocaleString()}
                       </span>
                       {client.mrr > 0 && <MiniSparkline data={sparkData} />}
@@ -661,17 +663,17 @@ export default function Clients() {
                       {client.servicesActive > 0 && (
                         <div className="flex -space-x-1">
                           {Array.from({ length: Math.min(client.servicesActive, 3) }).map((_, j) => (
-                            <div key={j} className="h-7 w-7 rounded-full bg-[#162044] border border-[#0f1535] flex items-center justify-center">
-                              <Target className="h-3 w-3 text-[#64748b]" />
+                            <div key={j} className="h-7 w-7 rounded-full bg-[#ffffff] border border-[#ffffff] flex items-center justify-center">
+                              <Target className="h-3 w-3 text-slate-500" />
                             </div>
                           ))}
                         </div>
                       )}
-                      {client.servicesActive === 0 && <span className="text-[13px] text-[#64748b]">—</span>}
+                      {client.servicesActive === 0 && <span className="text-[13px] text-slate-500">—</span>}
                     </div>
 
                     {/* Last Activity */}
-                    <span className="text-[13px] text-[#64748b]">
+                    <span className="text-[13px] text-slate-500">
                       {client.lastActive ? formatDistanceToNow(new Date(client.lastActive), { addSuffix: true }) : 'Never'}
                     </span>
 
@@ -679,24 +681,24 @@ export default function Clients() {
                     <div onClick={e => e.stopPropagation()}>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="p-2 rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-all">
+                          <button className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.05)] transition-all">
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
-                          className="min-w-[160px] bg-[#162044] border-[#1c2960] text-white"
+                          className="min-w-[160px] bg-[#ffffff] border-[#e4e6eb] text-slate-900"
                         >
-                          <DropdownMenuItem onClick={() => handleRowClick(client.id)} className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem onClick={() => handleRowClick(client.id)} className="text-slate-900 focus:bg-[rgba(255,255,255,0.05)] focus:text-slate-900">
                             View
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-slate-900 focus:bg-[rgba(255,255,255,0.05)] focus:text-slate-900">
                             Edit
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-slate-900 focus:bg-[rgba(255,255,255,0.05)] focus:text-slate-900">
                             Start Offboarding
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-white focus:bg-[rgba(255,255,255,0.05)] focus:text-white">
+                          <DropdownMenuItem className="text-slate-900 focus:bg-[rgba(255,255,255,0.05)] focus:text-slate-900">
                             Export Data
                           </DropdownMenuItem>
                           <DropdownMenuItem className="text-[#ef4444] focus:bg-[rgba(239,68,68,0.1)] focus:text-[#ef4444]">
@@ -727,13 +729,13 @@ export default function Clients() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.5, ease: easeOutExpo, delay: i * 0.08 }}
                 onClick={() => handleRowClick(client.id)}
-                className="relative flex flex-col items-center p-6 rounded-2xl cursor-pointer transition-all hover:-translate-y-1"
+                className="relative flex flex-col items-center p-6 rounded-xl cursor-pointer transition-all hover:-translate-y-1"
                 style={{
-                  background: '#0f1535',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  background: '#ffffff',
+                  border: '1px solid #e4e6eb',
                 }}
                 onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
-                  (e.currentTarget as HTMLElement).style.border = '1px solid rgba(126,234,87,0.2)';
+                  (e.currentTarget as HTMLElement).style.border = '1px solid rgba(111,75,216,0.2)';
                   (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.4)';
                 }}
                 onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
@@ -747,32 +749,32 @@ export default function Clients() {
                 </div>
 
                 <ClientAvatar initials={client.avatar} size={56} />
-                <h3 className="mt-3 text-lg font-semibold text-white" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+                <h3 className="mt-3 text-lg font-semibold text-slate-900" >
                   {client.name}
                 </h3>
-                <p className="text-[13px] text-[#64748b]">{client.company}</p>
+                <p className="text-[13px] text-slate-500">{client.company}</p>
 
-                <div className="w-full h-px my-4" style={{ background: '#1c2960' }} />
+                <div className="w-full h-px my-4" style={{ background: '#e4e6eb' }} />
 
-                <p className="text-xl font-medium text-[#7eea57]" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+                <p className="text-xl font-medium text-[#6f4bd8]" >
                   ${client.mrr.toLocaleString()}
-                  <span className="text-xs text-[#64748b] ml-1">/mo</span>
+                  <span className="text-xs text-slate-500 ml-1">/mo</span>
                 </p>
 
                 <div className="flex items-center gap-2 mt-3">
                   {client.servicesActive > 0 ? (
                     Array.from({ length: Math.min(client.servicesActive, 3) }).map((_, j) => (
-                      <div key={j} className="h-7 w-7 rounded-full bg-[#162044] flex items-center justify-center">
-                        <Target className="h-3 w-3 text-[#64748b]" />
+                      <div key={j} className="h-7 w-7 rounded-full bg-[#ffffff] flex items-center justify-center">
+                        <Target className="h-3 w-3 text-slate-500" />
                       </div>
                     ))
                   ) : (
-                    <span className="text-xs text-[#64748b]">No active services</span>
+                    <span className="text-xs text-slate-500">No active services</span>
                   )}
                 </div>
 
                 <p
-                  className="mt-4 text-[13px] font-medium text-[#7eea57] hover:underline"
+                  className="mt-4 text-[13px] font-medium text-[#6f4bd8] hover:underline"
                   onClick={(e) => { e.stopPropagation(); handleRowClick(client.id); }}
                 >
                   View Details
@@ -786,14 +788,14 @@ export default function Clients() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex flex-col items-center gap-4 mt-8">
-          <p className="text-[13px] text-[#64748b]">
+          <p className="text-[13px] text-slate-500">
             Showing {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, filteredClients.length)} of {filteredClients.length} clients
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -806,8 +808,8 @@ export default function Clients() {
                   className={cn(
                     'h-9 w-9 rounded-full text-sm font-medium transition-all',
                     currentPage === pageNum
-                      ? 'bg-[#162044] text-white'
-                      : 'text-[#64748b] hover:text-white'
+                      ? 'bg-[#ffffff] text-slate-900'
+                      : 'text-slate-500 hover:text-slate-900'
                   )}
                 >
                   {pageNum}
@@ -817,7 +819,7 @@ export default function Clients() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg text-[#64748b] hover:text-white disabled:text-[#475569] disabled:cursor-not-allowed transition-all"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 disabled:text-slate-600 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

@@ -16,20 +16,20 @@ import {
   type Milestone,
 } from "@/mocks/earningsMock";
 
-/* ─── design tokens ─── */
-const NAVY_900 = "#0f1535";
-const NAVY_800 = "#162044";
-const NAVY_700 = "#1c2960";
-const NAVY_950 = "#0a0e27";
-const NEON_GREEN = "#7eea57";
+/* ─── design tokens (workspace-aligned light theme) ─── */
+const NAVY_900 = "#ffffff";
+const NAVY_800 = "#f7f8fb";
+const NAVY_700 = "#e4e6eb";
+const NAVY_950 = "#ffffff";
+const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
 const PURPLE = "#8b5cf6";
-const GRAY_500 = "#64748b";
-const GRAY_600 = "#475569";
+const GRAY_500 = "#6f747d";
+const GRAY_600 = "#4a4d55";
 const WARNING = "#f59e0b";
-const SUCCESS = "#22c55e";
+const SUCCESS = "#10b981";
 const ERROR = "#ef4444";
-const WHITE = "#ffffff";
+const WHITE = "#202124";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
@@ -96,15 +96,15 @@ function KPICard({ label, value, sub, subColor, topColor, sparkline, barData, de
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: easeOutExpo, delay }}
-      className="rounded-[16px] p-6 relative overflow-hidden"
-      style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+      className="rounded-xl px-4 py-3 relative overflow-hidden"
+      style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
     >
       <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: topColor }} />
-      <p className="text-[13px] text-[#64748b] font-medium">{label}</p>
-      <p className="text-[32px] font-medium tracking-tight mt-1" style={{ color: topColor }}>{value}</p>
-      <p className="text-[13px] mt-1" style={{ color: subColor }}>{sub}</p>
+      <p className="text-[11px] uppercase tracking-[0.06em] text-slate-500 font-medium">{label}</p>
+      <p className="text-[24px] font-bold tracking-tight mt-1 leading-none" style={{ color: topColor }}>{value}</p>
+      <p className="text-[12px] mt-1.5" style={{ color: subColor }}>{sub}</p>
       {sparkline && (
-        <div className="mt-3 h-[40px] w-full">
+        <div className="mt-2 h-[32px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={sparklineData.slice(-7)}>
               <defs>
@@ -119,7 +119,7 @@ function KPICard({ label, value, sub, subColor, topColor, sparkline, barData, de
         </div>
       )}
       {barData && (
-        <div className="mt-3 h-[40px] w-full">
+        <div className="mt-2 h-[32px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={miniBarData}>
               <Bar dataKey="value" fill={topColor} radius={[3, 3, 0, 0]} />
@@ -222,7 +222,7 @@ function MilestoneNode({ m, index, onClick }: { m: Milestone; index: number; onC
 function PeriodTabs({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const tabs = ["7D", "30D", "90D", "1Y", "All"];
   return (
-    <div className="flex gap-1 bg-[#0a0e27] rounded-[10px] p-1">
+    <div className="flex gap-1 bg-[#ffffff] rounded-[10px] p-1">
       {tabs.map((t) => (
         <button
           key={t}
@@ -269,24 +269,22 @@ export default function Earnings() {
   };
 
   return (
-    <div className="min-h-[100dvh]" style={{ background: NAVY_950 }}>
+    <div className="min-h-[100dvh]">
       {showConfetti && (
         <ConfettiBurst x={showConfetti.x} y={showConfetti.y} active={true} />
       )}
 
-      <div className="max-w-[1400px] mx-auto px-6 py-8">
+      <div className="max-w-[1240px] mx-auto px-5 py-6">
         {/* ── Page Header ── */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: easeOutExpo }}
-          className="flex flex-col md:flex-row md:items-center justify-between mb-6"
+          className="flex flex-col md:flex-row md:items-center justify-between mb-5"
         >
           <div>
-            <h1 className="text-[36px] font-semibold tracking-tight text-white" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-              Earnings
-            </h1>
-            <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>
+            <h1 className="text-[28px] font-bold tracking-tight text-slate-900">Earnings</h1>
+            <p className="text-[13px] mt-1" style={{ color: GRAY_500 }}>
               Tracking $1.2M total · $24.8K this month · 87 clients
             </p>
           </div>
@@ -305,7 +303,7 @@ export default function Earnings() {
         </motion.div>
 
         {/* ── KPI Row ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-5">
           <KPICard label="Total Earnings" value={totalEarnings} sub="Lifetime earnings across all clients" subColor={GRAY_500} topColor={NEON_GREEN} sparkline delay={0} />
           <KPICard label="This Month" value={thisMonth} sub="+12% vs last month" subColor={NEON_GREEN} topColor={WHITE} barData delay={0.1} />
           <KPICard label="Pending Payouts" value={pendingPayouts} sub="12 invoices pending" subColor={WARNING} topColor={WARNING} delay={0.2} />
@@ -317,11 +315,11 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easeOutExpo, delay: 0.2 }}
-          className="rounded-[16px] p-6 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-5 mb-4"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-            <h2 className="text-[22px] font-semibold text-white" style={{ letterSpacing: "-0.01em" }}>Earnings Trajectory</h2>
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-5">
+            <h2 className="text-[22px] font-semibold text-slate-900" style={{ letterSpacing: "-0.01em" }}>Earnings Trajectory</h2>
             <PeriodTabs value={period} onChange={setPeriod} />
           </div>
 
@@ -359,7 +357,7 @@ export default function Earnings() {
             </ResponsiveContainer>
           </div>
 
-          <div className="flex items-center gap-6 mt-4 text-[12px]">
+          <div className="flex items-center gap-4 mt-3 text-[12px]">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: NEON_GREEN }} />
               <span style={{ color: GRAY_500 }}>Earnings</span>
@@ -372,15 +370,15 @@ export default function Earnings() {
         </motion.div>
 
         {/* ── Revenue Source Breakdown ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.3 }}
-            className="rounded-[16px] p-6"
-            style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+            className="rounded-xl p-5"
+            style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
           >
-            <h3 className="text-[18px] font-semibold text-white mb-4">Revenue Sources</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Revenue Sources</h3>
             <div className="flex items-center justify-center">
               <div className="relative">
                 <PieChart width={220} height={220}>
@@ -398,7 +396,7 @@ export default function Earnings() {
                   </Pie>
                 </PieChart>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[20px] font-medium text-white">$1.25M</span>
+                  <span className="text-[20px] font-medium text-slate-900">$1.25M</span>
                   <span className="text-[11px]" style={{ color: GRAY_500 }}>Total</span>
                 </div>
               </div>
@@ -410,10 +408,10 @@ export default function Earnings() {
                   <div key={s.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} />
-                      <span className="text-[13px] text-white">{s.name}</span>
+                      <span className="text-[13px] text-slate-900">{s.name}</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-[13px] font-medium text-white">${(s.value / 1000).toFixed(0)}K</span>
+                      <span className="text-[13px] font-medium text-slate-900">${(s.value / 1000).toFixed(0)}K</span>
                       <span className="text-[12px]" style={{ color: GRAY_500 }}>{pct}%</span>
                     </div>
                   </div>
@@ -426,10 +424,10 @@ export default function Earnings() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.4 }}
-            className="rounded-[16px] p-6"
-            style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+            className="rounded-xl p-5"
+            style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
           >
-            <h3 className="text-[18px] font-semibold text-white mb-4">Source Performance</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Source Performance</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -447,10 +445,10 @@ export default function Earnings() {
                       <td className="py-3 pr-4">
                         <div className="flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full" style={{ background: row.color }} />
-                          <span className="text-[13px] text-white">{row.source}</span>
+                          <span className="text-[13px] text-slate-900">{row.source}</span>
                         </div>
                       </td>
-                      <td className="text-right text-[13px] font-medium text-white py-3 px-2">${row.thisMonth.toLocaleString()}</td>
+                      <td className="text-right text-[13px] font-medium text-slate-900 py-3 px-2">${row.thisMonth.toLocaleString()}</td>
                       <td className="text-right text-[13px] py-3 px-2" style={{ color: GRAY_500 }}>${row.lastMonth.toLocaleString()}</td>
                       <td className="text-right py-3 px-2">
                         <span className="text-[13px] font-medium" style={{ color: row.change >= 0 ? SUCCESS : ERROR }}>
@@ -473,11 +471,11 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easeOutExpo, delay: 0.4 }}
-          className="rounded-[16px] p-8 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-6 mb-4"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <h3 className="text-[22px] font-semibold text-white" style={{ letterSpacing: "-0.01em" }}>Earnings Milestones</h3>
-          <p className="text-[15px] mt-1 mb-8" style={{ color: GRAY_500 }}>
+          <h3 className="text-[18px] font-semibold tracking-tight text-slate-900">Earnings Milestones</h3>
+          <p className="text-[13px] mt-0.5 mb-5" style={{ color: GRAY_500 }}>
             Celebrate every breakthrough on the journey from $0 to 100x
           </p>
           {/* Progress track */}
@@ -504,24 +502,24 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.5 }}
-          className="rounded-[16px] p-6 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-5 mb-4"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[18px] font-semibold text-white">Top Earning Clients</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900">Top Earning Clients</h3>
             <button className="text-[13px] font-medium flex items-center gap-1 transition-colors hover:opacity-80" style={{ color: NEON_GREEN }}>
               View All <ChevronRight size={14} />
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full border-collapse">
               <thead>
-                <tr className="border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 pr-4" style={{ color: GRAY_500 }}>Rank</th>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>Client</th>
-                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>Total</th>
-                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-3 px-2" style={{ color: GRAY_500 }}>This Month</th>
-                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-3 pl-4" style={{ color: GRAY_500 }}>Trend</th>
+                <tr className="border-y border-slate-200 bg-slate-50/60">
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Rank</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Client</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Total</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">This Month</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 text-slate-500">Trend</th>
                 </tr>
               </thead>
               <tbody>
@@ -531,9 +529,9 @@ export default function Earnings() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.4, ease: easeOutExpo, delay: 0.5 + i * 0.06 }}
-                    className="border-b transition-colors hover:bg-white/[0.02]" style={{ borderColor: "rgba(255,255,255,0.04)" }}
+                    className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
                   >
-                    <td className="py-3 pr-4">
+                    <td className="py-3 px-3 border-r border-slate-100">
                       <span
                         className="text-[13px] font-semibold"
                         style={{
@@ -543,21 +541,21 @@ export default function Earnings() {
                         #{c.rank}
                       </span>
                     </td>
-                    <td className="py-3 px-2">
+                    <td className="py-3 px-3 border-r border-slate-100">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-semibold" style={{ background: `${ELECTRIC_BLUE}20`, color: ELECTRIC_BLUE }}>
+                        <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold" style={{ background: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}>
                           {c.client.slice(0, 2).toUpperCase()}
                         </div>
-                        <span className="text-[14px] font-medium text-white">{c.client}</span>
+                        <span className="text-[14px] font-medium text-slate-900">{c.client}</span>
                       </div>
                     </td>
-                    <td className="text-right text-[14px] font-semibold text-white py-3 px-2">
+                    <td className="text-right text-[14px] font-semibold text-slate-900 py-3 px-3 border-r border-slate-100">
                       ${c.total.toLocaleString()}
                     </td>
-                    <td className="text-right text-[13px] text-white py-3 px-2">
+                    <td className="text-right text-[13px] text-slate-900 py-3 px-3 border-r border-slate-100">
                       ${c.thisMonth.toLocaleString()}
                     </td>
-                    <td className="py-3 pl-4">
+                    <td className="py-3 px-3">
                       {c.trend === "up" ? (
                         <ArrowUpRight size={16} style={{ color: SUCCESS }} />
                       ) : (
@@ -576,16 +574,16 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.6 }}
-          className="rounded-[16px] p-6 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-5 mb-4"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[18px] font-semibold text-white">Payouts</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900">Payouts</h3>
             <button className="flex items-center gap-2 px-4 py-2 rounded-[10px] text-[13px] font-semibold transition-all hover:scale-[1.02]" style={{ background: NEON_GREEN, color: NAVY_950 }}>
               <DollarSign size={14} /> Request Payout
             </button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
               <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Available</p>
               <p className="text-[20px] font-medium mt-1" style={{ color: NEON_GREEN }}>${payoutStats.available.toLocaleString()}</p>
@@ -600,32 +598,49 @@ export default function Earnings() {
             </div>
             <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
               <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Total Paid</p>
-              <p className="text-[20px] font-medium mt-1 text-white">${payoutStats.totalPaid.toLocaleString()}</p>
+              <p className="text-[20px] font-medium mt-1 text-slate-900">${payoutStats.totalPaid.toLocaleString()}</p>
             </div>
           </div>
-          <div className="space-y-2">
-            {payoutsList.map((p) => (
-              <motion.div
-                key={p.id}
-                initial={{ opacity: 0, x: -15 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.6 + p.id * 0.05 }}
-                className="flex items-center justify-between py-3 border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}
-              >
-                <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.date}</span>
-                <span className="text-[14px] font-medium text-white">${p.amount.toLocaleString()}</span>
-                <span className="text-[13px]" style={{ color: GRAY_500 }}>{p.method}</span>
-                <span
-                  className="text-[11px] font-medium uppercase tracking-wider px-3 py-1 rounded-full"
-                  style={{
-                    background: p.status === "Completed" ? "rgba(34,197,94,0.15)" : "rgba(59,130,246,0.15)",
-                    color: p.status === "Completed" ? SUCCESS : ELECTRIC_BLUE,
-                  }}
-                >
-                  {p.status}
-                </span>
-              </motion.div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-y border-slate-200 bg-slate-50/60">
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Date</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Amount</th>
+                  <th className="text-left text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 border-r border-slate-200 text-slate-500">Method</th>
+                  <th className="text-right text-[11px] font-medium uppercase tracking-wider py-2.5 px-3 text-slate-500">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payoutsList.map((p) => (
+                  <motion.tr
+                    key={p.id}
+                    initial={{ opacity: 0, x: -15 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, ease: easeOutExpo, delay: 0.6 + p.id * 0.05 }}
+                    className="border-b border-slate-100 transition-colors hover:bg-slate-50/60"
+                  >
+                    <td className="py-3 px-3 border-r border-slate-100 text-[13px] text-slate-500">{p.date}</td>
+                    <td className="py-3 px-3 border-r border-slate-100 text-right text-[14px] font-medium text-slate-900">
+                      ${p.amount.toLocaleString()}
+                    </td>
+                    <td className="py-3 px-3 border-r border-slate-100 text-[13px] text-slate-700">{p.method}</td>
+                    <td className="py-3 px-3 text-right">
+                      <span
+                        className="inline-flex items-center text-[11px] font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-full border"
+                        style={
+                          p.status === "Completed"
+                            ? { background: "#ecfdf5", color: "#047857", borderColor: "#a7f3d0" }
+                            : { background: "#f2efff", color: "#4b3bb4", borderColor: "#d8cffa" }
+                        }
+                      >
+                        {p.status}
+                      </span>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </motion.div>
 
@@ -634,7 +649,7 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.7 }}
-          className="rounded-[16px] p-6 mb-6"
+          className="rounded-xl p-5 mb-4"
           style={{
             background: `linear-gradient(135deg, ${NAVY_900}, ${NAVY_800})`,
             border: `1px solid rgba(59,130,246,0.2)`,
@@ -642,9 +657,9 @@ export default function Earnings() {
         >
           <div className="flex items-center gap-2 mb-4">
             <Sparkles size={18} style={{ color: PURPLE }} />
-            <h3 className="text-[18px] font-semibold text-white">AI Revenue Forecast</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900">AI Revenue Forecast</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
             {aiProjections.map((proj, i) => (
               <motion.div
                 key={proj.scenario}
@@ -685,10 +700,10 @@ export default function Earnings() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.5 }}
-          className="rounded-[16px] p-6 mb-6"
-          style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+          className="rounded-xl p-5 mb-4"
+          style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
         >
-          <h3 className="text-[18px] font-semibold text-white mb-4">Recent Earnings Activity</h3>
+          <h3 className="text-[18px] font-semibold text-slate-900 mb-4">Recent Earnings Activity</h3>
           <div className="space-y-0 max-h-[400px] overflow-y-auto pr-2">
             {earningsFeed.map((item, i) => (
               <motion.div
@@ -708,12 +723,12 @@ export default function Earnings() {
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[14px] font-medium text-white truncate">{item.client}</p>
+                    <p className="text-[14px] font-medium text-slate-900 truncate">{item.client}</p>
                     <p className="text-[12px]" style={{ color: GRAY_500 }}>{item.source}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
-                  <span className="text-[14px] font-medium text-white">${item.amount.toLocaleString()}</span>
+                  <span className="text-[14px] font-medium text-slate-900">${item.amount.toLocaleString()}</span>
                   <StatusBadge status={item.status} />
                   <span className="text-[12px] hidden sm:block" style={{ color: GRAY_500 }}>{item.date}</span>
                 </div>

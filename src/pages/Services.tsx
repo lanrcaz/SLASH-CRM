@@ -14,15 +14,15 @@ import {
   type Service,
 } from "@/mocks/earningsMock";
 
-/* ─── design tokens ─── */
-const NAVY_950 = "#0a0e27";
-const NAVY_900 = "#0f1535";
-const NAVY_800 = "#162044";
-const NAVY_700 = "#1c2960";
-const NEON_GREEN = "#7eea57";
+/* ─── design tokens (workspace-aligned light theme) ─── */
+const NAVY_950 = "#ffffff";
+const NAVY_900 = "#ffffff";
+const NAVY_800 = "#f7f8fb";
+const NAVY_700 = "#e4e6eb";
+const NEON_GREEN = "#6f4bd8";
 const ELECTRIC_BLUE = "#3b82f6";
-const GRAY_500 = "#64748b";
-const WHITE = "#ffffff";
+const GRAY_500 = "#6f747d";
+const WHITE = "#202124";
 const ERROR = "#ef4444";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
@@ -68,7 +68,7 @@ function ServiceIcon({ name, size = 22, color = NEON_GREEN }: { name: string; si
 /* ─── Status Badge ─── */
 function ServiceStatusBadge({ status }: { status: string }) {
   const config: Record<string, { bg: string; text: string }> = {
-    Active: { bg: "rgba(126,234,87,0.15)", text: "#7eea57" },
+    Active: { bg: "rgba(111,75,216,0.15)", text: "#6f4bd8" },
     Paused: { bg: "rgba(245,158,11,0.15)", text: "#f59e0b" },
     Archived: { bg: "rgba(100,116,139,0.15)", text: "#64748b" },
   };
@@ -93,10 +93,10 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, ease: easeOutExpo, delay: 0.2 + index * 0.1 }}
       whileHover={{ y: -4, borderColor: `${NEON_GREEN}33`, boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
-      className="rounded-[16px] p-6 transition-all duration-250"
+      className="rounded-xl p-6 transition-all duration-250"
       style={{
         background: NAVY_900,
-        border: "1px solid rgba(255,255,255,0.06)",
+        border: "1px solid #e4e6eb",
         borderTop: `2px solid ${service.color}`,
       }}
     >
@@ -110,7 +110,7 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
             <ServiceIcon name={service.icon} size={22} color={service.color} />
           </div>
           <div>
-            <h3 className="text-[18px] font-semibold text-white">{service.name}</h3>
+            <h3 className="text-[18px] font-semibold text-slate-900">{service.name}</h3>
             <ServiceStatusBadge status={isActive ? "Active" : "Paused"} />
           </div>
         </div>
@@ -136,15 +136,15 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
       {/* Metrics */}
       <div className="flex items-center gap-6 mt-5">
         <div>
-          <p className="text-[14px] font-semibold text-white">{service.clients}</p>
+          <p className="text-[14px] font-semibold text-slate-900">{service.clients}</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>clients</p>
         </div>
         <div>
-          <p className="text-[14px] font-semibold text-white">${(service.revenue / 1000).toFixed(1)}K</p>
+          <p className="text-[14px] font-semibold text-slate-900">${(service.revenue / 1000).toFixed(1)}K</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>total</p>
         </div>
         <div>
-          <p className="text-[14px] font-semibold text-white">{service.rating}</p>
+          <p className="text-[14px] font-semibold text-slate-900">{service.rating}</p>
           <p className="text-[11px]" style={{ color: GRAY_500 }}>rating</p>
         </div>
       </div>
@@ -167,10 +167,10 @@ function ServiceCard({ service, index, onEdit }: { service: Service; index: numb
       {/* Bottom Actions */}
       <div className="flex items-center justify-between mt-5 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
         <div className="flex items-center gap-2">
-          <button className="text-[12px] font-medium transition-colors hover:text-white" style={{ color: GRAY_500 }}>
+          <button className="text-[12px] font-medium transition-colors hover:text-slate-900" style={{ color: GRAY_500 }}>
             View Clients
           </button>
-          <button className="text-[12px] font-medium transition-colors hover:text-white" style={{ color: GRAY_500 }}>
+          <button className="text-[12px] font-medium transition-colors hover:text-slate-900" style={{ color: GRAY_500 }}>
             Edit Pricing
           </button>
         </div>
@@ -235,11 +235,11 @@ function ServiceModal({ service, onClose, onSave }: {
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        className="w-full max-w-[520px] rounded-[16px] p-6 max-h-[90vh] overflow-y-auto"
-        style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
+        className="w-full max-w-[520px] rounded-xl p-6 max-h-[90vh] overflow-y-auto"
+        style={{ background: NAVY_900, border: "1px solid #e4e6eb", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
       >
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-[20px] font-semibold text-white">
+          <h3 className="text-[20px] font-semibold text-slate-900">
             {isEdit ? "Edit Service" : "Add Service"}
           </h3>
           <button onClick={onClose} className="p-1.5 rounded-[6px] hover:bg-white/10 transition-colors" style={{ color: GRAY_500 }}>
@@ -254,7 +254,7 @@ function ServiceModal({ service, onClose, onSave }: {
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all focus:ring-1"
+              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none transition-all focus:ring-1"
               style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
               placeholder="e.g., SEO Optimization"
             />
@@ -265,7 +265,7 @@ function ServiceModal({ service, onClose, onSave }: {
             <textarea
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all resize-none"
+              className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none transition-all resize-none"
               style={{ background: NAVY_800, border: `1px solid ${NAVY_700}`, minHeight: 80 }}
               placeholder="Describe what this service includes..."
             />
@@ -278,7 +278,7 @@ function ServiceModal({ service, onClose, onSave }: {
                 type="number"
                 value={form.price || ""}
                 onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all"
+                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none transition-all"
                 style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                 placeholder="2500"
               />
@@ -288,7 +288,7 @@ function ServiceModal({ service, onClose, onSave }: {
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none transition-all"
+                className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none transition-all"
                 style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
               >
                 {["Marketing", "Development", "Design", "Consulting", "Advertising", "Analytics"].map((c) => (
@@ -398,8 +398,8 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number] }}
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        className="w-full max-w-[720px] rounded-[16px] p-6 max-h-[90vh] overflow-y-auto"
-        style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
+        className="w-full max-w-[720px] rounded-xl p-6 max-h-[90vh] overflow-y-auto"
+        style={{ background: NAVY_900, border: "1px solid #e4e6eb", boxShadow: "0 16px 48px rgba(0,0,0,0.4)" }}
       >
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
@@ -411,7 +411,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <ServiceIcon name={service.icon} size={24} color={service.color} />
             </div>
             <div>
-              <h3 className="text-[22px] font-semibold text-white">{service.name}</h3>
+              <h3 className="text-[22px] font-semibold text-slate-900">{service.name}</h3>
               <div className="flex items-center gap-2 mt-1">
                 <ServiceStatusBadge status={service.status} />
                 <span className="text-[14px] font-medium" style={{ color: NEON_GREEN }}>
@@ -426,7 +426,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 p-1 rounded-[10px]" style={{ background: NAVY_950 }}>
+        <div className="flex gap-1 mb-6 p-1 rounded-[10px]">
           {tabs.map((tab) => (
             <button
               key={tab}
@@ -455,7 +455,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Clients</p>
-                  <p className="text-[24px] font-medium text-white mt-1">{service.clients}</p>
+                  <p className="text-[24px] font-medium text-slate-900 mt-1">{service.clients}</p>
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Total Revenue</p>
@@ -463,11 +463,11 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Rating</p>
-                  <p className="text-[24px] font-medium text-white mt-1">{service.rating}</p>
+                  <p className="text-[24px] font-medium text-slate-900 mt-1">{service.rating}</p>
                 </div>
                 <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
                   <p className="text-[11px] uppercase tracking-wider font-medium" style={{ color: GRAY_500 }}>Avg Tenure</p>
-                  <p className="text-[24px] font-medium text-white mt-1">8.2<span className="text-[12px]" style={{ color: GRAY_500 }}>mo</span></p>
+                  <p className="text-[24px] font-medium text-slate-900 mt-1">8.2<span className="text-[12px]" style={{ color: GRAY_500 }}>mo</span></p>
                 </div>
               </div>
               <div className="rounded-[10px] p-4" style={{ background: NAVY_800 }}>
@@ -507,7 +507,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
               <div className="space-y-2">
                 {service.sparkline.map((d, i) => (
                   <div key={i} className="flex items-center justify-between py-2 border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-                    <span className="text-[13px] text-white">{d.month} 2025</span>
+                    <span className="text-[13px] text-slate-900">{d.month} 2025</span>
                     <span className="text-[13px] font-medium" style={{ color: NEON_GREEN }}>${d.value.toLocaleString()}</span>
                   </div>
                 ))}
@@ -529,7 +529,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                   <input
                     type="text"
                     defaultValue={service.name}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                   />
                 </div>
@@ -538,7 +538,7 @@ function ServiceDetailModal({ service, onClose }: { service: Service; onClose: (
                   <input
                     type="number"
                     defaultValue={service.price}
-                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-white outline-none"
+                    className="w-full rounded-[10px] px-4 py-3 text-[14px] text-slate-900 outline-none"
                     style={{ background: NAVY_800, border: `1px solid ${NAVY_700}` }}
                   />
                 </div>
@@ -563,8 +563,8 @@ function ServicesKPICard({ label, value, sub, iconColor, delay }: {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: easeOutExpo, delay }}
-      className="rounded-[16px] p-6"
-      style={{ background: NAVY_900, border: "1px solid rgba(255,255,255,0.06)" }}
+      className="rounded-xl p-6"
+      style={{ background: NAVY_900, border: "1px solid #e4e6eb" }}
     >
       <p className="text-[13px] font-medium" style={{ color: GRAY_500 }}>{label}</p>
       <p className="text-[32px] font-medium mt-1 tracking-tight" style={{ color: iconColor }}>{value}</p>
@@ -604,7 +604,7 @@ export default function Services() {
   };
 
   return (
-    <div className="min-h-[100dvh]" style={{ background: NAVY_950 }}>
+    <div className="min-h-[100dvh]">
       <div className="max-w-[1400px] mx-auto px-6 py-8">
         {/* ── Header ── */}
         <motion.div
@@ -614,7 +614,7 @@ export default function Services() {
           className="flex flex-col md:flex-row md:items-center justify-between mb-6"
         >
           <div>
-            <h1 className="text-[36px] font-semibold tracking-tight text-white" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h1 className="text-[36px] font-bold tracking-tight text-slate-900" style={{ letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               Services
             </h1>
             <p className="text-[15px] mt-1" style={{ color: GRAY_500 }}>

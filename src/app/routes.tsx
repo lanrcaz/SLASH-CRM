@@ -15,7 +15,7 @@ const Reports = lazy(() => import('@/pages/Reports'))
 const Settings = lazy(() => import('@/pages/Settings'))
 
 function RouteFallback() {
-  return <div className="min-h-screen bg-navy-950" />
+  return <div className="min-h-screen bg-white" />
 }
 
 export default function AppRoutes() {

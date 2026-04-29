@@ -32,9 +32,9 @@ const fadeSlideUp = (delay = 0) => ({
 const stageOrder: ProspectStage[] = ['Lead', 'Qualified', 'Proposal', 'Negotiation', 'Closed'];
 
 function getScoreColor(score: number) {
-  if (score >= 80) return '#22c55e';
-  if (score >= 50) return '#f59e0b';
-  return '#ef4444';
+  if (score >= 80) return '#6f4bd8';
+  if (score >= 50) return '#a89aea';
+  return '#cdc4f1';
 }
 
 function getScoreLabel(score: number) {
@@ -102,28 +102,27 @@ function ProspectCard({
       onClick={onClick}
       whileHover={{ y: -2 }}
       className={cn(
-        'rounded-[10px] border border-[rgba(255,255,255,0.04)] p-4 cursor-grab active:cursor-grabbing',
-        'bg-[#0f1535] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-200'
+        'rounded-xl border border-slate-200 bg-white p-4 cursor-grab active:cursor-grabbing',
+        'transition-all duration-200 hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]'
       )}
-      style={{ borderLeft: `3px solid ${scoreColor}` }}
     >
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold text-white truncate">{prospect.company}</p>
-          <p className="text-[12px] text-[#64748b] truncate">{prospect.name}</p>
+          <p className="text-[15px] font-semibold tracking-tight text-slate-900 truncate">{prospect.company}</p>
+          <p className="text-[12px] text-slate-500 truncate">{prospect.name}</p>
         </div>
         <AIScoreRing score={prospect.aiScore} size={28} />
       </div>
 
-      <p className="mt-2 text-[14px] font-semibold text-[#7eea57]">
+      <p className="mt-2 text-[14px] font-semibold text-[#6f4bd8]">
         ${(prospect.value / 1000).toFixed(0)},{String(prospect.value % 1000).padStart(3, '0')}
       </p>
 
       <div className="mt-2">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] text-[#64748b]">{prospect.probability}% probability</span>
+          <span className="text-[11px] text-slate-500">{prospect.probability}% probability</span>
         </div>
-        <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
+        <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-slate-100">
           <div
             className="h-full rounded-full transition-all"
             style={{ width: `${prospect.probability}%`, backgroundColor: scoreColor }}
@@ -134,21 +133,24 @@ function ProspectCard({
       <div className="mt-3 flex flex-wrap gap-1">
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: 'rgba(139,92,246,0.15)', color: '#8b5cf6' }}
+          style={{ backgroundColor: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
         >
           {prospect.source}
         </span>
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: `${scoreColor}15`, color: scoreColor }}
+          style={{ backgroundColor: `${scoreColor}1f`, color: scoreColor }}
         >
           {getScoreLabel(prospect.aiScore)}
         </span>
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-[rgba(255,255,255,0.04)] pt-2.5">
-        <span className="text-[11px] text-[#475569]">{prospect.lastContact}</span>
-        <div className="flex size-6 items-center justify-center rounded-full bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] text-[9px] font-medium text-white">
+      <div className="mt-3 flex items-center justify-between border-t border-[#eceef2] pt-2.5">
+        <span className="text-[11px] text-slate-500">{prospect.lastContact}</span>
+        <div
+          className="flex size-6 items-center justify-center rounded-full text-[9px] font-semibold"
+          style={{ background: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
+        >
           {prospect.assigneeAvatar}
         </div>
       </div>
@@ -176,15 +178,15 @@ function ProspectDetailPanel({
       animate={{ x: 0 }}
       exit={{ x: '100%' }}
       transition={{ duration: 0.3, ease: easeOutExpo }}
-      className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-[420px] border-l border-[#1c2960] bg-[#0f1535] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-y-auto"
+      className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-[420px] border-l border-[#e4e6eb] bg-[#ffffff] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-y-auto"
     >
       {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-[#1c2960] bg-[#0f1535] px-6 py-4">
+      <div className="sticky top-0 z-10 border-b border-[#e4e6eb] bg-[#ffffff] px-6 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-[22px] font-semibold text-white truncate">{prospect.company}</h2>
+          <h2 className="text-[22px] font-semibold text-slate-900 truncate">{prospect.company}</h2>
           <button
             onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-[#94a3b8] transition-colors hover:bg-[rgba(255,255,255,0.08)] hover:text-white"
+            className="flex size-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-[rgba(255,255,255,0.08)] hover:text-slate-900"
           >
             <X className="size-5" />
           </button>
@@ -199,8 +201,8 @@ function ProspectDetailPanel({
               className={cn(
                 'rounded-full px-3 py-1 text-[11px] font-medium transition-all',
                 prospect.stage === s
-                  ? 'text-[#0a0e27]'
-                  : 'border border-[#1c2960] text-[#94a3b8] hover:text-white hover:border-[#64748b]'
+                  ? 'text-[#ffffff]'
+                  : 'border border-[#e4e6eb] text-slate-400 hover:text-slate-900 hover:border-[#64748b]'
               )}
               style={
                 prospect.stage === s
@@ -216,14 +218,14 @@ function ProspectDetailPanel({
 
       <div className="px-6 py-5 flex flex-col gap-6">
         {/* AI Score */}
-        <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#162044] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">AI Score</h3>
+        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
+          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">AI Score</h3>
           <div className="flex items-center gap-5">
             <AIScoreRing score={prospect.aiScore} size={64} />
             <div className="flex-1">
               <div className="flex items-baseline gap-2">
-                <span className="text-[28px] font-medium text-white">{prospect.aiScore}</span>
-                <span className="text-[13px] text-[#64748b]">/ 100</span>
+                <span className="text-[28px] font-medium text-slate-900">{prospect.aiScore}</span>
+                <span className="text-[13px] text-slate-500">/ 100</span>
               </div>
               <span
                 className="inline-block mt-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium"
@@ -240,22 +242,22 @@ function ProspectDetailPanel({
               { label: 'Timing', score: Math.min(100, prospect.aiScore + 3) },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
-                <span className="w-[90px] text-[12px] text-[#94a3b8]">{item.label}</span>
+                <span className="w-[90px] text-[12px] text-slate-400">{item.label}</span>
                 <div className="flex-1 h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
                   <div
                     className="h-full rounded-full"
                     style={{ width: `${item.score}%`, backgroundColor: scoreColor }}
                   />
                 </div>
-                <span className="w-[28px] text-right text-[12px] text-white">{item.score}</span>
+                <span className="w-[28px] text-right text-[12px] text-slate-900">{item.score}</span>
               </div>
             ))}
           </div>
 
           {prospect.aiScore >= 80 && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg bg-[rgba(126,234,87,0.08)] p-3">
-              <SparklesIcon className="mt-0.5 size-4 shrink-0 text-[#7eea57]" />
-              <p className="text-[12px] text-[#7eea57]">
+            <div className="mt-4 flex items-start gap-2 rounded-lg bg-[rgba(111,75,216,0.08)] p-3">
+              <SparklesIcon className="mt-0.5 size-4 shrink-0 text-[#6f4bd8]" />
+              <p className="text-[12px] text-[#6f4bd8]">
                 Likely to convert in 14 days based on engagement patterns.
               </p>
             </div>
@@ -263,59 +265,59 @@ function ProspectDetailPanel({
         </div>
 
         {/* Contact Details */}
-        <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#162044] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Contact Details</h3>
+        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
+          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Contact Details</h3>
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <UserIcon className="size-4 text-[#64748b]" />
+              <UserIcon className="size-4 text-slate-500" />
               <span className="text-[13px] text-[#cbd5e1]">{prospect.name}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Mail className="size-4 text-[#64748b]" />
+              <Mail className="size-4 text-slate-500" />
               <span className="text-[13px] text-[#cbd5e1]">{prospect.email}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Phone className="size-4 text-[#64748b]" />
+              <Phone className="size-4 text-slate-500" />
               <span className="text-[13px] text-[#cbd5e1]">{prospect.phone}</span>
             </div>
             <div className="flex items-center gap-3">
-              <Calendar className="size-4 text-[#64748b]" />
+              <Calendar className="size-4 text-slate-500" />
               <span className="text-[13px] text-[#cbd5e1]">Last contact: {prospect.lastContact}</span>
             </div>
           </div>
         </div>
 
         {/* Value */}
-        <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#162044] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Deal Value</h3>
+        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
+          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Deal Value</h3>
           <div className="flex items-baseline gap-1">
-            <span className="text-[28px] font-medium text-[#7eea57]">
+            <span className="text-[28px] font-medium text-[#6f4bd8]">
               ${(prospect.value / 1000).toFixed(0)}K
             </span>
           </div>
           <div className="mt-3">
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-[#94a3b8]">Probability</span>
-              <span className="text-[13px] font-medium text-white">{prospect.probability}%</span>
+              <span className="text-[12px] text-slate-400">Probability</span>
+              <span className="text-[13px] font-medium text-slate-900">{prospect.probability}%</span>
             </div>
             <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
               <div
-                className="h-full rounded-full bg-[#7eea57]"
+                className="h-full rounded-full bg-[#6f4bd8]"
                 style={{ width: `${prospect.probability}%` }}
               />
             </div>
           </div>
-          <p className="mt-3 text-[12px] text-[#64748b]">
+          <p className="mt-3 text-[12px] text-slate-500">
             Expected value:{' '}
-            <span className="text-white font-medium">
+            <span className="text-slate-900 font-medium">
               ${Math.round(prospect.value * (prospect.probability / 100)).toLocaleString()}
             </span>
           </p>
         </div>
 
         {/* Activity Timeline */}
-        <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#162044] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-4">Activity</h3>
+        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
+          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Activity</h3>
           <div className="flex flex-col gap-4">
             {[
               { action: 'Initial contact', date: '3 weeks ago', icon: Mail },
@@ -324,12 +326,12 @@ function ProspectDetailPanel({
               { action: 'Follow-up call', date: prospect.lastContact, icon: PhoneCall },
             ].map((activity, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="flex size-7 items-center justify-center rounded-full bg-[#0a0e27]">
-                  <activity.icon className="size-3.5 text-[#64748b]" />
+                <div className="flex size-7 items-center justify-center rounded-full bg-[#ffffff]">
+                  <activity.icon className="size-3.5 text-slate-500" />
                 </div>
                 <div>
                   <p className="text-[13px] text-[#cbd5e1]">{activity.action}</p>
-                  <p className="text-[11px] text-[#475569]">{activity.date}</p>
+                  <p className="text-[11px] text-slate-600">{activity.date}</p>
                 </div>
               </div>
             ))}
@@ -337,23 +339,23 @@ function ProspectDetailPanel({
         </div>
 
         {/* Notes */}
-        <div className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#162044] p-5">
-          <h3 className="text-[14px] font-semibold text-white mb-3">Notes</h3>
-          <p className="text-[13px] text-[#94a3b8] leading-relaxed">{prospect.notes}</p>
+        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
+          <h3 className="text-[14px] font-semibold text-slate-900 mb-3">Notes</h3>
+          <p className="text-[13px] text-slate-400 leading-relaxed">{prospect.notes}</p>
         </div>
 
         {/* Actions */}
         <div className="flex flex-col gap-2">
-          <Button className="w-full bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold">
+          <Button className="w-full bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
             <Send className="size-4 mr-2" /> Send Email
           </Button>
           <Button
             variant="outline"
-            className="w-full border-[#1c2960] text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="w-full border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
           >
             <PhoneCall className="size-4 mr-2" /> Schedule Call
           </Button>
-          <Button className="w-full bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold">
+          <Button className="w-full bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
             <UserCheck className="size-4 mr-2" /> Convert to Client
           </Button>
           <Button
@@ -388,67 +390,67 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[520px] border-[#1c2960] bg-[#0f1535] text-white">
+      <DialogContent className="max-w-[520px] border-[#e4e6eb] bg-[#ffffff] text-slate-900">
         <DialogHeader>
           <DialogTitle className="text-[20px] font-semibold">Add Prospect</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Company *</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Company *</label>
               <Input
                 value={form.company}
                 onChange={(e) => update('company', e.target.value)}
                 placeholder="Company name"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Contact Name *</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Contact Name *</label>
               <Input
                 value={form.name}
                 onChange={(e) => update('name', e.target.value)}
                 placeholder="Full name"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Email</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Email</label>
               <Input
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
                 placeholder="contact@company.com"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Phone</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Phone</label>
               <Input
                 value={form.phone}
                 onChange={(e) => update('phone', e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Estimated Value ($)</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Estimated Value ($)</label>
               <Input
                 value={form.value}
                 onChange={(e) => update('value', e.target.value)}
                 placeholder="25000"
-                className="border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Source</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Source</label>
               <select
                 value={form.source}
                 onChange={(e) => update('source', e.target.value)}
-                className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
               >
                 {['Website', 'Referral', 'Cold outreach', 'Ad', 'Event', 'Partner', 'Other'].map((s) => (
                   <option key={s} value={s}>{s}</option>
@@ -458,11 +460,11 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Stage</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Stage</label>
               <select
                 value={form.stage}
                 onChange={(e) => update('stage', e.target.value as ProspectStage)}
-                className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
               >
                 {stageOrder.map((s) => (
                   <option key={s} value={s}>{s}</option>
@@ -470,11 +472,11 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
               </select>
             </div>
             <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Assigned To</label>
+              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Assigned To</label>
               <select
                 value={form.assignee}
                 onChange={(e) => update('assignee', e.target.value)}
-                className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
               >
                 {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
                   <option key={m} value={m}>{m}</option>
@@ -483,13 +485,13 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-[#94a3b8]">Notes</label>
+            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Notes</label>
             <textarea
               value={form.notes}
               onChange={(e) => update('notes', e.target.value)}
               placeholder="Additional notes..."
               rows={3}
-              className="w-full rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white placeholder:text-[#475569] outline-none focus:border-[#7eea57] resize-none"
+              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 placeholder:text-slate-600 outline-none focus:border-[#6f4bd8] resize-none"
             />
           </div>
         </div>
@@ -497,13 +499,13 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
           <Button
             variant="ghost"
             onClick={onClose}
-            className="text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.08)]"
+            className="text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
-            className="bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] font-semibold"
+            className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold"
           >
             Add Prospect
           </Button>
@@ -534,18 +536,18 @@ function FilterBar({
   return (
     <div className="flex flex-wrap gap-3 items-center">
       <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#64748b]" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
         <Input
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search prospects..."
-          className="pl-9 border-[#1c2960] bg-[#162044] text-white placeholder:text-[#475569] focus-visible:border-[#7eea57]"
+          className="pl-9 border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
         />
       </div>
       <select
         value={stageFilter}
         onChange={(e) => onStageFilterChange(e.target.value)}
-        className="rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
       >
         <option value="">All Stages</option>
         {stageOrder.map((s) => (
@@ -555,7 +557,7 @@ function FilterBar({
       <select
         value={assigneeFilter}
         onChange={(e) => onAssigneeFilterChange(e.target.value)}
-        className="rounded-md border border-[#1c2960] bg-[#162044] px-3 py-2 text-[13px] text-white outline-none focus:border-[#7eea57]"
+        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
       >
         <option value="">All Assignees</option>
         {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
@@ -647,7 +649,7 @@ export default function Prospects() {
   }, [prospectList]);
 
   return (
-    <div className="min-h-full bg-[#0a0e27] p-6">
+    <div className="min-h-full p-6">
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -656,21 +658,21 @@ export default function Prospects() {
       >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-[36px] font-semibold tracking-[-0.02em] text-white">Prospects</h1>
-            <p className="mt-1 text-[15px] text-[#64748b]">
+            <h1 className="text-[36px] font-bold tracking-tight text-slate-900">Prospects</h1>
+            <p className="mt-1 text-[15px] text-slate-500">
               {prospectList.length} prospects · ${(pipelineValue / 1000).toFixed(0)}K pipeline value · {winRate}% win rate
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Button
               onClick={() => setAddModalOpen(true)}
-              className="bg-[#7eea57] text-[#0a0e27] hover:bg-[#6dd446] hover:shadow-[0_0_20px_rgba(126,234,87,0.3)] font-semibold"
+              className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:shadow-[0_0_20px_rgba(111,75,216,0.3)] font-semibold"
             >
               <Plus className="size-4 mr-1.5" /> Add Prospect
             </Button>
             <Button
               variant="outline"
-              className="border-[#1c2960] text-[#94a3b8] hover:text-white hover:bg-[rgba(255,255,255,0.08)]"
+              className="border-[#e4e6eb] text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
             >
               <Upload className="size-4 mr-1.5" /> Import
             </Button>
@@ -700,12 +702,12 @@ export default function Prospects() {
                 initial: { opacity: 0, y: 20 },
                 animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOutExpo } },
               }}
-              className="rounded-[16px] border border-[rgba(255,255,255,0.06)] bg-[#0f1535] p-5"
+              className="rounded-xl border border-slate-200 bg-[#ffffff] p-5"
               style={{ borderTop: `2px solid ${ps.color}` }}
             >
-              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#64748b]">{ps.stage}</p>
-              <p className="mt-1 text-[20px] font-medium text-white">{count}</p>
-              <p className="text-[12px] text-[#64748b]">${(value / 1000).toFixed(0)}K</p>
+              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">{ps.stage}</p>
+              <p className="mt-1 text-[20px] font-medium text-slate-900">{count}</p>
+              <p className="text-[12px] text-slate-500">${(value / 1000).toFixed(0)}K</p>
             </motion.div>
           );
         })}
@@ -731,7 +733,7 @@ export default function Prospects() {
         initial="initial"
         animate="animate"
         className="mt-6 flex gap-4 overflow-x-auto pb-4"
-        style={{ scrollbarWidth: 'thin', scrollbarColor: '#1c2960 transparent' }}
+        style={{ scrollbarWidth: 'thin', scrollbarColor: '#e4e6eb transparent' }}
       >
         {pipelineStages.map((ps) => {
           const stageProspects = filteredProspects.filter((p) => p.stage === ps.stage);
@@ -749,26 +751,26 @@ export default function Prospects() {
                 handleDrop(ps.stage);
               }}
               className={cn(
-                'flex-shrink-0 rounded-[16px] bg-[rgba(15,21,53,0.5)] min-w-[280px] w-[300px] p-3 transition-colors',
-                draggedId && 'bg-[rgba(255,255,255,0.03)]'
+                'flex-shrink-0 min-w-[280px] w-[300px] rounded-xl p-3 transition-colors',
+                draggedId ? 'bg-[#f2efff]/40' : 'bg-transparent'
               )}
             >
               {/* Column Header */}
-              <div className="mb-3 flex items-center justify-between px-2">
+              <div className="mb-3 flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                   <div className="size-2 rounded-full" style={{ backgroundColor: ps.color }} />
-                  <span className="text-[15px] font-semibold text-white">{ps.stage}</span>
-                  <span className="rounded-full bg-[#162044] px-2 py-0.5 text-[11px] text-[#94a3b8]">
+                  <span className="text-[14px] font-semibold tracking-tight text-slate-900">{ps.stage}</span>
+                  <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-medium text-slate-500">
                     {stageProspects.length}
                   </span>
                 </div>
-                <button className="flex size-6 items-center justify-center rounded-full text-[#64748b] hover:bg-[rgba(255,255,255,0.08)] hover:text-white transition-colors">
+                <button className="flex size-6 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
                   <Plus className="size-3.5" />
                 </button>
               </div>
 
               {/* Column Value */}
-              <p className="mb-3 px-2 text-[12px] text-[#64748b]">
+              <p className="mb-3 px-1 text-[12px] font-normal text-slate-500">
                 ${(stageProspects.reduce((s, p) => s + p.value, 0) / 1000).toFixed(0)}K total
               </p>
 

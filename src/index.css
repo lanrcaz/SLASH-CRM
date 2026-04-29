@@ -71,8 +71,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Aptos", "Segoe UI Variable", "SF Pro Text", "Helvetica Neue", sans-serif;
-    text-rendering: geometricPrecision;
+    font-family: "Inter", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv11", "ss01", "ss03";
   }
 }
 
@@ -93,8 +96,8 @@
     --workspace-danger: #c2413d;
     color: var(--workspace-text);
     background:
-      radial-gradient(circle at 54% 0%, rgba(111, 75, 216, 0.08), transparent 34rem),
-      linear-gradient(180deg, #fafbfe 0%, var(--workspace-bg) 18rem, #f7f8fb 100%);
+      radial-gradient(ellipse 70% 45% at 50% 0%, rgba(111, 75, 216, 0.10), transparent 60%),
+      linear-gradient(180deg, #fafbfe 0%, #f7f8fb 100%);
   }
 
   .app-workspace h1,
@@ -103,86 +106,102 @@
     letter-spacing: -0.01em;
   }
 
-  .app-workspace .bg-\[\#0a0e27\],
-  .app-workspace .bg-navy-950 {
-    background-color: var(--workspace-bg) !important;
+  /*
+   * Legacy navy/neon-theme remap. These classes are sprinkled across pages,
+   * dialogs, dropdowns, and other portaled content. We need them remapped
+   * everywhere — not just inside .app-workspace — because Radix portals
+   * render at <body> level and would otherwise still display the old palette.
+   */
+  body .bg-\[\#0a0e27\],
+  body .bg-navy-950 {
+    background-color: #f7f8fb !important;
   }
 
-  .app-workspace .bg-\[\#0f1535\],
-  .app-workspace .bg-navy-900,
-  .app-workspace .bg-navy-800 {
-    background-color: var(--workspace-surface) !important;
+  body .bg-\[\#0f1535\],
+  body .bg-navy-900,
+  body .bg-navy-800 {
+    background-color: #ffffff !important;
   }
 
-  .app-workspace .bg-\[\#162044\],
-  .app-workspace .bg-\[\#1c2960\],
-  .app-workspace .bg-navy-700,
-  .app-workspace .bg-\[\#334155\] {
-    background-color: var(--workspace-surface-subtle) !important;
+  body .bg-\[\#162044\],
+  body .bg-\[\#1c2960\],
+  body .bg-navy-700,
+  body .bg-\[\#334155\] {
+    background-color: #f3f4f7 !important;
   }
 
-  .app-workspace .border-\[\#1c2960\],
-  .app-workspace .border-navy-700 {
-    border-color: var(--workspace-line) !important;
+  body .border-\[\#1c2960\],
+  body .border-navy-700 {
+    border-color: #e4e6eb !important;
   }
 
-  .app-workspace [class*="border-[rgba(255,255,255"],
-  .app-workspace [class*="border-[rgba(126,234,87"] {
-    border-color: var(--workspace-line) !important;
+  body [class*="border-[rgba(255,255,255"],
+  body [class*="border-[rgba(126,234,87"] {
+    border-color: #e4e6eb !important;
   }
 
-  .app-workspace [class*="bg-[rgba(255,255,255"] {
-    background-color: var(--workspace-surface-subtle) !important;
+  body [class*="bg-[rgba(255,255,255"] {
+    background-color: #f3f4f7 !important;
   }
 
-  .app-workspace .text-white {
-    color: var(--workspace-text) !important;
+  /*
+   * Note: do NOT remap .text-white globally. Many legitimate cases pair
+   * text-white with an explicit accent background (sidebar brand mark,
+   * accent buttons, status pills). Where pages used text-white assuming
+   * a navy surface that is now white, we replace text-white with explicit
+   * dark text per element instead of via a global override.
+   */
+
+  body .text-\[\#cbd5e1\],
+  body .text-\[\#94a3b8\] {
+    color: #6f747d !important;
   }
 
-  .app-workspace .text-\[\#cbd5e1\],
-  .app-workspace .text-\[\#94a3b8\] {
-    color: var(--workspace-muted) !important;
+  body .text-\[\#64748b\],
+  body .text-\[\#475569\] {
+    color: #6f747d !important;
   }
 
-  .app-workspace .text-\[\#64748b\],
-  .app-workspace .text-\[\#475569\],
-  .app-workspace .text-gray-400,
-  .app-workspace .text-gray-500 {
-    color: var(--workspace-faint) !important;
+  body .text-\[\#7eea57\],
+  body .text-neon-green,
+  body .text-purple-vibrant {
+    color: #6f4bd8 !important;
   }
 
-  .app-workspace .text-\[\#7eea57\],
-  .app-workspace .text-neon-green,
-  .app-workspace .text-purple-vibrant {
-    color: var(--workspace-accent) !important;
+  body .bg-\[\#7eea57\],
+  body .bg-neon-green,
+  body .bg-purple-vibrant {
+    background-color: #6f4bd8 !important;
   }
 
-  .app-workspace .bg-\[\#7eea57\],
-  .app-workspace .bg-neon-green,
-  .app-workspace .bg-purple-vibrant {
-    background-color: var(--workspace-accent) !important;
+  body .border-\[\#7eea57\],
+  body .border-neon-green {
+    border-color: #6f4bd8 !important;
   }
 
-  .app-workspace .border-\[\#7eea57\],
-  .app-workspace .border-neon-green {
-    border-color: var(--workspace-accent) !important;
-  }
-
-  .app-workspace .text-\[\#0a0e27\],
-  .app-workspace .text-navy-950 {
+  body .text-\[\#0a0e27\],
+  body .text-navy-950 {
     color: #ffffff !important;
   }
 
   .app-workspace input,
   .app-workspace select,
-  .app-workspace textarea {
+  .app-workspace textarea,
+  [role="dialog"] input,
+  [role="dialog"] select,
+  [role="dialog"] textarea {
     color-scheme: light;
   }
 
   .workspace-panel {
-    border: 1px solid var(--workspace-line);
+    border: 1px solid #e4e6eb;
     background: var(--workspace-surface);
-    box-shadow: 0 14px 34px rgba(32, 33, 36, 0.06);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    transition: box-shadow 200ms ease;
+  }
+
+  .workspace-panel:hover {
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   }
 
   .workspace-empty-illustration {

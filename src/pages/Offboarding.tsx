@@ -69,15 +69,16 @@ const tableRowEntrance = {
 // ─── Helpers ───────────────────────────────────────────────────────────
 
 function Avatar({ initials, size = 44 }: { initials: string; size?: number }) {
-  const bgColors: Record<string, string> = {
-    NS: 'bg-[#f59e0b]', VL: 'bg-[#3b82f6]', AC: 'bg-[#ef4444]',
-    HM: 'bg-[#8b5cf6]', SS: 'bg-[#06b6d4]', PD: 'bg-[#22c55e]',
-    VS: 'bg-[#ec4899]', CC: 'bg-[#f97316]', IW: 'bg-[#14b8a6]',
-  };
   return (
     <div
-      className={`flex items-center justify-center rounded-full text-white font-semibold text-sm ${bgColors[initials] || 'bg-[#64748b]'}`}
-      style={{ width: size, height: size, fontSize: size * 0.4 }}
+      className="flex items-center justify-center rounded-full font-semibold text-[#6f4bd8]"
+      style={{
+        width: size,
+        height: size,
+        fontSize: size * 0.38,
+        background: '#f2efff',
+        border: '1px solid #e4dffb',
+      }}
     >
       {initials}
     </div>
@@ -118,14 +119,14 @@ function KPICard({
       initial="hidden"
       animate="visible"
       transition={{ delay: index * 0.1 }}
-      className="bg-[#0f1535] rounded-2xl p-6 border border-[rgba(255,255,255,0.06)] hover:border-[rgba(245,158,11,0.2)] hover:-translate-y-0.5 transition-all duration-200"
+      className="bg-[#ffffff] rounded-xl p-6 border border-slate-200 hover:border-[rgba(245,158,11,0.2)] hover:-translate-y-0.5 transition-all duration-200"
     >
       <div className="flex items-start justify-between mb-3">
         <div>
-          <p className="text-[32px] font-medium text-white tracking-tight leading-none">
+          <p className="text-[32px] font-medium text-slate-900 tracking-tight leading-none">
             <CountUp end={value} duration={1.2} suffix={suffix || ''} />
           </p>
-          <p className="text-[13px] mt-2 text-[#64748b]">{sub}</p>
+          <p className="text-[13px] mt-2 text-slate-500">{sub}</p>
         </div>
         <div className="p-2.5 rounded-lg" style={{ backgroundColor: `${iconColor}15` }}>
           <Icon size={22} style={{ color: iconColor }} />
@@ -141,10 +142,10 @@ function OffboardingStepTracker({ steps, currentStep }: { steps: OffboardingStep
   return (
     <div className="mt-5 relative">
       {/* Background connector */}
-      <div className="absolute top-[16px] left-[4%] right-[4%] h-[2px] bg-[#1c2960] rounded-full" />
+      <div className="absolute top-[16px] left-[4%] right-[4%] h-[2px] bg-[#e4e6eb] rounded-full" />
       {/* Active connector */}
       <div
-        className="absolute top-[16px] left-[4%] h-[2px] bg-[#7eea57] rounded-full transition-all duration-500"
+        className="absolute top-[16px] left-[4%] h-[2px] rounded-full bg-[#6f4bd8] transition-all duration-500"
         style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 92}%` }}
       />
 
@@ -161,29 +162,23 @@ function OffboardingStepTracker({ steps, currentStep }: { steps: OffboardingStep
                 transition={{ delay: 0.5 + i * 0.15, duration: 0.4, ease: easeSpring }}
                 className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
                   isCompleted
-                    ? 'bg-[#7eea57] border-[#7eea57]'
+                    ? 'bg-[#6f4bd8] border-[#6f4bd8]'
                     : isCurrent
-                      ? 'bg-[#f59e0b] border-[#f59e0b]'
-                      : 'bg-[#1c2960] border-[#1c2960]'
+                      ? 'bg-[#ffffff] border-[#6f4bd8]'
+                      : 'bg-[#ffffff] border-[#e4e6eb]'
                 }`}
               >
                 {isCompleted ? (
-                  <Check size={14} className="text-[#0a0e27]" />
+                  <Check size={14} className="text-[#ffffff]" />
                 ) : isCurrent ? (
-                  <motion.div
-                    animate={{ boxShadow: ['0 0 0 0 rgba(245,158,11,0.4)', '0 0 0 8px rgba(245,158,11,0)', '0 0 0 0 rgba(245,158,11,0.4)'] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                  >
-                    <StepIcon step={step} size={14} className="text-[#0a0e27]" />
-                  </motion.div>
+                  <StepIcon step={step} size={14} className="text-[#6f4bd8]" />
                 ) : (
-                  <StepIcon step={step} size={14} className="text-[#64748b]" />
+                  <StepIcon step={step} size={14} className="text-[#9aa0a6]" />
                 )}
               </motion.div>
               <span
                 className={`mt-2 text-[10px] font-medium max-w-[60px] text-center leading-tight ${
-                  isCompleted ? 'text-[#7eea57]' : isCurrent ? 'text-[#f59e0b]' : 'text-[#64748b]'
+                  isCompleted ? 'text-[#6f4bd8]' : isCurrent ? 'text-[#6f4bd8]' : 'text-slate-500'
                 }`}
               >
                 {step.name}
@@ -206,11 +201,11 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
     <div className="mt-4 space-y-2">
       {/* Data Export Panel */}
       {client.currentStep === 2 && (
-        <div className="bg-[#162044] rounded-xl p-4">
+        <div className="bg-[#ffffff] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-[14px] font-semibold text-white">Export Summary</p>
-              <p className="text-[12px] text-[#64748b]">450MB across 156 files</p>
+              <p className="text-[14px] font-semibold text-slate-900">Export Summary</p>
+              <p className="text-[12px] text-slate-500">450MB across 156 files</p>
             </div>
             <span className="text-[11px] px-2.5 py-1 rounded-full bg-[rgba(59,130,246,0.15)] text-[#3b82f6]">
               CSV + JSON + Attachments
@@ -229,15 +224,15 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center justify-between py-2 border-b border-[#1c2960] last:border-0"
+                className="flex items-center justify-between py-2 border-b border-[#e4e6eb] last:border-0"
               >
                 <div className="flex items-center gap-2">
-                  <FileArchive size={14} className="text-[#64748b]" />
-                  <span className="text-[13px] text-white">{row.category}</span>
+                  <FileArchive size={14} className="text-slate-500" />
+                  <span className="text-[13px] text-slate-900">{row.category}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="text-[12px] text-[#64748b]">{row.size}</span>
-                  <span className="text-[12px] text-[#64748b]">{row.files} files</span>
+                  <span className="text-[12px] text-slate-500">{row.size}</span>
+                  <span className="text-[12px] text-slate-500">{row.files} files</span>
                   <span className="text-[11px] px-2 py-0.5 rounded-full bg-[rgba(34,197,94,0.15)] text-[#22c55e]">
                     {row.status} <Check size={10} className="inline" />
                   </span>
@@ -245,7 +240,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
               </motion.div>
             ))}
           </div>
-          <button className="mt-3 text-[12px] text-[#3b82f6] hover:text-[#7eea57] transition-colors">
+          <button className="mt-3 text-[12px] text-[#3b82f6] hover:text-[#6f4bd8] transition-colors">
             Download full export (ZIP)
           </button>
         </div>
@@ -253,10 +248,10 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
 
       {/* Feedback Panel */}
       {client.currentStep === 3 && (
-        <div className="bg-[#162044] rounded-xl p-4 space-y-4">
+        <div className="bg-[#ffffff] rounded-xl p-4 space-y-4">
           <div>
-            <label className="text-[12px] text-[#94a3b8] mb-2 block">Exit Reason</label>
-            <select className="w-full bg-[#0f1535] border border-[#1c2960] rounded-xl py-2.5 px-3 text-[14px] text-white focus:border-[#f59e0b] focus:outline-none transition-colors">
+            <label className="text-[12px] text-slate-400 mb-2 block">Exit Reason</label>
+            <select className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-slate-900 focus:border-[#f59e0b] focus:outline-none transition-colors">
               <option>Select reason</option>
               <option>Moving in-house</option>
               <option>Budget cuts</option>
@@ -267,7 +262,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
           </div>
 
           <div>
-            <label className="text-[12px] text-[#94a3b8] mb-2 block">Satisfaction Rating</label>
+            <label className="text-[12px] text-slate-400 mb-2 block">Satisfaction Rating</label>
             <div className="flex items-center gap-1.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -277,7 +272,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                 >
                   <Star
                     size={22}
-                    className={star <= feedbackRating ? 'text-[#f59e0b] fill-[#f59e0b]' : 'text-[#64748b]'}
+                    className={star <= feedbackRating ? 'text-[#f59e0b] fill-[#f59e0b]' : 'text-slate-500'}
                   />
                 </button>
               ))}
@@ -285,25 +280,25 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
           </div>
 
           <div>
-            <label className="text-[12px] text-[#94a3b8] mb-2 block">What went well?</label>
+            <label className="text-[12px] text-slate-400 mb-2 block">What went well?</label>
             <textarea
               rows={2}
               placeholder="Share what worked well..."
-              className="w-full bg-[#0f1535] border border-[#1c2960] rounded-xl py-2.5 px-3 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
+              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-slate-900 placeholder:text-slate-500 focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
             />
           </div>
 
           <div>
-            <label className="text-[12px] text-[#94a3b8] mb-2 block">What could we improve?</label>
+            <label className="text-[12px] text-slate-400 mb-2 block">What could we improve?</label>
             <textarea
               rows={2}
               placeholder="Share areas for improvement..."
-              className="w-full bg-[#0f1535] border border-[#1c2960] rounded-xl py-2.5 px-3 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
+              className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-slate-900 placeholder:text-slate-500 focus:border-[#f59e0b] focus:outline-none transition-colors resize-none"
             />
           </div>
 
           <div>
-            <label className="text-[12px] text-[#94a3b8] mb-2 block">Would you recommend us?</label>
+            <label className="text-[12px] text-slate-400 mb-2 block">Would you recommend us?</label>
             <div className="flex items-center gap-2">
               {(['yes', 'maybe', 'no'] as const).map((val) => (
                 <button
@@ -312,7 +307,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[12px] transition-all ${
                     recommendValue === val
                       ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                      : 'border-[#1c2960] text-[#64748b] hover:text-white'
+                      : 'border-[#e4e6eb] text-slate-500 hover:text-slate-900'
                   }`}
                 >
                   {val === 'yes' && <ThumbsUp size={12} />}
@@ -324,7 +319,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
             </div>
           </div>
 
-          <button className="w-full py-2.5 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[13px] hover:bg-[#d97706] transition-colors">
+          <button className="w-full py-2.5 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[13px] hover:bg-[#d97706] transition-colors">
             Save Feedback
           </button>
         </div>
@@ -332,8 +327,8 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
 
       {/* Access Revocation Panel */}
       {client.currentStep === 4 && (
-        <div className="bg-[#162044] rounded-xl p-4">
-          <p className="text-[14px] font-semibold text-white mb-3">Access Checklist</p>
+        <div className="bg-[#ffffff] rounded-xl p-4">
+          <p className="text-[14px] font-semibold text-slate-900 mb-3">Access Checklist</p>
           <div className="space-y-2">
             {[
               { resource: 'Dashboard Access', status: 'Revoked', action: 'View log' },
@@ -351,9 +346,9 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                   initial="hidden"
                   animate="visible"
                   transition={{ delay: i * 0.05 }}
-                  className="flex items-center justify-between py-2 border-b border-[#1c2960] last:border-0"
+                  className="flex items-center justify-between py-2 border-b border-[#e4e6eb] last:border-0"
                 >
-                  <span className="text-[13px] text-white">{item.resource}</span>
+                  <span className="text-[13px] text-slate-900">{item.resource}</span>
                   <div className="flex items-center gap-3">
                     <span className={`text-[11px] px-2 py-0.5 rounded-full ${
                       isRevoked
@@ -362,7 +357,7 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
                     }`}>
                       {item.status}
                     </span>
-                    <button className="text-[11px] text-[#3b82f6] hover:text-[#7eea57] transition-colors">
+                    <button className="text-[11px] text-[#3b82f6] hover:text-[#6f4bd8] transition-colors">
                       {item.action}
                     </button>
                   </div>
@@ -375,10 +370,10 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
 
       {/* Final Review Panel */}
       {client.currentStep === 5 && (
-        <div className="bg-[#162044] rounded-xl p-4 space-y-4">
+        <div className="bg-[#ffffff] rounded-xl p-4 space-y-4">
           <div className="flex items-center gap-2">
             <ShieldCheck size={20} className="text-[#22c55e]" />
-            <span className="text-[14px] font-semibold text-white">Compliance Verification</span>
+            <span className="text-[14px] font-semibold text-slate-900">Compliance Verification</span>
           </div>
 
           <div className="space-y-2">
@@ -396,14 +391,14 @@ function StepDetailPanel({ client }: { client: OffboardingClient }) {
             ))}
           </div>
 
-          <div className="border-t border-[#1c2960] pt-3">
-            <p className="text-[12px] text-[#94a3b8] mb-2">Automated farewell email preview:</p>
-            <div className="bg-[#0f1535] rounded-lg p-3 text-[12px] text-[#94a3b8] italic">
+          <div className="border-t border-[#e4e6eb] pt-3">
+            <p className="text-[12px] text-slate-400 mb-2">Automated farewell email preview:</p>
+            <div className="bg-[#ffffff] rounded-lg p-3 text-[12px] text-slate-400 italic">
               "Thank you for being a valued client. Your offboarding is now complete. All data has been securely exported and access has been revoked. We wish you the best in your future endeavors."
             </div>
           </div>
 
-          <button className="w-full py-2.5 rounded-xl bg-[#22c55e] text-white font-semibold text-[13px] hover:bg-[#16a34a] transition-colors">
+          <button className="w-full py-2.5 rounded-xl bg-[#22c55e] text-slate-900 font-semibold text-[13px] hover:bg-[#16a34a] transition-colors">
             Confirm Final Review
           </button>
         </div>
@@ -426,10 +421,10 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
       initial="hidden"
       animate="visible"
       transition={{ delay: index * 0.1 }}
-      className={`bg-[#0f1535] rounded-2xl p-6 border mb-4 transition-all duration-200 ${
+      className={`bg-[#ffffff] rounded-xl p-6 border mb-4 transition-all duration-200 ${
         client.urgent
-          ? 'border-l-[3px] border-l-[#ef4444] border-[rgba(255,255,255,0.06)]'
-          : 'border-l-[3px] border-l-[#f59e0b] border-[rgba(255,255,255,0.06)]'
+          ? 'border-l-[3px] border-l-[#ef4444] border-slate-200'
+          : 'border-l-[3px] border-l-[#f59e0b] border-slate-200'
       }`}
     >
       {/* Top section */}
@@ -437,8 +432,8 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
         <div className="flex items-center gap-4">
           <Avatar initials={client.avatar} />
           <div>
-            <h3 className="text-[18px] font-semibold text-white">{client.clientName}</h3>
-            <p className="text-[13px] text-[#64748b]">
+            <h3 className="text-[18px] font-semibold text-slate-900">{client.clientName}</h3>
+            <p className="text-[13px] text-slate-500">
               Offboarding started {format(parseISO(client.startDate), 'MMM d')} · Est. complete: {format(parseISO(client.expectedCompletion), 'MMM d')}
             </p>
           </div>
@@ -456,17 +451,17 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
             <ShieldCheck size={14} className="text-[#22c55e]" />
             <span className="text-[12px] text-[#22c55e]">{client.compliance}</span>
           </div>
-          <span className="text-[12px] text-[#94a3b8]">{daysLeft > 0 ? `${daysLeft} days left` : 'Completing today'}</span>
+          <span className="text-[12px] text-slate-400">{daysLeft > 0 ? `${daysLeft} days left` : 'Completing today'}</span>
           <button className="p-1.5 rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors">
-            <MoreVertical size={16} className="text-[#64748b]" />
+            <MoreVertical size={16} className="text-slate-500" />
           </button>
         </div>
       </div>
 
       {/* Reason */}
-      <p className="mt-2 text-[12px] text-[#94a3b8]">
+      <p className="mt-2 text-[12px] text-slate-400">
         Reason: <span className="text-[#cbd5e1]">{client.reason}</span>
-        {client.notes && <span className="block mt-0.5 text-[#64748b]">{client.notes}</span>}
+        {client.notes && <span className="block mt-0.5 text-slate-500">{client.notes}</span>}
       </p>
 
       {/* Step Tracker */}
@@ -476,7 +471,7 @@ function OffboardingCard({ client, index }: { client: OffboardingClient; index: 
       <div className="mt-4">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-2 text-[13px] text-[#94a3b8] hover:text-white transition-colors"
+          className="flex items-center gap-2 text-[13px] text-slate-400 hover:text-slate-900 transition-colors"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           {expanded ? 'Hide' : 'Show'} step details
@@ -508,23 +503,23 @@ function CompletedTable() {
       variants={cardEntrance}
       initial="hidden"
       animate="visible"
-      className="bg-[#0f1535] rounded-2xl border border-[rgba(255,255,255,0.06)] overflow-hidden"
+      className="bg-[#ffffff] rounded-xl border border-slate-200 overflow-hidden"
     >
-      <div className="p-6 border-b border-[#1c2960]">
-        <h3 className="text-[18px] font-semibold text-white">Completed Exits</h3>
-        <p className="text-[13px] text-[#64748b] mt-0.5">Recently offboarded clients</p>
+      <div className="p-6 border-b border-[#e4e6eb]">
+        <h3 className="text-[18px] font-semibold text-slate-900">Completed Exits</h3>
+        <p className="text-[13px] text-slate-500 mt-0.5">Recently offboarded clients</p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-b border-[#1c2960]">
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Client</th>
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Duration</th>
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Reason</th>
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Satisfaction</th>
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Data Exported</th>
-              <th className="text-left px-6 py-3 text-[11px] font-medium text-[#64748b] uppercase tracking-wider">Date</th>
+            <tr className="border-b border-[#e4e6eb]">
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Client</th>
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Duration</th>
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Reason</th>
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Satisfaction</th>
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Data Exported</th>
+              <th className="text-left px-6 py-3 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Date</th>
             </tr>
           </thead>
           <tbody>
@@ -535,12 +530,12 @@ function CompletedTable() {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: i * 0.04 }}
-                className="border-b border-[#1c2960] last:border-0 hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+                className="border-b border-[#e4e6eb] last:border-0 hover:bg-[rgba(255,255,255,0.02)] transition-colors"
               >
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-3">
                     <Avatar initials={row.clientName.substring(0, 2).toUpperCase()} size={32} />
-                    <span className="text-[14px] text-white font-medium">{row.clientName}</span>
+                    <span className="text-[14px] text-slate-900 font-medium">{row.clientName}</span>
                   </div>
                 </td>
                 <td className="px-6 py-3.5 text-[13px] text-[#cbd5e1]">{row.duration}</td>
@@ -548,11 +543,11 @@ function CompletedTable() {
                 <td className="px-6 py-3.5">
                   <div className="flex items-center gap-1">
                     <Star size={12} className="text-[#f59e0b] fill-[#f59e0b]" />
-                    <span className="text-[13px] text-white">{row.satisfaction}</span>
+                    <span className="text-[13px] text-slate-900">{row.satisfaction}</span>
                   </div>
                 </td>
                 <td className="px-6 py-3.5 text-[13px] text-[#cbd5e1]">{row.dataExported}</td>
-                <td className="px-6 py-3.5 text-[13px] text-[#64748b]">{format(parseISO(row.offboardDate), 'MMM d, yyyy')}</td>
+                <td className="px-6 py-3.5 text-[13px] text-slate-500">{format(parseISO(row.offboardDate), 'MMM d, yyyy')}</td>
               </motion.tr>
             ))}
           </tbody>
@@ -573,18 +568,18 @@ function ChurnAnalysis() {
       variants={cardEntrance}
       initial="hidden"
       animate="visible"
-      className="bg-[#0f1535] rounded-2xl p-6 border border-[rgba(255,255,255,0.06)]"
+      className="bg-[#ffffff] rounded-xl p-6 border border-slate-200"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-[18px] font-semibold text-white">Churn Analysis</h3>
-          <p className="text-[13px] text-[#64748b] mt-0.5">Exit reasons breakdown</p>
+          <h3 className="text-[18px] font-semibold text-slate-900">Churn Analysis</h3>
+          <p className="text-[13px] text-slate-500 mt-0.5">Exit reasons breakdown</p>
         </div>
         <div className="text-right">
           <p className="text-[28px] font-medium text-[#f59e0b] leading-none">
             <CountUp end={2.4} decimals={1} suffix="%" duration={1.2} />
           </p>
-          <p className="text-[11px] text-[#64748b] mt-1">30-day churn rate</p>
+          <p className="text-[11px] text-slate-500 mt-1">30-day churn rate</p>
         </div>
       </div>
 
@@ -613,8 +608,8 @@ function ChurnAnalysis() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#0f1535',
-                  border: '1px solid #1c2960',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e4e6eb',
                   borderRadius: '10px',
                   fontSize: '12px',
                   color: '#fff',
@@ -629,8 +624,8 @@ function ChurnAnalysis() {
             <div key={reason.reason} className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: reason.color }} />
               <span className="text-[12px] text-[#cbd5e1] flex-1">{reason.reason}</span>
-              <span className="text-[12px] text-white font-medium">{reason.count}</span>
-              <span className="text-[11px] text-[#64748b] w-10 text-right">
+              <span className="text-[12px] text-slate-900 font-medium">{reason.count}</span>
+              <span className="text-[11px] text-slate-500 w-10 text-right">
                 {Math.round((reason.count / total) * 100)}%
               </span>
             </div>
@@ -660,7 +655,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-[#0f1535] rounded-2xl p-10 text-center max-w-[560px] w-full"
+        className="bg-[#ffffff] rounded-xl p-10 text-center max-w-[560px] w-full"
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -669,16 +664,16 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
         >
           <CheckCircle2 size={56} className="text-[#f59e0b] mx-auto mb-4" />
         </motion.div>
-        <h3 className="text-[22px] font-semibold text-white mb-2">Offboarding started</h3>
-        <p className="text-[15px] text-[#94a3b8] mb-2">
+        <h3 className="text-[22px] font-semibold text-slate-900 mb-2">Offboarding started</h3>
+        <p className="text-[15px] text-slate-400 mb-2">
           The exit workflow has been initiated for the selected client.
         </p>
-        <p className="text-[13px] text-[#64748b] mb-6">
+        <p className="text-[13px] text-slate-500 mb-6">
           Estimated completion: 5 days
         </p>
         <button
           onClick={onClose}
-          className="px-6 py-2.5 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[13px] hover:bg-[#d97706] transition-colors"
+          className="px-6 py-2.5 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[13px] hover:bg-[#d97706] transition-colors"
         >
           View Progress
         </button>
@@ -687,12 +682,12 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="bg-[#0f1535] rounded-2xl max-w-[560px] w-full overflow-hidden">
+    <div className="bg-[#ffffff] rounded-xl max-w-[560px] w-full overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-[#1c2960] flex items-center justify-between">
-        <h3 className="text-[18px] font-semibold text-white">Start Offboarding</h3>
+      <div className="p-6 border-b border-[#e4e6eb] flex items-center justify-between">
+        <h3 className="text-[18px] font-semibold text-slate-900">Start Offboarding</h3>
         <button onClick={onClose} className="p-1.5 rounded-md hover:bg-[rgba(255,255,255,0.05)] transition-colors">
-          <X size={18} className="text-[#64748b]" />
+          <X size={18} className="text-slate-500" />
         </button>
       </div>
 
@@ -708,14 +703,14 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
           <div key={i} className="flex items-center gap-2 flex-1">
             <div
               className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold transition-colors ${
-                i + 1 < step ? 'bg-[#7eea57] text-[#0a0e27]' :
-                i + 1 === step ? 'bg-[#f59e0b] text-[#0a0e27]' : 'bg-[#1c2960] text-[#64748b]'
+                i + 1 < step ? 'bg-[#6f4bd8] text-[#ffffff]' :
+                i + 1 === step ? 'bg-[#f59e0b] text-[#ffffff]' : 'bg-[#e4e6eb] text-slate-500'
               }`}
             >
               {i + 1 < step ? <Check size={14} /> : i + 1}
             </div>
             {i < totalSteps - 1 && (
-              <div className={`flex-1 h-[2px] rounded-full ${i + 1 < step ? 'bg-[#7eea57]' : 'bg-[#1c2960]'}`} />
+              <div className={`flex-1 h-[2px] rounded-full ${i + 1 < step ? 'bg-[#6f4bd8]' : 'bg-[#e4e6eb]'}`} />
             )}
           </div>
         ))}
@@ -734,15 +729,15 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
             {/* Step 1: Select Client */}
             {step === 1 && (
               <div>
-                <h4 className="text-[15px] font-semibold text-white mb-1">Select Client</h4>
-                <p className="text-[13px] text-[#64748b] mb-4">Choose an active client to offboard</p>
+                <h4 className="text-[15px] font-semibold text-slate-900 mb-1">Select Client</h4>
+                <p className="text-[13px] text-slate-500 mb-4">Choose an active client to offboard</p>
 
                 <div className="relative mb-4">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     type="text"
                     placeholder="Search active clients..."
-                    className="w-full bg-[#162044] border border-[#1c2960] rounded-xl py-2.5 pl-10 pr-4 text-[14px] text-white placeholder:text-[#64748b] focus:border-[#f59e0b] focus:outline-none transition-colors"
+                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 pl-10 pr-4 text-[14px] text-slate-900 placeholder:text-slate-500 focus:border-[#f59e0b] focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -754,11 +749,11 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${
                         selectedClient === name
                           ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.05)]'
-                          : 'border-transparent bg-[#162044] hover:bg-[#1c2960]'
+                          : 'border-transparent bg-[#ffffff] hover:bg-[#e4e6eb]'
                       }`}
                     >
                       <Avatar initials={name.substring(0, 2).toUpperCase()} size={36} />
-                      <span className="text-[14px] text-white font-medium">{name}</span>
+                      <span className="text-[14px] text-slate-900 font-medium">{name}</span>
                       {selectedClient === name && <Check size={16} className="text-[#f59e0b] ml-auto" />}
                     </button>
                   ))}
@@ -770,11 +765,11 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
             {step === 2 && (
               <div className="space-y-4">
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-1.5 block">Offboarding Reason</label>
+                  <label className="text-[12px] text-slate-400 mb-1.5 block">Offboarding Reason</label>
                   <select
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full bg-[#162044] border border-[#1c2960] rounded-xl py-2.5 px-3 text-[14px] text-white focus:border-[#f59e0b] focus:outline-none transition-colors"
+                    className="w-full bg-[#ffffff] border border-[#e4e6eb] rounded-xl py-2.5 px-3 text-[14px] text-slate-900 focus:border-[#f59e0b] focus:outline-none transition-colors"
                   >
                     <option value="">Select reason</option>
                     <option value="contract">Contract ended</option>
@@ -786,12 +781,12 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-1.5 block">Request Feedback</label>
+                  <label className="text-[12px] text-slate-400 mb-1.5 block">Request Feedback</label>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => setFeedbackEnabled(!feedbackEnabled)}
                       className={`w-10 h-6 rounded-full flex items-center px-0.5 cursor-pointer transition-colors ${
-                        feedbackEnabled ? 'bg-[#f59e0b]' : 'bg-[#1c2960]'
+                        feedbackEnabled ? 'bg-[#f59e0b]' : 'bg-[#e4e6eb]'
                       }`}
                     >
                       <div
@@ -805,7 +800,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-1.5 block">Data Export Format</label>
+                  <label className="text-[12px] text-slate-400 mb-1.5 block">Data Export Format</label>
                   <div className="grid grid-cols-4 gap-2">
                     {['CSV', 'JSON', 'Both', 'Full Archive'].map((fmt) => (
                       <button
@@ -814,7 +809,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                         className={`py-2 rounded-lg border text-[12px] transition-all ${
                           exportFormat === fmt
                             ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                            : 'border-[#1c2960] text-[#64748b] hover:text-white'
+                            : 'border-[#e4e6eb] text-slate-500 hover:text-slate-900'
                         }`}
                       >
                         {fmt}
@@ -824,7 +819,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-1.5 block">Retention Period</label>
+                  <label className="text-[12px] text-slate-400 mb-1.5 block">Retention Period</label>
                   <div className="flex items-center gap-2">
                     {(['30 days', '60 days', '90 days'] as const).map((period) => (
                       <button
@@ -833,7 +828,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                         className={`px-4 py-2 rounded-lg border text-[12px] transition-all ${
                           retention === period
                             ? 'border-[#f59e0b] bg-[rgba(245,158,11,0.1)] text-[#f59e0b]'
-                            : 'border-[#1c2960] text-[#64748b] hover:text-white'
+                            : 'border-[#e4e6eb] text-slate-500 hover:text-slate-900'
                         }`}
                       >
                         {period}
@@ -847,29 +842,29 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
             {/* Step 3: Confirm */}
             {step === 3 && (
               <div className="space-y-4">
-                <h4 className="text-[15px] font-semibold text-white mb-1">Confirm Offboarding</h4>
-                <p className="text-[13px] text-[#64748b] mb-4">Review all settings before proceeding</p>
+                <h4 className="text-[15px] font-semibold text-slate-900 mb-1">Confirm Offboarding</h4>
+                <p className="text-[13px] text-slate-500 mb-4">Review all settings before proceeding</p>
 
-                <div className="bg-[#162044] rounded-xl p-4 space-y-3">
+                <div className="bg-[#ffffff] rounded-xl p-4 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-[12px] text-[#64748b]">Client</span>
-                    <span className="text-[14px] text-white">{selectedClient || 'Not selected'}</span>
+                    <span className="text-[12px] text-slate-500">Client</span>
+                    <span className="text-[14px] text-slate-900">{selectedClient || 'Not selected'}</span>
                   </div>
-                  <div className="border-t border-[#1c2960] pt-3 flex justify-between items-center">
-                    <span className="text-[12px] text-[#64748b]">Reason</span>
-                    <span className="text-[14px] text-white">{reason || 'Not specified'}</span>
+                  <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
+                    <span className="text-[12px] text-slate-500">Reason</span>
+                    <span className="text-[14px] text-slate-900">{reason || 'Not specified'}</span>
                   </div>
-                  <div className="border-t border-[#1c2960] pt-3 flex justify-between items-center">
-                    <span className="text-[12px] text-[#64748b]">Export Format</span>
-                    <span className="text-[14px] text-white">{exportFormat}</span>
+                  <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
+                    <span className="text-[12px] text-slate-500">Export Format</span>
+                    <span className="text-[14px] text-slate-900">{exportFormat}</span>
                   </div>
-                  <div className="border-t border-[#1c2960] pt-3 flex justify-between items-center">
-                    <span className="text-[12px] text-[#64748b]">Retention</span>
-                    <span className="text-[14px] text-white">{retention}</span>
+                  <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
+                    <span className="text-[12px] text-slate-500">Retention</span>
+                    <span className="text-[14px] text-slate-900">{retention}</span>
                   </div>
-                  <div className="border-t border-[#1c2960] pt-3 flex justify-between items-center">
-                    <span className="text-[12px] text-[#64748b]">Exit Survey</span>
-                    <span className="text-[14px] text-white">{feedbackEnabled ? 'Yes' : 'No'}</span>
+                  <div className="border-t border-[#e4e6eb] pt-3 flex justify-between items-center">
+                    <span className="text-[12px] text-slate-500">Exit Survey</span>
+                    <span className="text-[14px] text-slate-900">{feedbackEnabled ? 'Yes' : 'No'}</span>
                   </div>
                 </div>
 
@@ -880,7 +875,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                       confirmed ? 'bg-[#f59e0b] border-[#f59e0b]' : 'border-[#64748b]'
                     }`}
                   >
-                    {confirmed && <Check size={12} className="text-[#0a0e27]" />}
+                    {confirmed && <Check size={12} className="text-[#ffffff]" />}
                   </button>
                   <span className="text-[13px] text-[#cbd5e1]">
                     I understand this will revoke all client access and begin the exit workflow.
@@ -890,7 +885,7 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
                 <button
                   onClick={() => setStarted(true)}
                   disabled={!confirmed}
-                  className="w-full py-3 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[14px] hover:bg-[#d97706] hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[14px] hover:bg-[#d97706] hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <LogOut size={16} /> Begin Offboarding
                 </button>
@@ -902,18 +897,18 @@ function OffboardingWizard({ onClose }: { onClose: () => void }) {
 
       {/* Footer */}
       {!started && (
-        <div className="p-6 border-t border-[#1c2960] flex items-center justify-between">
+        <div className="p-6 border-t border-[#e4e6eb] flex items-center justify-between">
           <button
             onClick={() => setStep((s) => Math.max(1, s - 1))}
             disabled={step === 1}
-            className="text-[13px] text-[#94a3b8] hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="text-[13px] text-slate-400 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             Back
           </button>
           {step < totalSteps && (
             <button
               onClick={() => setStep((s) => Math.min(totalSteps, s + 1))}
-              className="px-5 py-2 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[13px] hover:bg-[#d97706] transition-colors"
+              className="px-5 py-2 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[13px] hover:bg-[#d97706] transition-colors"
             >
               Continue
             </button>
@@ -942,7 +937,7 @@ export default function Offboarding() {
   }, [showWizard]);
 
   return (
-    <div className="min-h-[100dvh] bg-[#0a0e27]">
+    <div className="min-h-[100dvh]">
       {/* ─── Header ───────────────────────────────────────────────── */}
       <motion.section
         variants={fadeSlideDown}
@@ -951,15 +946,15 @@ export default function Offboarding() {
         className="px-6 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
       >
         <div>
-          <h1 className="text-[36px] font-semibold text-white tracking-tight leading-tight">Offboarding</h1>
-          <p className="text-[15px] text-[#64748b] mt-1">
+          <h1 className="text-[36px] font-bold text-slate-900 tracking-tight leading-tight">Offboarding</h1>
+          <p className="text-[15px] text-slate-500 mt-1">
             {activeOffboardings.length} active offboardings · 2 completed this month · Avg. 5 days
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowWizard(true)}
-            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[13px] hover:bg-[#d97706] hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[13px] hover:bg-[#d97706] hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             <LogOut size={16} /> Start Offboarding
           </button>
@@ -974,20 +969,20 @@ export default function Offboarding() {
         className="px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
       >
         <KPICard icon={LogOut} iconColor="#f59e0b" value={3} sub="In progress" index={0} />
-        <KPICard icon={CheckCircle2} iconColor="#7eea57" value={2} sub="All compliant" index={1} />
-        <KPICard icon={Clock} iconColor="#ffffff" value={5} suffix=" days" sub="From start to complete" index={2} />
+        <KPICard icon={CheckCircle2} iconColor="#6f4bd8" value={2} sub="All compliant" index={1} />
+        <KPICard icon={Clock} iconColor="#5f6368" value={5} suffix=" days" sub="From start to complete" index={2} />
         <KPICard icon={Database} iconColor="#3b82f6" value={1.2} suffix="GB" sub="Total client data exported" index={3} />
       </motion.section>
 
       {/* ─── View Toggle ──────────────────────────────────────────── */}
       <section className="px-6 mb-6">
-        <div className="flex items-center gap-6 border-b border-[#1c2960]">
+        <div className="flex items-center gap-6 border-b border-[#e4e6eb]">
           {(['active', 'completed', 'settings'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-3 text-[14px] font-medium transition-colors relative ${
-                activeTab === tab ? 'text-white' : 'text-[#64748b] hover:text-[#94a3b8]'
+                activeTab === tab ? 'text-slate-900' : 'text-slate-500 hover:text-slate-400'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -1046,14 +1041,14 @@ export default function Offboarding() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="bg-[#0f1535] rounded-2xl p-8 border border-[rgba(255,255,255,0.06)]"
+              className="bg-[#ffffff] rounded-xl p-8 border border-slate-200"
             >
-              <h3 className="text-[18px] font-semibold text-white mb-2">Offboarding Settings</h3>
-              <p className="text-[13px] text-[#64748b] mb-6">Configure default offboarding behavior</p>
+              <h3 className="text-[18px] font-semibold text-slate-900 mb-2">Offboarding Settings</h3>
+              <p className="text-[13px] text-slate-500 mb-6">Configure default offboarding behavior</p>
 
               <div className="space-y-6 max-w-[480px]">
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-2 block">Default Retention Period</label>
+                  <label className="text-[12px] text-slate-400 mb-2 block">Default Retention Period</label>
                   <div className="flex items-center gap-2">
                     {(['30 days', '60 days', '90 days'] as const).map((period) => (
                       <button
@@ -1067,7 +1062,7 @@ export default function Offboarding() {
                 </div>
 
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-2 block">Auto-export Format</label>
+                  <label className="text-[12px] text-slate-400 mb-2 block">Auto-export Format</label>
                   <div className="flex items-center gap-2">
                     {['CSV', 'JSON', 'Both'].map((fmt) => (
                       <button
@@ -1081,7 +1076,7 @@ export default function Offboarding() {
                 </div>
 
                 <div>
-                  <label className="text-[12px] text-[#94a3b8] mb-2 block">Automated Actions</label>
+                  <label className="text-[12px] text-slate-400 mb-2 block">Automated Actions</label>
                   <div className="space-y-2">
                     {[
                       'Send farewell email automatically',
@@ -1091,7 +1086,7 @@ export default function Offboarding() {
                     ].map((action) => (
                       <label key={action} className="flex items-center gap-3 cursor-pointer">
                         <div className="w-5 h-5 rounded bg-[#f59e0b] flex items-center justify-center">
-                          <Check size={12} className="text-[#0a0e27]" />
+                          <Check size={12} className="text-[#ffffff]" />
                         </div>
                         <span className="text-[13px] text-[#cbd5e1]">{action}</span>
                       </label>
@@ -1099,7 +1094,7 @@ export default function Offboarding() {
                   </div>
                 </div>
 
-                <button className="px-6 py-2.5 rounded-xl bg-[#f59e0b] text-[#0a0e27] font-semibold text-[13px] hover:bg-[#d97706] transition-colors">
+                <button className="px-6 py-2.5 rounded-xl bg-[#f59e0b] text-[#ffffff] font-semibold text-[13px] hover:bg-[#d97706] transition-colors">
                   Save Settings
                 </button>
               </div>
