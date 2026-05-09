@@ -1,167 +1,330 @@
-import { useState, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import type { DragEvent } from 'react';
 import {
-  Plus, Search, Upload, X, Mail, Phone,
-  Calendar, CheckCircle2, Send, PhoneCall, UserCheck, UserX,
+  ArrowUpRight,
+  Bot,
+  Calendar,
+  CheckCircle2,
+  ChevronDown,
+  Filter,
+  Mail,
+  MoreVertical,
+  Phone,
+  Plus,
+  Search,
+  Send,
+  Sparkles,
+  Upload,
+  UserCheck,
+  X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
+  Dialog,
+  DialogContent,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  prospects, pipelineStages, type Prospect, type ProspectStage,
+  pipelineStages,
+  prospects,
+  type Prospect,
+  type ProspectStage,
 } from '@/mocks/dashboardMock';
 
-/* ------------------------------------------------------------------ */
-/*  Animation helpers                                                  */
-/* ------------------------------------------------------------------ */
-const easeOutExpo = [0.16, 1, 0.3, 1] as [number, number, number, number];
-
-const fadeSlideUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, delay, ease: easeOutExpo },
-});
-
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
 const stageOrder: ProspectStage[] = ['Lead', 'Qualified', 'Proposal', 'Negotiation', 'Closed'];
+const sources = ['Website', 'Referral', 'Cold outreach', 'Ad', 'Event', 'Partner'];
+const assignees = ['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'];
+
+type ViewMode = 'board' | 'table' | 'intake';
+
+type ProspectForm = {
+  company: string;
+  name: string;
+  email: string;
+  phone: string;
+  value: string;
+  source: string;
+  assignee: string;
+  notes: string;
+};
 
 function getScoreColor(score: number) {
-  if (score >= 80) return '#6f4bd8';
-  if (score >= 50) return '#a89aea';
-  return '#cdc4f1';
+  if (score >= 80) return '#1f8f55';
+  if (score >= 55) return '#b97010';
+  return '#c2413d';
 }
 
 function getScoreLabel(score: number) {
   if (score >= 80) return 'Hot';
-  if (score >= 50) return 'Warm';
+  if (score >= 55) return 'Warm';
   return 'Cold';
 }
 
-/* ------------------------------------------------------------------ */
-/*  AI Score Ring                                                      */
-/* ------------------------------------------------------------------ */
-function AIScoreRing({ score, size = 32 }: { score: number; size?: number }) {
-  const color = getScoreColor(score);
-  const strokeWidth = 3;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
+function formatMoney(value: number) {
+  return `$${value.toLocaleString()}`;
+}
+
+function scoreTone(score: number) {
+  if (score >= 80) return 'border-[#b6dec8] bg-[#eef9f3] text-[#1f8f55]';
+  if (score >= 55) return 'border-[#f1d6aa] bg-[#fff6e8] text-[#b97010]';
+  return 'border-[#f0b7b4] bg-[#fff0ef] text-[#c2413d]';
+}
+
+function MetricCard({
+  label,
+  value,
+  detail,
+  tone = 'purple',
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  tone?: 'purple' | 'green' | 'amber' | 'gray';
+}) {
+  const toneClasses = {
+    purple: 'bg-[#f2efff] text-[#6f4bd8]',
+    green: 'bg-[#eef9f3] text-[#1f8f55]',
+    amber: 'bg-[#fff6e8] text-[#b97010]',
+    gray: 'bg-[#f1f2f5] text-[#575d67]',
+  };
 
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke={color} strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-          className="transition-all duration-500"
-        />
-      </svg>
-      <span
-        className="absolute inset-0 flex items-center justify-center text-[10px] font-semibold"
-        style={{ color }}
-      >
-        {score}
-      </span>
+    <div className="rounded-lg border border-[#dfe2e8] bg-white px-4 py-3 shadow-[0_1px_2px_rgba(32,33,36,0.04)]">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[12px] font-bold uppercase tracking-[0.04em] text-[#737984]">{label}</p>
+        <span className={cn('rounded-full px-2 py-0.5 text-[11px] font-bold', toneClasses[tone])}>
+          Live
+        </span>
+      </div>
+      <p className="mt-2 text-[27px] font-semibold leading-none text-[#24262c]">{value}</p>
+      <p className="mt-1.5 text-[12px] text-[#747984]">{detail}</p>
     </div>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Prospect Card                                                      */
-/* ------------------------------------------------------------------ */
-function ProspectCard({
-  prospect,
-  onClick,
-  onDragStart,
+function FilterSelect({
+  value,
+  onChange,
+  options,
+  label,
 }: {
-  prospect: Prospect;
-  onClick: () => void;
-  onDragStart: () => void;
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  label: string;
 }) {
-  const scoreColor = getScoreColor(prospect.aiScore);
-
   return (
-    <motion.div
-      layout
-      layoutId={prospect.id}
-      draggable
-      onDragStart={onDragStart}
-      onClick={onClick}
-      whileHover={{ y: -2 }}
-      className={cn(
-        'rounded-xl border border-slate-200 bg-white p-4 cursor-grab active:cursor-grabbing',
-        'transition-all duration-200 hover:border-slate-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]'
-      )}
-    >
-      <div className="flex items-start justify-between">
-        <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold tracking-tight text-slate-900 truncate">{prospect.company}</p>
-          <p className="text-[12px] text-slate-500 truncate">{prospect.name}</p>
-        </div>
-        <AIScoreRing score={prospect.aiScore} size={28} />
-      </div>
-
-      <p className="mt-2 text-[14px] font-semibold text-[#6f4bd8]">
-        ${(prospect.value / 1000).toFixed(0)},{String(prospect.value % 1000).padStart(3, '0')}
-      </p>
-
-      <div className="mt-2">
-        <div className="flex items-center justify-between">
-          <span className="text-[11px] text-slate-500">{prospect.probability}% probability</span>
-        </div>
-        <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-slate-100">
-          <div
-            className="h-full rounded-full transition-all"
-            style={{ width: `${prospect.probability}%`, backgroundColor: scoreColor }}
-          />
-        </div>
-      </div>
-
-      <div className="mt-3 flex flex-wrap gap-1">
-        <span
-          className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
-        >
-          {prospect.source}
-        </span>
-        <span
-          className="rounded-full px-2 py-0.5 text-[10px] font-medium"
-          style={{ backgroundColor: `${scoreColor}1f`, color: scoreColor }}
-        >
-          {getScoreLabel(prospect.aiScore)}
-        </span>
-      </div>
-
-      <div className="mt-3 flex items-center justify-between border-t border-[#eceef2] pt-2.5">
-        <span className="text-[11px] text-slate-500">{prospect.lastContact}</span>
-        <div
-          className="flex size-6 items-center justify-center rounded-full text-[9px] font-semibold"
-          style={{ background: '#f2efff', color: '#6f4bd8', border: '1px solid #e4dffb' }}
-        >
-          {prospect.assigneeAvatar}
-        </div>
-      </div>
-    </motion.div>
+    <label className="relative">
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 min-w-[150px] appearance-none rounded-md border border-[#cbd0da] bg-white px-3 pr-9 text-[13px] font-semibold text-[#3f444c] outline-none transition focus:border-[#6f4bd8] focus:ring-2 focus:ring-[#6f4bd8]/15"
+      >
+        <option value="">{label}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#69707a]" />
+    </label>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Prospect Detail Panel                                              */
-/* ------------------------------------------------------------------ */
-function ProspectDetailPanel({
+function ProspectScore({ score }: { score: number }) {
+  return (
+    <span className={cn('inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-bold', scoreTone(score))}>
+      {score} · {getScoreLabel(score)}
+    </span>
+  );
+}
+
+function BoardCard({
+  prospect,
+  onSelect,
+  onDragStart,
+}: {
+  prospect: Prospect;
+  onSelect: () => void;
+  onDragStart: () => void;
+}) {
+  return (
+    <button
+      draggable
+      onDragStart={onDragStart}
+      onClick={onSelect}
+      className="w-full cursor-grab rounded-md border border-[#dfe2e8] bg-white p-3 text-left shadow-[0_1px_2px_rgba(32,33,36,0.05)] transition hover:border-[#b8b0fb] hover:bg-[#fbfaff] active:cursor-grabbing"
+      style={{ borderLeft: `3px solid ${getScoreColor(prospect.aiScore)}` }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-[14px] font-bold text-[#303238]">{prospect.company}</p>
+          <p className="truncate text-[12px] text-[#747984]">{prospect.name}</p>
+        </div>
+        <ProspectScore score={prospect.aiScore} />
+      </div>
+      <div className="mt-3 flex items-center justify-between">
+        <p className="text-[15px] font-bold text-[#303238]">{formatMoney(prospect.value)}</p>
+        <span className="rounded-full bg-[#f1f2f5] px-2 py-0.5 text-[11px] font-semibold text-[#575d67]">
+          {prospect.probability}%
+        </span>
+      </div>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e6e9ef]">
+        <div
+          className="h-full rounded-full bg-[#6f4bd8]"
+          style={{ width: `${prospect.probability}%` }}
+        />
+      </div>
+      <div className="mt-3 flex items-center justify-between border-t border-[#eceef2] pt-2.5">
+        <span className="text-[11px] text-[#747984]">{prospect.source}</span>
+        <span className="flex size-6 items-center justify-center rounded-full bg-[#f2efff] text-[9px] font-bold text-[#6f4bd8]">
+          {prospect.assigneeAvatar}
+        </span>
+      </div>
+    </button>
+  );
+}
+
+function ProspectTable({
+  rows,
+  onSelect,
+}: {
+  rows: Prospect[];
+  onSelect: (prospect: Prospect) => void;
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[980px] text-left">
+        <thead>
+          <tr className="border-b border-[#eceef2] bg-[#fafbfc] text-[12px] font-bold text-[#575d67]">
+            <th className="px-5 py-3">Company</th>
+            <th className="px-5 py-3">Status</th>
+            <th className="px-5 py-3">Source</th>
+            <th className="px-5 py-3">Assigned by</th>
+            <th className="px-5 py-3">AI score</th>
+            <th className="px-5 py-3">Value</th>
+            <th className="px-5 py-3">Last contact</th>
+            <th className="px-5 py-3" />
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-[#eceef2]">
+          {rows.map((prospect) => (
+            <tr key={prospect.id} className="text-[14px] hover:bg-[#fafbfc]">
+              <td className="px-5 py-3">
+                <button onClick={() => onSelect(prospect)} className="flex items-center gap-3 text-left">
+                  <span className="flex size-8 items-center justify-center rounded-full bg-[#f2efff] text-[11px] font-bold text-[#6f4bd8]">
+                    {prospect.company.slice(0, 2).toUpperCase()}
+                  </span>
+                  <span>
+                    <span className="block font-bold text-[#303238]">{prospect.company}</span>
+                    <span className="text-[12px] text-[#747984]">{prospect.email}</span>
+                  </span>
+                </button>
+              </td>
+              <td className="px-5 py-3">
+                <span className="rounded-md border border-[#d8dbe3] bg-[#f7f8fb] px-2.5 py-1 text-[12px] font-bold text-[#575d67]">
+                  {prospect.stage}
+                </span>
+              </td>
+              <td className="px-5 py-3 text-[#575d67]">{prospect.source}</td>
+              <td className="px-5 py-3 text-[#575d67]">{prospect.assignee}</td>
+              <td className="px-5 py-3"><ProspectScore score={prospect.aiScore} /></td>
+              <td className="px-5 py-3 font-bold text-[#303238]">{formatMoney(prospect.value)}</td>
+              <td className="px-5 py-3 text-[#747984]">{prospect.lastContact}</td>
+              <td className="px-5 py-3 text-right">
+                <button
+                  onClick={() => onSelect(prospect)}
+                  className="rounded-md border border-[#d9dde6] p-2 text-[#4f5661] transition hover:bg-[#f3f4f7]"
+                >
+                  <ArrowUpRight className="size-4" />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function IntakePanel({ onCreate }: { onCreate: () => void }) {
+  const intakeRows = [
+    { source: 'Google Search Console', leads: 18, status: 'Ready to qualify', owner: 'SEO queue' },
+    { source: 'Website form', leads: 7, status: 'New submissions', owner: 'Sarah Chen' },
+    { source: 'Referral partners', leads: 5, status: 'Warm introductions', owner: 'Marcus Johnson' },
+    { source: 'Manual CSV import', leads: 42, status: 'Needs dedupe', owner: 'Ops' },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_360px]">
+      <section className="workspace-panel rounded-lg">
+        <div className="flex items-start justify-between border-b border-[#eceef2] px-5 py-4">
+          <div>
+            <h2 className="text-[18px] font-bold text-[#303238]">Lead intake sources</h2>
+            <p className="text-[13px] text-[#6f747d]">Free-first lead sources we can connect before paid enrichment APIs.</p>
+          </div>
+          <button
+            onClick={onCreate}
+            className="inline-flex items-center gap-2 rounded-md bg-[#6f4bd8] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#5f3fd0]"
+          >
+            <Plus className="size-4" /> Add lead
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left">
+            <thead>
+              <tr className="border-b border-[#eceef2] bg-[#fafbfc] text-[12px] font-bold text-[#575d67]">
+                <th className="px-5 py-3">Source</th>
+                <th className="px-5 py-3">Open leads</th>
+                <th className="px-5 py-3">Workflow status</th>
+                <th className="px-5 py-3">Owner</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#eceef2]">
+              {intakeRows.map((row) => (
+                <tr key={row.source} className="text-[14px]">
+                  <td className="px-5 py-3 font-bold text-[#303238]">{row.source}</td>
+                  <td className="px-5 py-3 text-[#575d67]">{row.leads}</td>
+                  <td className="px-5 py-3">
+                    <span className="rounded-md border border-[#d8dbe3] bg-[#f7f8fb] px-2.5 py-1 text-[12px] font-bold text-[#575d67]">
+                      {row.status}
+                    </span>
+                  </td>
+                  <td className="px-5 py-3 text-[#575d67]">{row.owner}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside className="workspace-panel rounded-lg p-5">
+        <div className="flex size-11 items-center justify-center rounded-md bg-[#f2efff] text-[#6f4bd8]">
+          <Bot className="size-5" />
+        </div>
+        <h3 className="mt-4 text-[18px] font-bold text-[#303238]">Free SEO lead workflow</h3>
+        <p className="mt-2 text-[13px] leading-6 text-[#6f747d]">
+          Start with Search Console queries, landing-page form submissions, CSV imports, and a dedupe queue. Paid APIs can be added later only when the free signal is not enough.
+        </p>
+        <div className="mt-4 space-y-2">
+          {['Import query winners', 'Match company domains', 'Score lead intent', 'Assign follow-up task'].map((item) => (
+            <div key={item} className="flex items-center gap-2 text-[13px] font-semibold text-[#3f444c]">
+              <CheckCircle2 className="size-4 text-[#1f8f55]" />
+              {item}
+            </div>
+          ))}
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function ProspectDrawer({
   prospect,
   onClose,
   onStageChange,
@@ -170,343 +333,217 @@ function ProspectDetailPanel({
   onClose: () => void;
   onStageChange: (stage: ProspectStage) => void;
 }) {
-  const scoreColor = getScoreColor(prospect.aiScore);
+  const expectedValue = Math.round(prospect.value * (prospect.probability / 100));
 
   return (
-    <motion.div
-      initial={{ x: '100%' }}
-      animate={{ x: 0 }}
-      exit={{ x: '100%' }}
-      transition={{ duration: 0.3, ease: easeOutExpo }}
-      className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-[420px] border-l border-[#e4e6eb] bg-[#ffffff] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-y-auto"
-    >
-      {/* Header */}
-      <div className="sticky top-0 z-10 border-b border-[#e4e6eb] bg-[#ffffff] px-6 py-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[22px] font-semibold text-slate-900 truncate">{prospect.company}</h2>
-          <button
-            onClick={onClose}
-            className="flex size-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-[rgba(255,255,255,0.08)] hover:text-slate-900"
-          >
-            <X className="size-5" />
-          </button>
-        </div>
-
-        {/* Stage selector */}
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          {stageOrder.map((s) => (
-            <button
-              key={s}
-              onClick={() => onStageChange(s)}
-              className={cn(
-                'rounded-full px-3 py-1 text-[11px] font-medium transition-all',
-                prospect.stage === s
-                  ? 'text-[#ffffff]'
-                  : 'border border-[#e4e6eb] text-slate-400 hover:text-slate-900 hover:border-[#64748b]'
-              )}
-              style={
-                prospect.stage === s
-                  ? { backgroundColor: pipelineStages.find((ps) => ps.stage === s)?.color || '#64748b' }
-                  : undefined
-              }
-            >
-              {s}
+    <>
+      <button className="fixed inset-0 z-40 bg-[#202124]/25" onClick={onClose} aria-label="Close prospect details" />
+      <aside className="fixed bottom-0 right-0 top-0 z-50 w-full max-w-[460px] overflow-y-auto border-l border-[#dfe2e8] bg-white shadow-[-16px_0_40px_rgba(32,33,36,0.14)]">
+        <div className="sticky top-0 z-10 border-b border-[#eceef2] bg-white px-6 py-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h2 className="truncate text-[22px] font-bold text-[#303238]">{prospect.company}</h2>
+              <p className="text-[13px] text-[#747984]">{prospect.name} · {prospect.source}</p>
+            </div>
+            <button onClick={onClose} className="rounded-md border border-[#d9dde6] p-2 text-[#4f5661] hover:bg-[#f3f4f7]">
+              <X className="size-4" />
             </button>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div className="px-6 py-5 flex flex-col gap-6">
-        {/* AI Score */}
-        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">AI Score</h3>
-          <div className="flex items-center gap-5">
-            <AIScoreRing score={prospect.aiScore} size={64} />
-            <div className="flex-1">
-              <div className="flex items-baseline gap-2">
-                <span className="text-[28px] font-medium text-slate-900">{prospect.aiScore}</span>
-                <span className="text-[13px] text-slate-500">/ 100</span>
-              </div>
-              <span
-                className="inline-block mt-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium"
-                style={{ backgroundColor: `${scoreColor}15`, color: scoreColor }}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {stageOrder.map((stage) => (
+              <button
+                key={stage}
+                onClick={() => onStageChange(stage)}
+                className={cn(
+                  'rounded-full border px-3 py-1 text-[12px] font-bold transition',
+                  prospect.stage === stage
+                    ? 'border-[#6f4bd8] bg-[#f2efff] text-[#6f4bd8]'
+                    : 'border-[#d8dbe3] bg-white text-[#575d67] hover:bg-[#f7f8fb]'
+                )}
               >
-                {getScoreLabel(prospect.aiScore)}
-              </span>
-            </div>
-          </div>
-          <div className="mt-4 flex flex-col gap-2">
-            {[
-              { label: 'Engagement', score: Math.min(100, prospect.aiScore + 5) },
-              { label: 'Company Fit', score: Math.min(100, prospect.aiScore - 2) },
-              { label: 'Timing', score: Math.min(100, prospect.aiScore + 3) },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-3">
-                <span className="w-[90px] text-[12px] text-slate-400">{item.label}</span>
-                <div className="flex-1 h-1.5 overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-                  <div
-                    className="h-full rounded-full"
-                    style={{ width: `${item.score}%`, backgroundColor: scoreColor }}
-                  />
-                </div>
-                <span className="w-[28px] text-right text-[12px] text-slate-900">{item.score}</span>
-              </div>
+                {stage}
+              </button>
             ))}
           </div>
-
-          {prospect.aiScore >= 80 && (
-            <div className="mt-4 flex items-start gap-2 rounded-lg bg-[rgba(111,75,216,0.08)] p-3">
-              <SparklesIcon className="mt-0.5 size-4 shrink-0 text-[#6f4bd8]" />
-              <p className="text-[12px] text-[#6f4bd8]">
-                Likely to convert in 14 days based on engagement patterns.
-              </p>
-            </div>
-          )}
         </div>
 
-        {/* Contact Details */}
-        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Contact Details</h3>
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-3">
-              <UserIcon className="size-4 text-slate-500" />
-              <span className="text-[13px] text-[#cbd5e1]">{prospect.name}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Mail className="size-4 text-slate-500" />
-              <span className="text-[13px] text-[#cbd5e1]">{prospect.email}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Phone className="size-4 text-slate-500" />
-              <span className="text-[13px] text-[#cbd5e1]">{prospect.phone}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Calendar className="size-4 text-slate-500" />
-              <span className="text-[13px] text-[#cbd5e1]">Last contact: {prospect.lastContact}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Value */}
-        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Deal Value</h3>
-          <div className="flex items-baseline gap-1">
-            <span className="text-[28px] font-medium text-[#6f4bd8]">
-              ${(prospect.value / 1000).toFixed(0)}K
-            </span>
-          </div>
-          <div className="mt-3">
+        <div className="space-y-5 px-6 py-5">
+          <section className="rounded-lg border border-[#dfe2e8] bg-[#fafbfc] p-4">
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-slate-400">Probability</span>
-              <span className="text-[13px] font-medium text-slate-900">{prospect.probability}%</span>
-            </div>
-            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-              <div
-                className="h-full rounded-full bg-[#6f4bd8]"
-                style={{ width: `${prospect.probability}%` }}
-              />
-            </div>
-          </div>
-          <p className="mt-3 text-[12px] text-slate-500">
-            Expected value:{' '}
-            <span className="text-slate-900 font-medium">
-              ${Math.round(prospect.value * (prospect.probability / 100)).toLocaleString()}
-            </span>
-          </p>
-        </div>
-
-        {/* Activity Timeline */}
-        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-slate-900 mb-4">Activity</h3>
-          <div className="flex flex-col gap-4">
-            {[
-              { action: 'Initial contact', date: '3 weeks ago', icon: Mail },
-              { action: 'Demo completed', date: '2 weeks ago', icon: CheckCircle2 },
-              { action: 'Proposal sent', date: '1 week ago', icon: Send },
-              { action: 'Follow-up call', date: prospect.lastContact, icon: PhoneCall },
-            ].map((activity, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="flex size-7 items-center justify-center rounded-full bg-[#ffffff]">
-                  <activity.icon className="size-3.5 text-slate-500" />
-                </div>
-                <div>
-                  <p className="text-[13px] text-[#cbd5e1]">{activity.action}</p>
-                  <p className="text-[11px] text-slate-600">{activity.date}</p>
-                </div>
+              <div>
+                <p className="text-[12px] font-bold uppercase tracking-[0.04em] text-[#737984]">AI score</p>
+                <p className="mt-1 text-[30px] font-semibold text-[#303238]">{prospect.aiScore}</p>
               </div>
-            ))}
+              <ProspectScore score={prospect.aiScore} />
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              <div className="rounded-md bg-white p-3">
+                <p className="text-[12px] text-[#747984]">Deal value</p>
+                <p className="text-[17px] font-bold text-[#303238]">{formatMoney(prospect.value)}</p>
+              </div>
+              <div className="rounded-md bg-white p-3">
+                <p className="text-[12px] text-[#747984]">Expected value</p>
+                <p className="text-[17px] font-bold text-[#303238]">{formatMoney(expectedValue)}</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-[#dfe2e8] p-4">
+            <h3 className="text-[15px] font-bold text-[#303238]">Contact details</h3>
+            <div className="mt-4 space-y-3 text-[13px] text-[#575d67]">
+              <p className="flex items-center gap-3"><Mail className="size-4 text-[#747984]" /> {prospect.email}</p>
+              <p className="flex items-center gap-3"><Phone className="size-4 text-[#747984]" /> {prospect.phone}</p>
+              <p className="flex items-center gap-3"><Calendar className="size-4 text-[#747984]" /> Last contact: {prospect.lastContact}</p>
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-[#dfe2e8] p-4">
+            <h3 className="text-[15px] font-bold text-[#303238]">Suggested next action</h3>
+            <div className="mt-3 rounded-md border border-[#dcd7ff] bg-[#fbfaff] p-3">
+              <div className="flex items-start gap-3">
+                <Sparkles className="mt-0.5 size-4 text-[#6f4bd8]" />
+                <p className="text-[13px] leading-5 text-[#575d67]">
+                  Send a short follow-up focused on ROI and book a 20-minute qualification call within 48 hours.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-[#dfe2e8] p-4">
+            <h3 className="text-[15px] font-bold text-[#303238]">Notes</h3>
+            <p className="mt-2 text-[13px] leading-6 text-[#6f747d]">{prospect.notes}</p>
+          </section>
+
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <Button className="bg-[#6f4bd8] text-white hover:bg-[#5f3fd0]">
+              <Send className="mr-2 size-4" /> Email
+            </Button>
+            <Button variant="outline" className="border-[#cbd0da] text-[#303238] hover:bg-[#f3f4f7]">
+              <UserCheck className="mr-2 size-4" /> Convert
+            </Button>
           </div>
         </div>
-
-        {/* Notes */}
-        <div className="rounded-xl border border-slate-200 bg-[#ffffff] p-5">
-          <h3 className="text-[14px] font-semibold text-slate-900 mb-3">Notes</h3>
-          <p className="text-[13px] text-slate-400 leading-relaxed">{prospect.notes}</p>
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col gap-2">
-          <Button className="w-full bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
-            <Send className="size-4 mr-2" /> Send Email
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full border-[#e4e6eb] text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
-          >
-            <PhoneCall className="size-4 mr-2" /> Schedule Call
-          </Button>
-          <Button className="w-full bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold">
-            <UserCheck className="size-4 mr-2" /> Convert to Client
-          </Button>
-          <Button
-            variant="ghost"
-            className="w-full text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:text-[#ef4444]"
-          >
-            <UserX className="size-4 mr-2" /> Mark Lost
-          </Button>
-        </div>
-      </div>
-    </motion.div>
+      </aside>
+    </>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Add Prospect Modal                                                 */
-/* ------------------------------------------------------------------ */
-function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [form, setForm] = useState({
-    name: '', company: '', email: '', phone: '',
-    value: '', source: 'Website', stage: 'Lead' as ProspectStage,
-    assignee: 'Sarah Chen', notes: '',
+function AddProspectDialog({
+  open,
+  onClose,
+  onAdd,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onAdd: (prospect: Prospect) => void;
+}) {
+  const [form, setForm] = useState<ProspectForm>({
+    company: '',
+    name: '',
+    email: '',
+    phone: '',
+    value: '',
+    source: 'Website',
+    assignee: 'Sarah Chen',
+    notes: '',
   });
 
-  const update = (field: string, value: string) =>
+  const update = (field: keyof ProspectForm, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleSubmit = () => {
+  const reset = () => {
+    setForm({
+      company: '',
+      name: '',
+      email: '',
+      phone: '',
+      value: '',
+      source: 'Website',
+      assignee: 'Sarah Chen',
+      notes: '',
+    });
+  };
+
+  const submit = () => {
+    const assigneeInitials = form.assignee
+      .split(' ')
+      .map((part) => part[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+
+    onAdd({
+      id: `p-${Date.now()}`,
+      company: form.company || 'New Prospect',
+      name: form.name || 'Unknown contact',
+      email: form.email || 'contact@example.com',
+      phone: form.phone || '+1 (555) 000-0000',
+      value: Number(form.value) || 0,
+      probability: 20,
+      stage: 'Lead',
+      assignee: form.assignee,
+      assigneeAvatar: assigneeInitials,
+      lastContact: 'Just now',
+      aiScore: 58,
+      source: form.source,
+      notes: form.notes || 'New lead added manually.',
+      tags: [form.source, 'Manual'],
+    });
+    reset();
     onClose();
-    setForm({ name: '', company: '', email: '', phone: '', value: '', source: 'Website', stage: 'Lead', assignee: 'Sarah Chen', notes: '' });
   };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-[520px] border-[#e4e6eb] bg-[#ffffff] text-slate-900">
+      <DialogContent className="max-w-[560px] border-[#dfe2e8] bg-white text-[#303238]">
         <DialogHeader>
-          <DialogTitle className="text-[20px] font-semibold">Add Prospect</DialogTitle>
+          <DialogTitle className="text-[20px] font-bold">Add Prospect</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4 py-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Company *</label>
-              <Input
-                value={form.company}
-                onChange={(e) => update('company', e.target.value)}
-                placeholder="Company name"
-                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-              />
-            </div>
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Contact Name *</label>
-              <Input
-                value={form.name}
-                onChange={(e) => update('name', e.target.value)}
-                placeholder="Full name"
-                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Email</label>
-              <Input
-                value={form.email}
-                onChange={(e) => update('email', e.target.value)}
-                placeholder="contact@company.com"
-                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-              />
-            </div>
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Phone</label>
-              <Input
-                value={form.phone}
-                onChange={(e) => update('phone', e.target.value)}
-                placeholder="+1 (555) 000-0000"
-                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Estimated Value ($)</label>
-              <Input
-                value={form.value}
-                onChange={(e) => update('value', e.target.value)}
-                placeholder="25000"
-                className="border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-              />
-            </div>
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Source</label>
-              <select
-                value={form.source}
-                onChange={(e) => update('source', e.target.value)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
-              >
-                {['Website', 'Referral', 'Cold outreach', 'Ad', 'Event', 'Partner', 'Other'].map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Stage</label>
-              <select
-                value={form.stage}
-                onChange={(e) => update('stage', e.target.value as ProspectStage)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
-              >
-                {stageOrder.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Assigned To</label>
-              <select
-                value={form.assignee}
-                onChange={(e) => update('assignee', e.target.value)}
-                className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
-              >
-                {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="mb-1.5 block text-[12px] font-medium text-slate-400">Notes</label>
+
+        <div className="grid grid-cols-1 gap-4 py-4 sm:grid-cols-2">
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Company</span>
+            <Input value={form.company} onChange={(event) => update('company', event.target.value)} className="border-[#cbd0da] bg-[#f7f8fb]" />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Contact</span>
+            <Input value={form.name} onChange={(event) => update('name', event.target.value)} className="border-[#cbd0da] bg-[#f7f8fb]" />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Email</span>
+            <Input value={form.email} onChange={(event) => update('email', event.target.value)} className="border-[#cbd0da] bg-[#f7f8fb]" />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Phone</span>
+            <Input value={form.phone} onChange={(event) => update('phone', event.target.value)} className="border-[#cbd0da] bg-[#f7f8fb]" />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Value</span>
+            <Input value={form.value} onChange={(event) => update('value', event.target.value)} className="border-[#cbd0da] bg-[#f7f8fb]" placeholder="25000" />
+          </label>
+          <label className="space-y-1.5">
+            <span className="text-[12px] font-bold text-[#575d67]">Source</span>
+            <select value={form.source} onChange={(event) => update('source', event.target.value)} className="h-10 w-full rounded-md border border-[#cbd0da] bg-[#f7f8fb] px-3 text-[13px] outline-none">
+              {sources.map((source) => <option key={source}>{source}</option>)}
+            </select>
+          </label>
+          <label className="space-y-1.5 sm:col-span-2">
+            <span className="text-[12px] font-bold text-[#575d67]">Notes</span>
             <textarea
               value={form.notes}
-              onChange={(e) => update('notes', e.target.value)}
-              placeholder="Additional notes..."
-              rows={3}
-              className="w-full rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 placeholder:text-slate-600 outline-none focus:border-[#6f4bd8] resize-none"
+              onChange={(event) => update('notes', event.target.value)}
+              className="min-h-24 w-full rounded-md border border-[#cbd0da] bg-[#f7f8fb] px-3 py-2 text-[13px] outline-none focus:border-[#6f4bd8] focus:ring-2 focus:ring-[#6f4bd8]/15"
             />
-          </div>
+          </label>
         </div>
+
         <DialogFooter>
-          <Button
-            variant="ghost"
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
-          >
+          <Button variant="ghost" onClick={onClose} className="text-[#575d67] hover:bg-[#f3f4f7]">
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmit}
-            className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] font-semibold"
-          >
+          <Button onClick={submit} className="bg-[#6f4bd8] text-white hover:bg-[#5f3fd0]">
             Add Prospect
           </Button>
         </DialogFooter>
@@ -515,306 +552,246 @@ function AddProspectModal({ open, onClose }: { open: boolean; onClose: () => voi
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Filter Bar                                                         */
-/* ------------------------------------------------------------------ */
-function FilterBar({
-  search,
-  onSearchChange,
-  stageFilter,
-  onStageFilterChange,
-  assigneeFilter,
-  onAssigneeFilterChange,
-}: {
-  search: string;
-  onSearchChange: (v: string) => void;
-  stageFilter: string;
-  onStageFilterChange: (v: string) => void;
-  assigneeFilter: string;
-  onAssigneeFilterChange: (v: string) => void;
-}) {
-  return (
-    <div className="flex flex-wrap gap-3 items-center">
-      <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-500" />
-        <Input
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search prospects..."
-          className="pl-9 border-[#e4e6eb] bg-[#ffffff] text-slate-900 placeholder:text-slate-600 focus-visible:border-[#6f4bd8]"
-        />
-      </div>
-      <select
-        value={stageFilter}
-        onChange={(e) => onStageFilterChange(e.target.value)}
-        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
-      >
-        <option value="">All Stages</option>
-        {stageOrder.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
-      </select>
-      <select
-        value={assigneeFilter}
-        onChange={(e) => onAssigneeFilterChange(e.target.value)}
-        className="rounded-md border border-[#e4e6eb] bg-[#ffffff] px-3 py-2 text-[13px] text-slate-900 outline-none focus:border-[#6f4bd8]"
-      >
-        <option value="">All Assignees</option>
-        {['Sarah Chen', 'Marcus Johnson', 'Priya Patel', 'Tom Wright', 'Lisa Park'].map((m) => (
-          <option key={m} value={m}>{m}</option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Icons (local to avoid naming conflicts)                            */
-/* ------------------------------------------------------------------ */
-function SparklesIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-    </svg>
-  );
-}
-
-function UserIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Main Prospects Page                                                */
-/* ------------------------------------------------------------------ */
-
 export default function Prospects() {
   const [prospectList, setProspectList] = useState<Prospect[]>(prospects);
   const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null);
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<ViewMode>('board');
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState('');
+  const [sourceFilter, setSourceFilter] = useState('');
   const [assigneeFilter, setAssigneeFilter] = useState('');
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
 
-  /* Drag & drop */
-  const handleDragStart = useCallback((id: string) => {
-    setDraggedId(id);
-  }, []);
+  const filteredProspects = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase();
 
-  const handleDrop = useCallback(
-    (stage: ProspectStage) => {
-      if (!draggedId) return;
-      setProspectList((prev) =>
-        prev.map((p) => (p.id === draggedId ? { ...p, stage } : p))
+    return prospectList.filter((prospect) => {
+      const matchesSearch =
+        !normalizedSearch ||
+        prospect.company.toLowerCase().includes(normalizedSearch) ||
+        prospect.name.toLowerCase().includes(normalizedSearch) ||
+        prospect.email.toLowerCase().includes(normalizedSearch);
+
+      return (
+        matchesSearch &&
+        (!stageFilter || prospect.stage === stageFilter) &&
+        (!sourceFilter || prospect.source === sourceFilter) &&
+        (!assigneeFilter || prospect.assignee === assigneeFilter)
       );
-      setDraggedId(null);
-    },
-    [draggedId]
+    });
+  }, [assigneeFilter, prospectList, search, sourceFilter, stageFilter]);
+
+  const pipelineValue = useMemo(
+    () => prospectList.reduce((sum, prospect) => sum + prospect.value, 0),
+    [prospectList]
   );
 
-  /* Stage change from detail panel */
-  const handleStageChange = useCallback((stage: ProspectStage) => {
-    if (!selectedProspect) return;
-    setProspectList((prev) =>
-      prev.map((p) => (p.id === selectedProspect.id ? { ...p, stage } : p))
-    );
-    setSelectedProspect((prev) => (prev ? { ...prev, stage } : null));
-  }, [selectedProspect]);
+  const weightedValue = useMemo(
+    () => prospectList.reduce((sum, prospect) => sum + prospect.value * (prospect.probability / 100), 0),
+    [prospectList]
+  );
 
-  /* Filtered prospects */
-  const filteredProspects = useMemo(() => {
-    return prospectList.filter((p) => {
-      const matchesSearch = !search ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.company.toLowerCase().includes(search.toLowerCase()) ||
-        p.email.toLowerCase().includes(search.toLowerCase());
-      const matchesStage = !stageFilter || p.stage === stageFilter;
-      const matchesAssignee = !assigneeFilter || p.assignee === assigneeFilter;
-      return matchesSearch && matchesStage && matchesAssignee;
-    });
-  }, [prospectList, search, stageFilter, assigneeFilter]);
-
-  /* Pipeline summary values */
-  const pipelineValue = useMemo(() => {
-    return prospectList.reduce((sum, p) => sum + p.value, 0);
-  }, [prospectList]);
+  const hotLeadCount = useMemo(
+    () => prospectList.filter((prospect) => prospect.aiScore >= 80).length,
+    [prospectList]
+  );
 
   const winRate = useMemo(() => {
-    const closed = prospectList.filter((p) => p.stage === 'Closed').length;
-    return prospectList.length > 0 ? Math.round((closed / prospectList.length) * 100) : 0;
+    const closed = prospectList.filter((prospect) => prospect.stage === 'Closed').length;
+    return prospectList.length ? Math.round((closed / prospectList.length) * 100) : 0;
   }, [prospectList]);
 
+  const handleDrop = (event: DragEvent<HTMLDivElement>, stage: ProspectStage) => {
+    event.preventDefault();
+    if (!draggedId) return;
+
+    setProspectList((current) =>
+      current.map((prospect) => (prospect.id === draggedId ? { ...prospect, stage } : prospect))
+    );
+    setDraggedId(null);
+  };
+
+  const updateSelectedStage = (stage: ProspectStage) => {
+    if (!selectedProspect) return;
+
+    setProspectList((current) =>
+      current.map((prospect) => (prospect.id === selectedProspect.id ? { ...prospect, stage } : prospect))
+    );
+    setSelectedProspect((current) => (current ? { ...current, stage } : current));
+  };
+
+  const addProspect = (prospect: Prospect) => {
+    setProspectList((current) => [prospect, ...current]);
+  };
+
+  const stageMetrics = pipelineStages.map((stage) => {
+    const rows = prospectList.filter((prospect) => prospect.stage === stage.stage);
+    const value = rows.reduce((sum, prospect) => sum + prospect.value, 0);
+    return { ...stage, rows, value };
+  });
+
   return (
-    <div className="min-h-full p-6">
-      {/* Page Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: easeOutExpo }}
-      >
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h1 className="text-[36px] font-bold tracking-tight text-slate-900">Prospects</h1>
-            <p className="mt-1 text-[15px] text-slate-500">
-              {prospectList.length} prospects · ${(pipelineValue / 1000).toFixed(0)}K pipeline value · {winRate}% win rate
-            </p>
+    <div className="min-h-full overflow-x-hidden px-4 py-5 sm:px-6 md:px-10">
+      <div className="flex flex-col gap-4 border-b border-[#dfe2e8] pb-5 xl:flex-row xl:items-start xl:justify-between">
+        <div>
+          <h1 className="text-[30px] font-semibold leading-tight text-[#303238] md:text-[36px]">
+            Prospects & Lead Workflows
+          </h1>
+          <p className="mt-1 max-w-[250px] text-[14px] leading-5 text-[#6f747d] sm:max-w-[760px]">
+            {prospectList.length} prospects · {formatMoney(pipelineValue)} total pipeline · {winRate}% closed conversion
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Button variant="outline" className="border-[#cbd0da] bg-white text-[#303238] hover:bg-[#f3f4f7]">
+            <Upload className="mr-2 size-4" /> Import
+          </Button>
+          <Button onClick={() => setAddOpen(true)} className="bg-[#6f4bd8] text-white hover:bg-[#5f3fd0]">
+            <Plus className="mr-2 size-4" /> Add Prospect
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Pipeline value" value={formatMoney(pipelineValue)} detail="All active and closed opportunities" />
+        <MetricCard label="Weighted value" value={formatMoney(Math.round(weightedValue))} detail="Probability-adjusted forecast" tone="green" />
+        <MetricCard label="Hot leads" value={`${hotLeadCount}`} detail="AI score of 80 or higher" tone="amber" />
+        <MetricCard label="Closed rate" value={`${winRate}%`} detail="Closed prospects across the sample" tone="gray" />
+      </div>
+
+      <section className="workspace-panel mt-5 rounded-lg">
+        <div className="flex flex-col gap-4 border-b border-[#eceef2] px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: 'board' as const, label: 'Pipeline Board' },
+              { id: 'table' as const, label: 'Table View' },
+              { id: 'intake' as const, label: 'Lead Intake' },
+            ].map((view) => (
+              <button
+                key={view.id}
+                onClick={() => setActiveView(view.id)}
+                className={cn(
+                  'rounded-md px-3 py-2 text-[14px] font-bold transition',
+                  activeView === view.id
+                    ? 'border border-[#6f4bd8] bg-[#f2efff] text-[#6f4bd8]'
+                    : 'border border-[#d9dde6] bg-white text-[#3f444c] hover:bg-[#f3f4f7]'
+                )}
+              >
+                {view.label}
+              </button>
+            ))}
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#6f4bd8] text-[#ffffff] hover:bg-[#5b39c4] hover:shadow-[0_0_20px_rgba(111,75,216,0.3)] font-semibold"
+
+          <a href="#/app/reports" className="text-[14px] font-bold text-[#6f4bd8] hover:underline">
+            How do I assign lead workflows?
+          </a>
+        </div>
+
+        <div className="flex flex-col gap-3 px-5 py-4 xl:flex-row xl:items-center">
+          <div className="relative min-w-0 flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#69707a]" />
+            <Input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search prospects, contacts, domains..."
+              className="h-10 border-[#cbd0da] bg-white pl-9 text-[#303238] placeholder:text-[#8b9099] focus-visible:border-[#6f4bd8]"
+            />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <FilterSelect value={stageFilter} onChange={setStageFilter} options={stageOrder} label="All stages" />
+            <FilterSelect value={sourceFilter} onChange={setSourceFilter} options={sources} label="All sources" />
+            <FilterSelect value={assigneeFilter} onChange={setAssigneeFilter} options={assignees} label="All assignees" />
+            <button
+              onClick={() => {
+                setSearch('');
+                setStageFilter('');
+                setSourceFilter('');
+                setAssigneeFilter('');
+              }}
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-[#cbd0da] bg-white px-3 text-[13px] font-bold text-[#3f444c] hover:bg-[#f3f4f7]"
             >
-              <Plus className="size-4 mr-1.5" /> Add Prospect
-            </Button>
-            <Button
-              variant="outline"
-              className="border-[#e4e6eb] text-slate-400 hover:text-slate-900 hover:bg-[rgba(255,255,255,0.08)]"
-            >
-              <Upload className="size-4 mr-1.5" /> Import
-            </Button>
+              <Filter className="size-4" /> Clear
+            </button>
           </div>
         </div>
-      </motion.div>
+      </section>
 
-      {/* Pipeline Summary Bar */}
-      <motion.div
-        variants={{
-          animate: { transition: { staggerChildren: 0.08 } },
-        }}
-        initial="initial"
-        animate="animate"
-        className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-5"
-      >
-        {pipelineStages.map((ps) => {
-          const count = prospectList.filter((p) => p.stage === ps.stage).length;
-          const value = prospectList
-            .filter((p) => p.stage === ps.stage)
-            .reduce((s, p) => s + p.value, 0);
-
-          return (
-            <motion.div
-              key={ps.stage}
-              variants={{
-                initial: { opacity: 0, y: 20 },
-                animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOutExpo } },
-              }}
-              className="rounded-xl border border-slate-200 bg-[#ffffff] p-5"
-              style={{ borderTop: `2px solid ${ps.color}` }}
-            >
-              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-slate-500">{ps.stage}</p>
-              <p className="mt-1 text-[20px] font-medium text-slate-900">{count}</p>
-              <p className="text-[12px] text-slate-500">${(value / 1000).toFixed(0)}K</p>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-
-      {/* Filter Bar */}
-      <motion.div {...fadeSlideUp(0.25)} className="mt-6">
-        <FilterBar
-          search={search}
-          onSearchChange={setSearch}
-          stageFilter={stageFilter}
-          onStageFilterChange={setStageFilter}
-          assigneeFilter={assigneeFilter}
-          onAssigneeFilterChange={setAssigneeFilter}
-        />
-      </motion.div>
-
-      {/* Kanban Board */}
-      <motion.div
-        variants={{
-          animate: { transition: { staggerChildren: 0.1 } },
-        }}
-        initial="initial"
-        animate="animate"
-        className="mt-6 flex gap-4 overflow-x-auto pb-4"
-        style={{ scrollbarWidth: 'thin', scrollbarColor: '#e4e6eb transparent' }}
-      >
-        {pipelineStages.map((ps) => {
-          const stageProspects = filteredProspects.filter((p) => p.stage === ps.stage);
-
-          return (
-            <motion.div
-              key={ps.stage}
-              variants={{
-                initial: { opacity: 0, y: 30 },
-                animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeOutExpo } },
-              }}
-              onDragOver={(e: React.DragEvent) => e.preventDefault()}
-              onDrop={(e: React.DragEvent) => {
-                e.preventDefault();
-                handleDrop(ps.stage);
-              }}
-              className={cn(
-                'flex-shrink-0 min-w-[280px] w-[300px] rounded-xl p-3 transition-colors',
-                draggedId ? 'bg-[#f2efff]/40' : 'bg-transparent'
-              )}
-            >
-              {/* Column Header */}
-              <div className="mb-3 flex items-center justify-between px-1">
+      {activeView === 'board' && (
+        <>
+          <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-5">
+            {stageMetrics.map((metric) => (
+              <div key={metric.stage} className="rounded-lg border border-[#dfe2e8] bg-white p-4">
                 <div className="flex items-center gap-2">
-                  <div className="size-2 rounded-full" style={{ backgroundColor: ps.color }} />
-                  <span className="text-[14px] font-semibold tracking-tight text-slate-900">{ps.stage}</span>
-                  <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-medium text-slate-500">
-                    {stageProspects.length}
-                  </span>
+                  <span className="size-2 rounded-full" style={{ backgroundColor: metric.color }} />
+                  <p className="text-[12px] font-bold uppercase tracking-[0.04em] text-[#737984]">{metric.stage}</p>
                 </div>
-                <button className="flex size-6 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900">
-                  <Plus className="size-3.5" />
-                </button>
+                <p className="mt-2 text-[22px] font-semibold text-[#303238]">{metric.rows.length}</p>
+                <p className="text-[12px] text-[#747984]">{formatMoney(metric.value)}</p>
               </div>
+            ))}
+          </div>
 
-              {/* Column Value */}
-              <p className="mb-3 px-1 text-[12px] font-normal text-slate-500">
-                ${(stageProspects.reduce((s, p) => s + p.value, 0) / 1000).toFixed(0)}K total
-              </p>
+          <div className="mt-5 flex gap-4 overflow-x-auto pb-4">
+            {stageMetrics.map((metric) => (
+              <div
+                key={metric.stage}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => handleDrop(event, metric.stage)}
+                className="min-h-[420px] w-[312px] shrink-0 rounded-lg border border-[#dfe2e8] bg-[#f5f6f8] p-3"
+              >
+                <div className="mb-3 flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <span className="size-2 rounded-full" style={{ backgroundColor: metric.color }} />
+                    <span className="text-[15px] font-bold text-[#303238]">{metric.stage}</span>
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-[#747984]">
+                      {metric.rows.length}
+                    </span>
+                  </div>
+                  <button className="rounded-md p-1.5 text-[#69707a] hover:bg-white">
+                    <MoreVertical className="size-4" />
+                  </button>
+                </div>
 
-              {/* Cards */}
-              <div className="flex flex-col gap-3">
-                <AnimatePresence mode="popLayout">
-                  {stageProspects.map((prospect) => (
-                    <ProspectCard
-                      key={prospect.id}
-                      prospect={prospect}
-                      onClick={() => setSelectedProspect(prospect)}
-                      onDragStart={() => handleDragStart(prospect.id)}
-                    />
-                  ))}
-                </AnimatePresence>
+                <div className="space-y-3">
+                  {filteredProspects
+                    .filter((prospect) => prospect.stage === metric.stage)
+                    .map((prospect) => (
+                      <BoardCard
+                        key={prospect.id}
+                        prospect={prospect}
+                        onSelect={() => setSelectedProspect(prospect)}
+                        onDragStart={() => setDraggedId(prospect.id)}
+                      />
+                    ))}
+                </div>
               </div>
-            </motion.div>
-          );
-        })}
-      </motion.div>
+            ))}
+          </div>
+        </>
+      )}
 
-      {/* Add Prospect Modal */}
-      <AddProspectModal open={addModalOpen} onClose={() => setAddModalOpen(false)} />
+      {activeView === 'table' && (
+        <section className="workspace-panel mt-5 overflow-hidden rounded-lg">
+          <div className="border-b border-[#eceef2] px-5 py-4">
+            <h2 className="text-[18px] font-bold text-[#303238]">Prospect table</h2>
+            <p className="text-[13px] text-[#6f747d]">{filteredProspects.length} results match the active filters.</p>
+          </div>
+          <ProspectTable rows={filteredProspects} onSelect={setSelectedProspect} />
+        </section>
+      )}
 
-      {/* Prospect Detail Panel */}
-      <AnimatePresence>
-        {selectedProspect && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-40 bg-black/50"
-              onClick={() => setSelectedProspect(null)}
-            />
-            <ProspectDetailPanel
-              prospect={selectedProspect}
-              onClose={() => setSelectedProspect(null)}
-              onStageChange={handleStageChange}
-            />
-          </>
-        )}
-      </AnimatePresence>
+      {activeView === 'intake' && <div className="mt-5"><IntakePanel onCreate={() => setAddOpen(true)} /></div>}
+
+      {selectedProspect && (
+        <ProspectDrawer
+          prospect={selectedProspect}
+          onClose={() => setSelectedProspect(null)}
+          onStageChange={updateSelectedStage}
+        />
+      )}
+
+      <AddProspectDialog open={addOpen} onClose={() => setAddOpen(false)} onAdd={addProspect} />
     </div>
   );
 }
