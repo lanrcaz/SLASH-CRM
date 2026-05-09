@@ -129,8 +129,16 @@ npm run preview
 ## Planning Docs
 
 - `docs/BUILD_ROADMAP.md` - execution roadmap from platform spine to market launch
+- `docs/README.md` - documentation index and source-of-truth order
 - `docs/ARCHITECTURE.md` - production architecture, module boundaries, data flow, and quality gates
 - `docs/AGENT_OPERATING_MODEL.md` - operating model for Codex as project orchestrator and system architect
+- `AGENTS.md` - repository-level instructions for autonomous coding agents
+- `docs/SWARM_ORCHESTRATION.md` - multi-agent execution model, role boundaries, and handoff rules
+- `docs/BETA_EXECUTION_PLAN.md` - task-level Beta build plan with IDs, dependencies, and acceptance criteria
+- `docs/KIMI_AGENT_PROMPTS.md` - prompt templates for KIMI 2.6 swarm assignments and reviews
+- `docs/SUPABASE_DB_MAPPING.md` - database, RLS, Edge Function, and storage mapping
+- `docs/THIRD_PARTY_SERVICE_MAP.md` - required and deferred service integrations
+- `docs/FEATURE_ACCEPTANCE_CRITERIA.md` - feature-level definitions of done for Beta
 
 ## Product Direction
 
