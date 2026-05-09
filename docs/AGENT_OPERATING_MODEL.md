@@ -24,6 +24,27 @@ The main orchestrator owns:
 
 ## Working Modes
 
+### Assembly Mode
+
+Use when integrating KIMI 2.6 swarm-generated blocks into SLASH-CRM.
+
+Outputs:
+
+- Blueprint intake decision.
+- Current-state mapping.
+- Compatibility matrix.
+- Gap register updates.
+- Adapter plan.
+- Validation evidence.
+
+Rules:
+
+- Preserve the existing SLASH-CRM foundation.
+- Treat integration issues as route-resolution problems.
+- Prefer adapters, mappings, migrations, and contract clarification over rewrites.
+- Do not assemble blocks without manifests and contracts.
+- Do not leave P0/P1 gaps ownerless.
+
 ### Discovery Mode
 
 Use when entering a new area of the codebase or product.
@@ -121,6 +142,7 @@ Every serious feature should be built as a complete slice:
 
 Pause and ask the user before:
 
+- Rebuilding or replacing the existing SLASH-CRM foundation.
 - Renaming the product.
 - Changing the primary backend provider.
 - Adding paid services.
@@ -128,6 +150,8 @@ Pause and ask the user before:
 - Introducing billing.
 - Adding client-facing access.
 - Removing a major feature from the master plan.
+- Accepting an open P1 production gap.
+- Deviating from a KIMI blueprint contract during assembly.
 
 Proceed without asking when:
 
@@ -139,13 +163,14 @@ Proceed without asking when:
 ## Weekly Execution Loop
 
 1. Review roadmap phase and open gaps.
-2. Pick the next highest-leverage vertical slice.
-3. Inspect current code and data model.
-4. Implement the smallest complete version.
-5. Run lint, typecheck, and build.
-6. Browser-test the changed workflow when applicable.
-7. Update docs if the system behavior changed.
-8. Push only clean, intentional changes.
+2. Review `docs/GAP_REGISTER.md`.
+3. Pick the next highest-leverage vertical slice or assembly gap.
+4. Inspect current code, data model, and blueprint references.
+5. Implement the smallest complete version or narrowest adapter.
+6. Run lint, typecheck, and build.
+7. Browser-test the changed workflow when applicable.
+8. Update docs and gap evidence if the system behavior changed.
+9. Push only clean, intentional changes.
 
 ## Current Priority
 

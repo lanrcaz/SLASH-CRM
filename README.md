@@ -128,6 +128,10 @@ npm run preview
 
 ## Planning Docs
 
+- `docs/PRODUCTION_ASSEMBLY_PROTOCOL.md` - mission-critical assembly model and 99%+ production-success gates
+- `docs/KIMI_BLUEPRINT_CONTRACT.md` - required KIMI 2.6 blueprint package contract
+- `docs/CODEX_ASSEMBLY_PROTOCOL.md` - Codex assembly, adapter, route-resolution, and validation protocol
+- `docs/GAP_REGISTER.md` - live gap register for measurable deltas, owners, closure routes, and evidence
 - `docs/BUILD_ROADMAP.md` - execution roadmap from platform spine to market launch
 - `docs/README.md` - documentation index and source-of-truth order
 - `docs/ARCHITECTURE.md` - production architecture, module boundaries, data flow, and quality gates

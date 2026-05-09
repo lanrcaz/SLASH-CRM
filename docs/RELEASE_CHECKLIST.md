@@ -2,6 +2,19 @@
 
 Do not call SLASH-CRM Beta until these gates pass.
 
+## Mission-Critical Assembly Gates
+
+- [ ] KIMI blueprint package satisfies `docs/KIMI_BLUEPRINT_CONTRACT.md`, if KIMI output is part of the release.
+- [ ] Codex assembly follows `docs/CODEX_ASSEMBLY_PROTOCOL.md`.
+- [ ] Existing SLASH-CRM foundation is preserved.
+- [ ] No generated block replaced the app shell without approved deviation.
+- [ ] Every assembled block has a blueprint reference or documented local task reference.
+- [ ] Every P0/P1 mismatch is recorded in `docs/GAP_REGISTER.md`.
+- [ ] No open P0 gaps remain.
+- [ ] No open unaccepted P1 gaps remain.
+- [ ] No undocumented deviations remain.
+- [ ] Production-success score is at or above the 99% threshold defined in `docs/PRODUCTION_ASSEMBLY_PROTOCOL.md`.
+
 ## Product Gates
 
 - [ ] Users can sign in.

@@ -7,21 +7,29 @@ This folder contains the operating system for building SLASH-CRM from prototype 
 Read in this order when onboarding a new human or agent:
 
 1. `../AGENTS.md`
-2. `BUILD_ROADMAP.md`
-3. `SWARM_ORCHESTRATION.md`
-4. `BETA_EXECUTION_PLAN.md`
-5. `KIMI_AGENT_PROMPTS.md`
-6. `ARCHITECTURE.md`
-7. `SUPABASE_DB_MAPPING.md`
-8. `FEATURE_ACCEPTANCE_CRITERIA.md`
-9. `THIRD_PARTY_SERVICE_MAP.md`
-10. `SETUP.md`
-11. `RELEASE_CHECKLIST.md`
+2. `PRODUCTION_ASSEMBLY_PROTOCOL.md`
+3. `KIMI_BLUEPRINT_CONTRACT.md`
+4. `CODEX_ASSEMBLY_PROTOCOL.md`
+5. `GAP_REGISTER.md`
+6. `BUILD_ROADMAP.md`
+7. `SWARM_ORCHESTRATION.md`
+8. `BETA_EXECUTION_PLAN.md`
+9. `KIMI_AGENT_PROMPTS.md`
+10. `ARCHITECTURE.md`
+11. `SUPABASE_DB_MAPPING.md`
+12. `FEATURE_ACCEPTANCE_CRITERIA.md`
+13. `THIRD_PARTY_SERVICE_MAP.md`
+14. `SETUP.md`
+15. `RELEASE_CHECKLIST.md`
 
 ## Core Planning
 
 | Document | Purpose |
 | --- | --- |
+| `PRODUCTION_ASSEMBLY_PROTOCOL.md` | Mission-critical no-rebuild assembly model and 99%+ readiness gates. |
+| `KIMI_BLUEPRINT_CONTRACT.md` | Required KIMI 2.6 blueprint package structure and artifact contract. |
+| `CODEX_ASSEMBLY_PROTOCOL.md` | Codex integration, adapter, route-resolution, and validation protocol. |
+| `GAP_REGISTER.md` | Live measurable delta register for gaps, owners, closure routes, and evidence. |
 | `BUILD_ROADMAP.md` | Roadmap from platform spine to Beta, v1, and market launch. |
 | `ARCHITECTURE.md` | App architecture, module boundaries, data flow, and quality gates. |
 | `AGENT_OPERATING_MODEL.md` | How Codex acts as project orchestrator and system architect. |
@@ -47,17 +55,23 @@ Read in this order when onboarding a new human or agent:
 - `BUILD_ROADMAP.md` is the execution roadmap.
 - `BETA_EXECUTION_PLAN.md` is the agent task board.
 - `SUPABASE_DB_MAPPING.md` is the database planning source.
+- `PRODUCTION_ASSEMBLY_PROTOCOL.md` is the mission-critical assembly source.
+- `GAP_REGISTER.md` is the measurable delta source.
 - `AGENTS.md` is the root instruction file for autonomous coding agents.
 
 If documents conflict, follow this priority:
 
 1. User instructions in the current task.
 2. `AGENTS.md`.
-3. `BETA_EXECUTION_PLAN.md`.
-4. `SUPABASE_DB_MAPPING.md`.
-5. `ARCHITECTURE.md`.
-6. `BUILD_ROADMAP.md`.
-7. `MASTER_PLAN.md`.
+3. `PRODUCTION_ASSEMBLY_PROTOCOL.md`.
+4. `CODEX_ASSEMBLY_PROTOCOL.md`.
+5. `KIMI_BLUEPRINT_CONTRACT.md`.
+6. `GAP_REGISTER.md`.
+7. `BETA_EXECUTION_PLAN.md`.
+8. `SUPABASE_DB_MAPPING.md`.
+9. `ARCHITECTURE.md`.
+10. `BUILD_ROADMAP.md`.
+11. `MASTER_PLAN.md`.
 
 ## Current Build Priority
 

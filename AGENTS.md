@@ -14,21 +14,36 @@ Build the Beta of SLASH-CRM: an agency CRM that captures leads, manages clients,
 
 The Beta is not a mock demo. A Beta feature must save real data, reload correctly, respect organization permissions, and pass quality checks.
 
+## Mission-Critical Assembly Principle
+
+SLASH-CRM is not being rebuilt.
+
+The existing repository is the target production structure. KIMI 2.6 swarm output must be treated as a hardened blueprint and block package. Codex agents act as the disciplined assembly layer that maps, adapts, integrates, validates, and closes gaps inside the current SLASH-CRM foundation.
+
+If integration friction appears, agents must trace the blueprint, identify the blocked route, register the gap, and apply the narrowest safe recovery path. Friction is not permission to rewrite, duplicate, or drift.
+
 ## Required Reading Order
 
 1. `README.md`
-2. `docs/BUILD_ROADMAP.md`
-3. `docs/SWARM_ORCHESTRATION.md`
-4. `docs/BETA_EXECUTION_PLAN.md`
-5. `docs/ARCHITECTURE.md`
-6. `docs/SUPABASE_DB_MAPPING.md`
-7. `docs/FEATURE_ACCEPTANCE_CRITERIA.md`
-8. `docs/THIRD_PARTY_SERVICE_MAP.md`
-9. `docs/RELEASE_CHECKLIST.md`
-10. `MASTER_PLAN.md` for full product background
+2. `docs/PRODUCTION_ASSEMBLY_PROTOCOL.md`
+3. `docs/KIMI_BLUEPRINT_CONTRACT.md`
+4. `docs/CODEX_ASSEMBLY_PROTOCOL.md`
+5. `docs/GAP_REGISTER.md`
+6. `docs/BUILD_ROADMAP.md`
+7. `docs/SWARM_ORCHESTRATION.md`
+8. `docs/BETA_EXECUTION_PLAN.md`
+9. `docs/ARCHITECTURE.md`
+10. `docs/SUPABASE_DB_MAPPING.md`
+11. `docs/FEATURE_ACCEPTANCE_CRITERIA.md`
+12. `docs/THIRD_PARTY_SERVICE_MAP.md`
+13. `docs/RELEASE_CHECKLIST.md`
+14. `MASTER_PLAN.md` for full product background
 
 ## Non-Negotiable Rules
 
+- Do not rebuild SLASH-CRM from scratch.
+- Do not replace the existing foundation with a generated alternative.
+- Do not reinterpret KIMI architecture loosely when a contract exists.
 - Do not build fake production features.
 - Do not mix mock data into production feature modules.
 - Do not introduce paid services without explicit approval.
@@ -38,6 +53,8 @@ The Beta is not a mock demo. A Beta feature must save real data, reload correctl
 - Do not touch unrelated files.
 - Do not revert changes from other agents unless explicitly assigned to resolve a conflict.
 - Do not use port `3000`; it is reserved on the owner machine.
+- Do register every unresolved P0/P1 mismatch in `docs/GAP_REGISTER.md`.
+- Do treat integration failures as route-resolution problems, not rewrite invitations.
 
 ## Local Commands
 
@@ -94,6 +111,8 @@ If a task needs to edit outside its ownership area, the agent must state the rea
 Every agent final report must include:
 
 - Task ID
+- Blueprint reference, when assembling KIMI output
+- Gap IDs opened or closed
 - Files changed
 - What was implemented
 - What was intentionally not implemented

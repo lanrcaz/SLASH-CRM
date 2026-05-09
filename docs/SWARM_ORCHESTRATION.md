@@ -6,6 +6,8 @@ This document is the operating manual for deploying KIMI 2.6 or another agent sw
 
 Build the Beta from top to bottom without agents stepping on each other.
 
+The objective is controlled assembly, not improvisational rebuilding. KIMI 2.6 agents produce hardened blueprint artifacts and system blocks. Codex agents integrate those blocks into the current SLASH-CRM production structure through the assembly controls in `PRODUCTION_ASSEMBLY_PROTOCOL.md` and `CODEX_ASSEMBLY_PROTOCOL.md`.
+
 The swarm should produce a working internal agency CRM with:
 
 - Authentication and organization roles.
@@ -20,16 +22,21 @@ The swarm should produce a working internal agency CRM with:
 
 Agents should not all start coding at once. The project has hard dependencies.
 
+Agents should also not treat generated code as automatically mergeable. Every generated block must be mapped to the current repo, checked against its manifest, validated against contracts, and tracked against the gap register.
+
 The correct sequence is:
 
-1. Platform spine.
-2. Database and types.
-3. Auth and organization context.
-4. Feature data layers.
-5. Feature UI wiring.
-6. Cross-feature workflows.
-7. Reporting and exports.
-8. QA, release, deployment.
+1. Blueprint package verification.
+2. Current-state mapping.
+3. Gap registration.
+4. Platform spine.
+5. Database and types.
+6. Auth and organization context.
+7. Feature data layers.
+8. Feature UI wiring.
+9. Cross-feature workflows.
+10. Reporting and exports.
+11. QA, release, deployment.
 
 Parallel work is allowed only when file ownership does not overlap and dependencies are satisfied.
 
@@ -48,6 +55,9 @@ Parallel work is allowed only when file ownership does not overlap and dependenc
 | Onboarding Agent | Onboarding records, tasks, templates, file checklist | `src/features/onboarding`, `src/pages/Onboarding.tsx` |
 | Reports Agent | CSV/PDF exports, scheduled report shell, report builder | `src/features/reports`, `src/pages/Reports.tsx` |
 | QA Agent | Smoke tests, browser checks, release checklist | test files, docs, CI |
+| Blueprint Intake Agent | Verifies KIMI package completeness before assembly | `docs/GAP_REGISTER.md`, intake notes |
+| Adapter Agent | Resolves blueprint/current-repo mismatches through narrow adapters | Feature boundaries and integration files |
+| Security Validation Agent | Validates auth, RLS, secrets, CORS, and public endpoints | Security docs, Supabase policies, function contracts |
 
 ## Dependency Graph
 
@@ -89,14 +99,21 @@ activities
 
 ## Parallelization Plan
 
-### Wave 0: Documentation And Guardrails
+### Wave 0: Blueprint Intake And Guardrails
 
 Can run in parallel:
 
-- Orchestrator fills docs and task board.
+- Orchestrator verifies KIMI blueprint package.
+- Blueprint Intake Agent checks required manifests and contracts.
 - QA Agent checks release checklist gaps.
+- Security Validation Agent checks security model completeness.
 
 Do not code feature logic yet.
+
+Exit gate:
+
+- `docs/GAP_REGISTER.md` updated.
+- KIMI package accepted, accepted with gaps, or blocked for clarification.
 
 ### Wave 1: Platform Foundation
 

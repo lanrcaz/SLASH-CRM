@@ -12,13 +12,20 @@ Build SLASH-CRM Beta, an agency CRM for lead capture, client management, service
 
 Read first:
 1. AGENTS.md
-2. docs/SWARM_ORCHESTRATION.md
-3. docs/BETA_EXECUTION_PLAN.md
-4. docs/ARCHITECTURE.md
-5. docs/SUPABASE_DB_MAPPING.md
-6. docs/FEATURE_ACCEPTANCE_CRITERIA.md
+2. docs/PRODUCTION_ASSEMBLY_PROTOCOL.md
+3. docs/KIMI_BLUEPRINT_CONTRACT.md
+4. docs/CODEX_ASSEMBLY_PROTOCOL.md
+5. docs/GAP_REGISTER.md
+6. docs/SWARM_ORCHESTRATION.md
+7. docs/BETA_EXECUTION_PLAN.md
+8. docs/ARCHITECTURE.md
+9. docs/SUPABASE_DB_MAPPING.md
+10. docs/FEATURE_ACCEPTANCE_CRITERIA.md
 
 Rules:
+- Do not rebuild SLASH-CRM from scratch.
+- Treat the current repository as the target environment.
+- Produce or follow blueprint contracts before code assembly.
 - Work only on your assigned task.
 - Respect allowed files and do not touch unrelated files.
 - Do not use port 3000.
@@ -31,6 +38,8 @@ Rules:
 
 Final report must include:
 - Task ID
+- Blueprint reference
+- Gap IDs opened or closed
 - Files changed
 - What was implemented
 - What was intentionally not implemented
@@ -79,6 +88,8 @@ Browser test:
 
 Final report required:
 - Task ID
+- Blueprint reference
+- Gap IDs opened or closed
 - Files changed
 - Implementation summary
 - Checks run
@@ -202,6 +213,9 @@ Rules:
 Review this completed task for SLASH-CRM.
 
 Check:
+- Does it preserve the current SLASH-CRM foundation?
+- Does it trace to a blueprint reference where applicable?
+- Were any gaps opened or closed in docs/GAP_REGISTER.md?
 - Does it satisfy the task acceptance criteria?
 - Does it respect file ownership?
 - Does it persist real data when required?
