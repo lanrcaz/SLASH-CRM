@@ -126,6 +126,12 @@ npm run preview
 - No production authentication, database, billing, or third-party integrations are wired yet.
 - `MASTER_PLAN.md` captures the broader vision for evolving this prototype into a production-ready CRM platform.
 
+## Planning Docs
+
+- `docs/BUILD_ROADMAP.md` - execution roadmap from platform spine to market launch
+- `docs/ARCHITECTURE.md` - production architecture, module boundaries, data flow, and quality gates
+- `docs/AGENT_OPERATING_MODEL.md` - operating model for Codex as project orchestrator and system architect
+
 ## Product Direction
 
 The long-term goal of SLASH-CRM is to become an operations-focused CRM for agencies and service businesses that need more than a traditional sales pipeline. The product direction centers on unifying:
