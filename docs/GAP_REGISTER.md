@@ -82,7 +82,7 @@ These gaps track third-party creation and configuration work that must be closed
 
 | Gap ID | Severity | Status | Owner | Affected Area | Description | Closure Path | Validation |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| GAP-INFRA-P0-001 | P0 | open | Platform Agent / Operator | Supabase project | Supabase staging project is not confirmed created or linked. | Follow `docs/SUPABASE_SETUP_RUNBOOK.md` to create and link staging. | Project ref recorded privately and `npx supabase status` resolves. |
+| GAP-INFRA-P0-001 | P0 | in-progress | Platform Agent / Operator | Supabase project | Supabase CLI is installed and local `supabase/config.toml` is initialized, but staging project creation/linking is not confirmed. | Follow `docs/SUPABASE_SETUP_RUNBOOK.md` to create and link staging. | Project ref recorded privately and `npx supabase status` resolves. |
 | GAP-INFRA-P0-002 | P0 | open | Platform Agent / Operator | Database | Initial Supabase migration is not confirmed applied to staging. | Run `npx supabase db push` against staging after project link. | Expected business tables exist and RLS is enabled. |
 | GAP-INFRA-P0-003 | P0 | open | Platform Agent / Operator | Environment variables | Required client-safe env vars are not confirmed in local and Vercel. | Configure variables per `docs/ENVIRONMENT_VARIABLES.md`. | Vercel build sees `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; no server secrets in browser env. |
 | GAP-INFRA-P1-004 | P1 | open | Backend Agent / Operator | Edge Functions | `lead-intake`, `convert-lead`, and `scheduled-sync` deployment is not confirmed. | Deploy functions after Supabase setup, or explicitly defer unavailable features. | Function deploy commands pass and smoke tests succeed. |
