@@ -12,6 +12,7 @@ The packages were inspected in quarantine at:
 ```text
 /tmp/slash-crm-kimi-intake
 /tmp/slash-crm-kimi-intake-tar
+/tmp/slash-crm-kimi-intake-latest
 ```
 
 ## Executive Decision
@@ -23,8 +24,8 @@ The KIMI package contains substantial useful implementation work, but it is not 
 Blocking reasons:
 
 - The zip archive fails integrity checks.
-- The tar archive fixes the missing-file issue and extracts cleanly.
-- The tar-extracted package does not pass lint, typecheck, or build.
+- The replacement tar archive fixes the missing-file issue and extracts cleanly.
+- The latest tar-extracted package still does not pass lint, typecheck, or build.
 - The real SLASH-CRM repo has not yet received the KIMI source integration; it only has package dependency changes and the untracked zip package.
 
 ## Current Repository State
@@ -165,9 +166,9 @@ Previously missing critical files are present in the tar extraction:
 5277  src/features/leads/components/StageChangeDialog.tsx
 ```
 
-## Missing Critical Files
+## Zip Missing Critical Files
 
-Confirmed missing after extraction:
+Confirmed missing from the corrupt zip extraction:
 
 ```text
 src/features/clients/queries.ts
@@ -180,6 +181,12 @@ src/features/leads/schemas.ts
 src/features/leads/types.ts
 src/features/leads/components/ProposalForm.tsx
 src/features/leads/components/StageChangeDialog.tsx
+```
+
+Replacement tar status:
+
+```text
+resolved in FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz
 ```
 
 Examples of imports that reference missing files:
@@ -262,6 +269,8 @@ src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected.
 
 ### Tar Extraction
 
+First tar quarantine result:
+
 Install command:
 
 ```bash
@@ -316,6 +325,33 @@ failed
 src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected.
 ```
 
+Latest replacement tar recheck:
+
+```bash
+tar xzf "FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz" -C /tmp/slash-crm-kimi-intake-latest
+cd /tmp/slash-crm-kimi-intake-latest
+npm install
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Result:
+
+```text
+install: passed, 501 packages, 0 vulnerabilities
+lint: failed, 55 problems, 37 errors, 18 warnings
+typecheck: failed, src/pages/Offboarding.tsx(1193,11): error TS1005: ')' expected.
+build: failed, src/pages/Offboarding.tsx(1193,11): error TS1005: ')' expected.
+```
+
+Interpretation:
+
+- The replacement tar closes the archive-integrity and missing-source-file gaps.
+- KIMI appears to have attempted an Offboarding repair, but the file remains syntactically invalid.
+- The lint count improved from 68 problems to 55 problems, but lint still fails and cannot be accepted for assembly.
+- The package's own gap status should not be trusted as closure evidence unless the commands above pass in quarantine.
+
 ## Current Production Foundation Quality Gate
 
 The current SLASH-CRM repo, without integrating KIMI source files, still passes:
@@ -336,7 +372,7 @@ Observed concerns requiring later review if a clean package is supplied:
 - `lead-intake` defaults to permissive origin behavior when no allowlist is configured.
 - Edge Functions use service role server-side, which is acceptable only if never exposed to Vite client code.
 - Extracted docs mark gaps as closed even though quality gates fail.
-- Package includes `node_modules_old_*` directory entries and should be repackaged without dependency artifacts.
+- The replacement tar excludes `node_modules_old_*`, which is acceptable for source-package hygiene.
 
 ## Required Recovery Path
 
@@ -346,9 +382,10 @@ Required next actions:
 
 1. Use the tar package as the preferred source artifact, not the zip.
 2. Require KIMI or Codex salvage to fix the Offboarding syntax error.
-3. Require `npm run lint`, `npm run typecheck`, and `npm run build` to pass in quarantine.
-4. Re-run Gate A0 Blueprint Intake.
-5. Only then begin Codex mapping and controlled assembly.
+3. Require lint cleanup for the remaining 55 lint problems.
+4. Require `npm run lint`, `npm run typecheck`, and `npm run build` to pass in quarantine.
+5. Re-run Gate A0 Blueprint Intake.
+6. Only then begin Codex mapping and controlled assembly.
 
 ## Decision
 
