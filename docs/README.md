@@ -44,6 +44,7 @@ Read in this order when onboarding a new human or agent:
 | `SUPABASE_DB_MAPPING.md` | Database table map, RLS model, Edge Function map, missing table plan. |
 | `THIRD_PARTY_SERVICE_MAP.md` | Required and deferred third-party services, env vars, and rollout order. |
 | `FEATURE_ACCEPTANCE_CRITERIA.md` | Feature definitions of done for Beta workflows. |
+| `KIMI_INTAKE_AUDIT_2026-05-10.md` | Intake audit for the first KIMI package and its blocking assembly gaps. |
 | `SETUP.md` | Local setup, environment setup, Supabase setup, and troubleshooting. |
 | `DEPLOYMENT.md` | Vercel, Supabase, staging, production, and post-deploy checks. |
 | `DATA_IMPORT.md` | Import order, CSV requirements, validation, and rollback strategy. |

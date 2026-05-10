@@ -69,7 +69,11 @@ Add KIMI-specific gaps here after blueprint package intake.
 
 | Gap ID | Severity | Status | Owner | Blueprint Reference | Repo Reference | Description | Closure Path | Validation |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| GAP-KIMI-A0-001 | P0 | blocked | KIMI Swarm / Blueprint Intake Agent | `FROM KIMI SWARM/SLASH-CRM-Beta.zip` | `docs/KIMI_INTAKE_AUDIT_2026-05-10.md` | KIMI zip fails integrity checks with bad zipfile offsets. | Provide a clean archive with no `unzip -t` errors, no `node_modules_old_*`, and complete source tree. | `unzip -t` passes and clean extraction succeeds. |
+| GAP-KIMI-A0-002 | P0 | blocked | KIMI Swarm / Blueprint Intake Agent | `FROM KIMI SWARM/SLASH-CRM-Beta.zip` | `/tmp/slash-crm-kimi-intake` | Extracted package is missing critical source files, including leads queries/mutations/types/schemas, proposal/stage components, clients queries, and dashboard query/hook files. | Re-issue package with missing files or provide patch bundle containing all missing files. | All imports resolve and file inventory matches manifest. |
+| GAP-KIMI-A0-003 | P0 | blocked | KIMI Swarm / QA Agent | Quarantine package | `/tmp/slash-crm-kimi-intake` | KIMI package fails `npm run typecheck` and `npm run build` on `src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected`. | Fix syntax error and provide passing quality-gate evidence. | `npm run typecheck` and `npm run build` pass in quarantine. |
+| GAP-KIMI-A0-004 | P1 | open | KIMI Swarm / QA Agent | Quarantine package | `/tmp/slash-crm-kimi-intake` | KIMI package fails lint with 57 problems, including 41 errors. | Fix lint errors or provide approved rule-adjustment rationale. | `npm run lint` passes. |
+| GAP-KIMI-A0-005 | P1 | open | Security Validation Agent | Edge Function package | `supabase/functions/*/index.ts` | Edge Function CORS behavior requires review before production assembly; `convert-lead` uses wildcard CORS and `lead-intake` can become permissive when no allowlist is configured. | Enforce explicit staging/production allowlists and document env requirements. | Security review passes and function smoke tests pass. |
 
 ## Closure Evidence Rules
 
