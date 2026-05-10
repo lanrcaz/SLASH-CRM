@@ -1,84 +1,56 @@
-# Deployment
+# Deployment Runbook
 
-This document defines how SLASH-CRM should be deployed for staging and production.
+This document defines the controlled deployment path for SLASH-CRM across local, staging, and production.
+
+It assumes the current frontend foundation remains intact and KIMI-generated modules are assembled only after they pass quarantine gates.
+
+## Source References
+
+- Vercel environment variables: https://vercel.com/docs/projects/environment-variables
+- Vercel Vite deployments: https://vercel.com/docs/frameworks/frontend/vite
+- Supabase environment deployment: https://supabase.com/docs/guides/cli/managing-environments
+- Supabase Auth redirect URLs: https://supabase.com/docs/guides/auth/redirect-urls
 
 ## Deployment Stack
 
-| Layer | Service |
-| --- | --- |
-| Frontend | Vercel |
-| Auth | Supabase Auth |
-| Database | Supabase Postgres |
-| Backend functions | Supabase Edge Functions |
-| Storage | Supabase Storage |
-| CI | GitHub Actions |
-| Error tracking | Sentry, before production users |
-| Product analytics | PostHog or Mixpanel, after Beta users |
-
-## Environments
-
-| Environment | Purpose | Data |
+| Layer | Service | Release Requirement |
 | --- | --- | --- |
-| `local` | Developer machine | Local or staging Supabase |
-| `staging` | Internal testing and QA | Test or copied anonymized data |
-| `production` | Market-facing app | Real customer data |
+| Frontend hosting | Vercel | Required for staging and production |
+| Auth | Supabase Auth | Required for private CRM routes |
+| Database | Supabase Postgres | Required before real CRM persistence |
+| Backend jobs/functions | Supabase Edge Functions | Required for public lead intake and lead conversion |
+| Source control | GitHub | Required |
+| CI | GitHub Actions | Required before external contributors |
+| Error tracking | Sentry | Recommended before external beta |
+| Product analytics | PostHog or Mixpanel | Recommended after event taxonomy is approved |
 
-Do not test destructive migrations on production first.
+## Release Environments
 
-## Vercel Setup
+| Environment | Purpose | Data | Deployment Source |
+| --- | --- | --- | --- |
+| `local` | Development and smoke testing | Local/staging test data | Local machine |
+| `staging` | QA and internal beta | Test/anonymized data | Vercel preview or staging project |
+| `production` | Market-facing app | Real customer data | Vercel production |
 
-1. Import `lanrcaz/SLASH-CRM` into Vercel.
-2. Framework preset: Vite.
-3. Install command: `npm install`.
-4. Build command: `npm run build`.
-5. Output directory: `dist`.
-6. Add environment variables.
-7. Deploy preview.
-8. Add preview/staging URL to Supabase Auth redirect allowlist.
-9. Verify `/`, `/app`, and nested `/app/*` routes.
+Production must not be used as the first place to test migrations, Edge Functions, env vars, auth redirects, or data import routines.
 
-## Required Vercel Environment Variables
+## Required Runbooks
 
-Client-safe:
+Before staging:
 
-```bash
-VITE_APP_ENV=staging
-VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
-```
+- `docs/SUPABASE_SETUP_RUNBOOK.md`
+- `docs/ENVIRONMENT_VARIABLES.md`
+- `docs/THIRD_PARTY_SETUP_RUNBOOK.md`
 
-Optional client-safe:
+Before production:
 
-```bash
-SENTRY_DSN=
-POSTHOG_KEY=
-```
+- `docs/RELEASE_CHECKLIST.md`
+- `docs/QA_BETA.md`
+- `docs/GAP_REGISTER.md`
 
-Do not add these to Vercel frontend env unless they are explicitly used client-side:
+## Local Validation
 
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `RESEND_API_KEY`
-- OAuth client secrets
-- Google Ads developer token
-- Meta app secret
-- Stripe secret key
-
-## Supabase Deployment Setup
-
-1. Create separate staging and production Supabase projects if possible.
-2. Run migrations in staging.
-3. Validate RLS policies.
-4. Configure Auth redirect URLs:
-   - local URL
-   - Vercel preview URL
-   - staging URL
-   - production URL
-5. Deploy Edge Functions only after implementation and local verification.
-6. Configure storage buckets only when onboarding files or report exports are implemented.
-
-## Pre-Deploy Checks
-
-Run locally:
+Run before every deployment:
 
 ```bash
 npm run lint
@@ -86,62 +58,164 @@ npm run typecheck
 npm run build
 ```
 
-Confirm:
+If any command fails, do not deploy.
 
-- No secrets committed.
-- `.env.local` is ignored.
-- New env vars are documented in `.env.example`.
-- Database migrations are reviewed.
-- RLS policies exist for new business tables.
-- Feature docs are updated if behavior changed.
+## Vercel Project Setup
+
+1. Import `lanrcaz/SLASH-CRM` into Vercel.
+2. Framework preset: Vite.
+3. Install command: `npm install`.
+4. Build command: `npm run build`.
+5. Output directory: `dist`.
+6. Add environment variables from `docs/ENVIRONMENT_VARIABLES.md`.
+7. Deploy preview.
+8. Add the Vercel preview/staging domain to Supabase Auth redirect allowlist.
+9. Open `/`, `/app`, and nested `/app/*` routes.
+
+Required Vercel variables:
+
+```bash
+VITE_APP_ENV=staging
+VITE_SUPABASE_URL=https://<project-ref>.supabase.co
+VITE_SUPABASE_ANON_KEY=<anon-key>
+```
+
+Do not add server secrets to Vercel frontend env:
+
+```text
+SUPABASE_SERVICE_ROLE_KEY
+GOOGLE_CLIENT_SECRET
+GOOGLE_REFRESH_TOKEN
+RESEND_API_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+```
+
+## Supabase Deployment Setup
+
+Follow `docs/SUPABASE_SETUP_RUNBOOK.md`.
+
+Minimum staging sequence:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <staging-project-ref>
+npx supabase db push
+npx supabase functions deploy lead-intake
+npx supabase functions deploy convert-lead
+npx supabase functions deploy scheduled-sync
+```
+
+Set server-side function secrets:
+
+```bash
+npx supabase secrets set APP_ORIGIN_ALLOWLIST=https://<staging-domain>
+npx supabase secrets set SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
+```
+
+Edge Functions may be deferred only if the relevant feature route is disabled or clearly marked unavailable.
+
+## GitHub CI Setup
+
+Required check commands:
+
+```bash
+npm install
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Recommended branch policy before external collaboration:
+
+- Protect `main`.
+- Require pull request review.
+- Require CI pass.
+- Disallow force-push to `main`.
+
+Optional future Supabase CI secrets:
+
+```text
+SUPABASE_ACCESS_TOKEN
+SUPABASE_PROJECT_REF_STAGING
+SUPABASE_PROJECT_REF_PRODUCTION
+SUPABASE_DB_PASSWORD_STAGING
+SUPABASE_DB_PASSWORD_PRODUCTION
+```
+
+## Pre-Deploy Checklist
+
+Before deploying staging:
+
+- Local lint/typecheck/build pass.
+- Supabase staging project exists.
+- Supabase migrations applied.
+- RLS manually reviewed.
+- Vercel env vars set.
+- Supabase Auth redirect URLs include local and staging URLs.
+- Edge Function CORS allowlist is explicit.
+- No secrets are committed.
+- KIMI package remains quarantined unless its gates pass.
+
+Before deploying production:
+
+- All staging smoke tests pass.
+- Production Supabase project exists.
+- Production env vars use production Supabase values.
+- Production Auth redirects use exact production domains.
+- Backups and rollback expectations are understood.
+- `docs/GAP_REGISTER.md` has no open P0 release blockers.
 
 ## Post-Deploy Smoke Test
 
-For staging:
+Staging:
 
 1. Open `/`.
 2. Open `/app`.
-3. Sign in.
-4. Create or view service.
-5. Create or view client.
-6. Create or view lead.
-7. Refresh each route.
-8. Confirm no browser console errors.
-9. Confirm network calls do not expose secrets.
-10. Confirm unauthenticated user cannot access private routes.
+3. Sign in or sign up.
+4. Bootstrap organization if needed.
+5. Create or view a service.
+6. Create or view a client.
+7. Create or view a lead.
+8. Refresh each private route.
+9. Confirm unauthenticated users cannot access private routes.
+10. Confirm browser console has no runtime errors.
+11. Confirm network responses do not expose service-role secrets.
 
-For production:
+Production:
 
-1. Repeat staging smoke test.
-2. Verify Sentry is receiving errors if enabled.
-3. Verify analytics only tracks approved events if enabled.
-4. Verify Supabase logs show expected auth and database activity.
+1. Repeat staging smoke test with production test account.
+2. Verify Sentry if enabled.
+3. Verify analytics if enabled.
+4. Verify Supabase logs show expected auth/database activity.
+5. Record deployment evidence in release notes.
 
 ## Rollback Plan
 
 Frontend rollback:
 
-- Revert to previous Vercel deployment.
+- Use Vercel's previous deployment rollback.
 
 Database rollback:
 
 - Prefer forward-fix migrations.
-- Do not run destructive SQL unless approved.
-- If a bad migration reaches staging, create a corrective migration and document it.
+- Avoid destructive rollback SQL.
+- If a migration corrupts staging, create a corrective migration and document it.
+- If production data is affected, stop release activity and create an incident record.
 
 Edge Function rollback:
 
-- Redeploy previous function version if available.
-- Disable function route or remove public form integration if intake is affected.
+- Redeploy prior known-good function.
+- Temporarily disable public form integration if lead intake is affected.
+- Tighten CORS allowlist if origin behavior is wrong.
 
-## Production Readiness
+## Deployment Decision Gate
 
-Production is not ready until:
+Deployment may proceed only when:
 
-- Release checklist passes.
-- Staging is tested with real-like data.
-- RLS has been manually reviewed.
-- Backups are understood.
-- Error tracking is enabled.
-- Auth redirects are correct.
-- No fake/mock production flows remain in core routes.
+- Local commands pass.
+- Staging infrastructure exists.
+- Required env vars are set in the correct systems.
+- Auth redirects are configured.
+- Open P0 gaps are either closed or explicitly scoped out of the deployment.
+- The deployment owner signs off.

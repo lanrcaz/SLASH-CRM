@@ -76,6 +76,21 @@ Add KIMI-specific gaps here after blueprint package intake.
 | GAP-KIMI-A0-005 | P1 | open | Security Validation Agent | Edge Function package | `supabase/functions/*/index.ts` | Edge Function CORS behavior requires review before production assembly; `convert-lead` uses wildcard CORS and `lead-intake` can become permissive when no allowlist is configured. | Enforce explicit staging/production allowlists and document env requirements. | Security review passes and function smoke tests pass. |
 | GAP-KIMI-A0-006 | P0 | blocked | KIMI Swarm / QA Agent | Second replacement quarantine package | `/tmp/slash-crm-kimi-update-GwstiM` | KIMI latest package still fails `npm run typecheck` and `npm run build` with integration-level TypeScript errors across activities, client/service forms, service mutations, Onboarding, Reports, Services, Prospects, and unused strict-mode variables. | Fix compile errors in quarantine, then resubmit archive with command evidence. Codex salvage is allowed only as a controlled assembly task, not direct package acceptance. | `npm run typecheck` and `npm run build` pass in quarantine. |
 
+## Infrastructure Setup Gaps
+
+These gaps track third-party creation and configuration work that must be closed before real Beta operations.
+
+| Gap ID | Severity | Status | Owner | Affected Area | Description | Closure Path | Validation |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| GAP-INFRA-P0-001 | P0 | open | Platform Agent / Operator | Supabase project | Supabase staging project is not confirmed created or linked. | Follow `docs/SUPABASE_SETUP_RUNBOOK.md` to create and link staging. | Project ref recorded privately and `npx supabase status` resolves. |
+| GAP-INFRA-P0-002 | P0 | open | Platform Agent / Operator | Database | Initial Supabase migration is not confirmed applied to staging. | Run `npx supabase db push` against staging after project link. | Expected business tables exist and RLS is enabled. |
+| GAP-INFRA-P0-003 | P0 | open | Platform Agent / Operator | Environment variables | Required client-safe env vars are not confirmed in local and Vercel. | Configure variables per `docs/ENVIRONMENT_VARIABLES.md`. | Vercel build sees `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`; no server secrets in browser env. |
+| GAP-INFRA-P1-004 | P1 | open | Backend Agent / Operator | Edge Functions | `lead-intake`, `convert-lead`, and `scheduled-sync` deployment is not confirmed. | Deploy functions after Supabase setup, or explicitly defer unavailable features. | Function deploy commands pass and smoke tests succeed. |
+| GAP-INFRA-P1-005 | P1 | open | Platform Agent / Operator | Vercel staging | Staging Vercel deployment is not confirmed connected to Supabase redirects. | Follow `docs/DEPLOYMENT.md` Vercel setup. | Staging URL loads app and private route auth flow works. |
+| GAP-INFRA-P1-006 | P1 | open | Growth/SEO Agent / Operator | SEO data providers | Free SEO data path is not configured. | Start with Google Search Console per `docs/THIRD_PARTY_SETUP_RUNBOOK.md`; defer paid APIs. | One verified property can sync query data into staging tables or scheduled-sync remains explicitly deferred. |
+| GAP-INFRA-P2-007 | P2 | open | Observability Agent / Operator | Error tracking | Sentry or equivalent is not configured for external Beta. | Configure before external testers if accepted. | Test error reaches monitoring project without PII leakage. |
+| GAP-INFRA-P2-008 | P2 | open | Analytics Agent / Operator | Product analytics | Product analytics provider and event taxonomy are not configured. | Select PostHog or Mixpanel after core event names are approved. | Events are visible in staging and avoid sensitive payloads. |
+
 ## Closure Evidence Rules
 
 A gap can be marked closed only when evidence is recorded.
