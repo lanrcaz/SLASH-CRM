@@ -1,15 +1,17 @@
 # KIMI Intake Audit — 2026-05-10
 
-This audit verifies the KIMI 2.6 package located at:
+This audit verifies the KIMI 2.6 packages located at:
 
 ```text
 FROM KIMI SWARM/SLASH-CRM-Beta.zip
+FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz
 ```
 
-The package was inspected in quarantine at:
+The packages were inspected in quarantine at:
 
 ```text
 /tmp/slash-crm-kimi-intake
+/tmp/slash-crm-kimi-intake-tar
 ```
 
 ## Executive Decision
@@ -21,8 +23,8 @@ The KIMI package contains substantial useful implementation work, but it is not 
 Blocking reasons:
 
 - The zip archive fails integrity checks.
-- Several critical files listed in the archive are missing local entries and did not extract.
-- The extracted package does not pass lint, typecheck, or build.
+- The tar archive fixes the missing-file issue and extracts cleanly.
+- The tar-extracted package does not pass lint, typecheck, or build.
 - The real SLASH-CRM repo has not yet received the KIMI source integration; it only has package dependency changes and the untracked zip package.
 
 ## Current Repository State
@@ -47,7 +49,7 @@ Interpretation:
 - KIMI source files are not integrated into the production app tree.
 - The current production foundation remains intact.
 - `package.json` and `package-lock.json` were modified to add `@supabase/supabase-js`.
-- The KIMI package is present only as an untracked zip.
+- The KIMI package is present as untracked zip/tar artifacts.
 
 ## Archive Integrity
 
@@ -92,6 +94,8 @@ no local entry: src/features/leads/components/StageChangeDialog.tsx
 
 ## Extracted Package Inventory
 
+### Zip Package
+
 Extracted file count excluding `node_modules_old_*`:
 
 ```text
@@ -127,6 +131,40 @@ The package includes useful modules for:
 
 However, the missing files prevent the package from compiling.
 
+### Tar Package
+
+The tar package was inspected with:
+
+```bash
+tar tzf "FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz"
+```
+
+Result:
+
+- Archive lists successfully.
+- Archive extracts successfully.
+- No `node_modules_old_*` entries were found.
+- 255 archive entries.
+- 205 extracted files.
+- 71 files under `src/features`.
+- 64 TypeScript/TSX files under `src/features`.
+- 33 Markdown files.
+
+Previously missing critical files are present in the tar extraction:
+
+```text
+10146 src/features/clients/queries.ts
+4086  src/features/dashboard/hooks/useDashboard.ts
+7324  src/features/dashboard/queries.ts
+2111  src/features/leads/README.md
+10534 src/features/leads/mutations.ts
+10627 src/features/leads/queries.ts
+3418  src/features/leads/schemas.ts
+3048  src/features/leads/types.ts
+5392  src/features/leads/components/ProposalForm.tsx
+5277  src/features/leads/components/StageChangeDialog.tsx
+```
+
 ## Missing Critical Files
 
 Confirmed missing after extraction:
@@ -157,6 +195,8 @@ src/features/clients/hooks/useClientDetail.ts imports ../queries
 ```
 
 ## Quarantine Quality Gate Results
+
+### Zip Extraction
 
 Install command:
 
@@ -220,6 +260,62 @@ failed
 src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected.
 ```
 
+### Tar Extraction
+
+Install command:
+
+```bash
+npm install
+```
+
+Result:
+
+```text
+added 501 packages
+found 0 vulnerabilities
+```
+
+Lint command:
+
+```bash
+npm run lint
+```
+
+Result:
+
+```text
+failed
+68 problems
+50 errors
+18 warnings
+```
+
+Typecheck command:
+
+```bash
+npm run typecheck
+```
+
+Result:
+
+```text
+failed
+src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected.
+```
+
+Build command:
+
+```bash
+npm run build
+```
+
+Result:
+
+```text
+failed
+src/pages/Offboarding.tsx(1214,10): error TS1005: '>' expected.
+```
+
 ## Current Production Foundation Quality Gate
 
 The current SLASH-CRM repo, without integrating KIMI source files, still passes:
@@ -248,19 +344,18 @@ Do not directly assemble this zip into SLASH-CRM.
 
 Required next actions:
 
-1. Request a clean KIMI package with no zip integrity errors.
-2. Require the missing files listed above.
-3. Require `npm run lint`, `npm run typecheck`, and `npm run build` evidence from KIMI.
-4. Require KIMI to remove `node_modules_old_*` from the package.
-5. Re-run Gate A0 Blueprint Intake.
-6. Only then begin Codex mapping and controlled assembly.
+1. Use the tar package as the preferred source artifact, not the zip.
+2. Require KIMI or Codex salvage to fix the Offboarding syntax error.
+3. Require `npm run lint`, `npm run typecheck`, and `npm run build` to pass in quarantine.
+4. Re-run Gate A0 Blueprint Intake.
+5. Only then begin Codex mapping and controlled assembly.
 
 ## Decision
 
 Assembly decision:
 
 ```text
-blocked pending clean KIMI package or Codex-led salvage plan
+blocked pending quality-gate fixes or Codex-led salvage plan
 ```
 
 Recommended owner:
