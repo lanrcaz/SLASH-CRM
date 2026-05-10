@@ -352,6 +352,91 @@ Interpretation:
 - The lint count improved from 68 problems to 55 problems, but lint still fails and cannot be accepted for assembly.
 - The package's own gap status should not be trusted as closure evidence unless the commands above pass in quarantine.
 
+### Second Replacement Package Recheck
+
+Package timestamp:
+
+```text
+FROM KIMI SWARM/SLASH-CRM-Beta.zip    2026-05-10 10:47
+FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz 2026-05-10 10:47
+```
+
+Quarantine path:
+
+```text
+/tmp/slash-crm-kimi-update-GwstiM
+```
+
+Archive checks:
+
+```bash
+unzip -t "FROM KIMI SWARM/SLASH-CRM-Beta.zip"
+tar tzf "FROM KIMI SWARM/SLASH-CRM-Beta.tar.gz" | wc -l
+```
+
+Result:
+
+```text
+zip: passed, no compressed-data errors detected
+tar: passed, 205 archive entries
+node_modules entries: none detected
+```
+
+Extracted inventory:
+
+```text
+205 total files
+71 files under src/features
+33 Markdown files
+```
+
+Quality gates:
+
+```bash
+npm install
+npm run lint
+npm run typecheck
+npm run build
+```
+
+Result:
+
+```text
+install: passed, 501 packages, 0 vulnerabilities
+lint: failed, 60 problems, 42 errors, 18 warnings
+typecheck: failed with TypeScript integration errors
+build: failed because tsc failed before Vite build
+```
+
+Important interpretation:
+
+- The second replacement package fixes the zip integrity issue.
+- The Offboarding TS1005 syntax parse failure is no longer present.
+- KIMI's package-internal `GAP_REGISTER.md` marks the Offboarding syntax gap closed, and that narrow syntax fix is accepted.
+- The package is still blocked for assembly because `npm run typecheck` and `npm run build` fail on broader integration errors.
+
+Representative TypeScript blockers:
+
+```text
+src/features/activities/hooks/useActivities.ts imports Activity and ActivityFilters from queries, but queries does not export them.
+src/features/clients/components/ClientForm.tsx has React Hook Form resolver/control type mismatches against the client schema.
+src/features/services/components/ServiceForm.tsx has React Hook Form resolver/control type mismatches against the service schema.
+src/features/services/hooks/useServiceMutations.ts uses ZodError.errors, which is not available on the installed Zod type; use issues.
+src/pages/Onboarding.tsx references useCallback without importing it.
+src/pages/Reports.tsx references PURPLE without declaring/importing it.
+src/pages/Services.tsx references multiple icon identifiers without declaring/importing them.
+src/pages/Prospects.tsx passes string | null where string | undefined is required.
+```
+
+Representative lint blockers:
+
+```text
+react-hooks/set-state-in-effect across hooks and contexts
+react-refresh/only-export-components in auth context files
+react-hooks/purity violations from Math.random and Date.now during render
+unused imports/variables across pages, hooks, and Edge Functions
+```
+
 ## Current Production Foundation Quality Gate
 
 The current SLASH-CRM repo, without integrating KIMI source files, still passes:
@@ -371,7 +456,7 @@ Observed concerns requiring later review if a clean package is supplied:
 - `convert-lead` uses wildcard CORS.
 - `lead-intake` defaults to permissive origin behavior when no allowlist is configured.
 - Edge Functions use service role server-side, which is acceptable only if never exposed to Vite client code.
-- Extracted docs mark gaps as closed even though quality gates fail.
+- Extracted docs mark some gaps as closed even though full quality gates fail.
 - The replacement tar excludes `node_modules_old_*`, which is acceptable for source-package hygiene.
 
 ## Required Recovery Path
@@ -380,12 +465,13 @@ Do not directly assemble this zip into SLASH-CRM.
 
 Required next actions:
 
-1. Use the tar package as the preferred source artifact, not the zip.
-2. Require KIMI or Codex salvage to fix the Offboarding syntax error.
-3. Require lint cleanup for the remaining 55 lint problems.
-4. Require `npm run lint`, `npm run typecheck`, and `npm run build` to pass in quarantine.
-5. Re-run Gate A0 Blueprint Intake.
-6. Only then begin Codex mapping and controlled assembly.
+1. Use the latest tar or zip package as an integrity-clean source artifact.
+2. Treat the narrow Offboarding syntax failure as fixed.
+3. Require KIMI or Codex salvage to fix the broader TypeScript integration failures.
+4. Require lint cleanup for the remaining 60 lint problems.
+5. Require `npm run lint`, `npm run typecheck`, and `npm run build` to pass in quarantine.
+6. Re-run Gate A0 Blueprint Intake.
+7. Only then begin Codex mapping and controlled assembly.
 
 ## Decision
 
